@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autoevaluación Serie X — Reequipamiento de Barrancos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f4f0;
+  --ink:#0d1a0d;
+  --ink2:#2d3d2d;
+  --muted:#6b7d6b;
+  --border:#c4d4c4;
+  --card:#ffffff;
+  --card2:#f7faf7;
+  --accent:#1a6e2e;
+  --accent2:#c8541a;
+  --accent3:#1a4e6e;
+  --ok:#1a6e2e;
+  --ng:#c8541a;
+  --t1c:#c8541a; --t2c:#1a4e6e; --t3c:#5c1a6e;
+  --t4c:#6e5c1a; --t5c:#1a6e2e; --t6c:#1a5c6e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;min-height:100vh}
+
+/* diagonal stripe header bg */
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:320px;background:repeating-linear-gradient(135deg,rgba(26,110,46,0.04) 0px,rgba(26,110,46,0.04) 1px,transparent 1px,transparent 20px);pointer-events:none;z-index:0}
+
+.wrap{max-width:820px;margin:0 auto;padding:0 1.5rem 5rem;position:relative;z-index:1}
+
+/* HEADER */
+.hdr{padding:3.5rem 0 2.5rem;border-bottom:2px solid var(--ink)}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.series-pill{background:var(--ink);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;padding:.35rem .9rem;border-radius:2px;white-space:nowrap;margin-top:.2rem}
+.hdr h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,7vw,5rem);font-weight:800;line-height:.95;letter-spacing:-.03em;color:var(--ink)}
+.hdr h1 span{color:var(--accent)}
+.hdr-meta{margin-top:1.25rem;display:flex;gap:2rem;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+/* PROGRESS */
+.prog-wrap{position:sticky;top:0;z-index:100;background:rgba(240,244,240,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:.7rem 0;margin-bottom:2.5rem}
+.prog-row{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted);margin-bottom:.35rem}
+.prog-track{height:3px;background:var(--border);overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));transition:width .4s;width:0%}
+
+/* TEMA BADGE */
+.tbadge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .65rem;border-radius:1px;margin-bottom:1rem;font-weight:500;border-left:3px solid currentColor;background:transparent}
+.bt1{color:var(--t1c);border-color:var(--t1c)} .bt2{color:var(--t2c);border-color:var(--t2c)}
+.bt3{color:var(--t3c);border-color:var(--t3c)} .bt4{color:var(--t4c);border-color:var(--t4c)}
+.bt5{color:var(--t5c);border-color:var(--t5c)} .bt6{color:var(--t6c);border-color:var(--t6c)}
+
+/* QUESTION CARD */
+.qcard{background:var(--card);border:1px solid var(--border);border-radius:0;padding:1.75rem 2rem;margin-bottom:1rem;position:relative;transition:border-color .15s}
+.qcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);transition:background .15s}
+.qcard:hover::before{background:var(--accent)}
+.qnum{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.12em;margin-bottom:.5rem;text-transform:uppercase}
+.qtxt{font-size:.97rem;font-weight:400;line-height:1.7;margin-bottom:1.25rem;color:var(--ink)}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:.45rem}
+.opt{display:flex;align-items:flex-start;gap:.75rem;padding:.7rem .95rem;background:var(--card2);border:1px solid var(--border);cursor:pointer;transition:all .12s;font-family:'IBM Plex Sans',sans-serif;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink2);width:100%;border-radius:0}
+.opt:hover:not(.dis){background:#e8f5ec;border-color:var(--accent);color:var(--accent)}
+.opt.sel{background:#e8f5ec;border-color:var(--accent);color:var(--accent)}
+.opt.ok{background:#dff2e4;border-color:var(--ok);color:var(--ok);font-weight:500}
+.opt.ng{background:#fdeee6;border-color:var(--ng);color:var(--ng)}
+.opt.dis{cursor:default}
+.okey{font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:500;opacity:.55;flex-shrink:0;margin-top:.15rem;min-width:1rem}
+
+/* FEEDBACK */
+.fb{display:none;margin-top:.85rem;padding:.8rem 1rem .8rem 1.1rem;font-size:.82rem;line-height:1.6;font-family:'IBM Plex Sans',sans-serif;border-left:3px solid}
+.fb.ok{background:#dff2e4;border-color:var(--ok);color:var(--ok);display:block}
+.fb.ng{background:#fdeee6;border-color:var(--ng);color:var(--ng);display:block}
+
+/* VERIFY BTN */
+.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.9rem;padding:.48rem 1.2rem;background:transparent;border:1px solid var(--ink);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s;border-radius:0}
+.btnv:hover:not(:disabled){background:var(--ink);color:var(--bg)}
+.btnv:disabled{opacity:.3;cursor:default}
+
+/* SUBMIT */
+.sub-sec{text-align:center;padding:2.5rem 0;border-top:2px solid var(--ink);margin-top:1rem}
+.warn{font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--accent2);margin-bottom:.9rem;min-height:1em}
+.btnsub{padding:.85rem 2.5rem;background:var(--ink);color:var(--bg);border:none;font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s;border-radius:0}
+.btnsub:hover{opacity:.82}
+
+/* RESULTS */
+#res{display:none;padding:2.5rem;background:var(--ink);color:var(--bg);margin-top:2rem}
+.res-pill{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,244,240,.5);margin-bottom:.5rem}
+.res-big{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--bg);margin:.5rem 0 .25rem}
+.res-sub{font-size:.88rem;color:rgba(240,244,240,.65);font-style:italic;margin-bottom:1.5rem}
+.rat{display:inline-block;padding:.38rem 1.2rem;border:1px solid rgba(240,244,240,.3);font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--bg);margin-bottom:2rem}
+.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.6rem;margin:1rem 0 2rem}
+.bkc{padding:.8rem;border:1px solid rgba(240,244,240,.15)}
+.bkn{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,244,240,.45);margin-bottom:.25rem}
+.bkv{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:700;color:var(--bg)}
+.btnr{padding:.72rem 1.8rem;background:transparent;border:1px solid rgba(240,244,240,.4);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:.74rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .12s;border-radius:0}
+.btnr:hover{background:rgba(240,244,240,.1)}
+
+@media(max-width:600px){.wrap{padding:0 1rem 4rem}.qcard{padding:1.25rem 1.25rem}.res-big{font-size:3.5rem}.hdr h1{font-size:3rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div class="hdr-top">
+    <h1>Autoevalua<br><span>ción</span></h1>
+    <div class="series-pill">Serie X</div>
+  </div>
+  <div class="hdr-meta">
+    <span>10 preguntas</span>
+    <span>Temas 1 – 6</span>
+    <span>Curso reequipamiento</span>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+</div>
+
+<div id="quiz"></div>
+
+<div class="sub-sec">
+  <div class="warn" id="warn"></div>
+  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
+</div>
+
+<div id="res">
+  <div class="res-pill">Resultado final · Serie X</div>
+  <div class="res-big" id="rb"></div>
+  <div class="res-sub" id="rs"></div>
+  <div class="rat" id="rr"></div>
+  <div class="bkd" id="bkd"></div>
+  <button class="btnr" onclick="restart()">↺ Repetir</button>
+</div>
+
+</div>
+
+<script>
+const Q=[
+  // TEMA 1
+  {id:1,bl:'t1',la:'Tema 1',nu:'1',
+   tx:'Un barranquista sufre una lesión grave al ceder un anclaje instalado por un reequipador particular sin formación ni permisos. Desde el punto de vista legal, ¿qué tipo de responsabilidad recaería principalmente sobre ese reequipador?',
+   op:['Responsabilidad patrimonial de la Administración, por no haber supervisado la instalación.','Responsabilidad civil por daños y perjuicios, y potencialmente responsabilidad penal por imprudencia.','Responsabilidad administrativa exclusivamente, al carecer de licencia de obra.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. La conducta imprudente de un reequipador que causa lesiones puede originar tanto responsabilidad civil (indemnización de daños) como responsabilidad penal por lesiones imprudentes, siendo esta última la más grave.',
+   fw:'Incorrecto. Respuesta correcta: B. La instalación defectuosa que causa lesiones implica responsabilidad civil por daños y potencialmente responsabilidad penal por imprudencia, sin perjuicio de otras responsabilidades adicionales.'},
+
+  // TEMA 1
+  {id:2,bl:'t1',la:'Tema 1',nu:'2',
+   tx:'La Etiqueta de Seguridad de la UIAA en un anclaje para roca garantiza que el producto:',
+   op:['Ha sido certificado conforme a la norma UIAA 123 y a la EN 959 por un laboratorio de pruebas independiente.','Ha superado únicamente las pruebas de resistencia mecánica exigidas por el CEN.','Ha sido fabricado en acero inoxidable de la aleación más resistente a la corrosión disponible.','Ninguna de las anteriores'],
+   co:'a',
+   fc:'Correcto. Según el Anexo IV (comunicado UIAA 2024), la Etiqueta de Seguridad UIAA certifica que el anclaje ha superado las pruebas de la norma UIAA 123 y la EN 959 ante un laboratorio independiente, y además indica la clase de corrosión aprobada.',
+   fw:'Incorrecto. Respuesta correcta: A. La etiqueta UIAA certifica el cumplimiento de UIAA 123 y EN 959 por laboratorio independiente, e incluye la clase de corrosión superada.'},
+
+  // TEMA 2
+  {id:3,bl:'t2',la:'Tema 2',nu:'3',
+   tx:'Según la Ley 4/2010 del Catálogo Canario de Especies Protegidas, las especies de "interés para los ecosistemas canarios" reciben protección:',
+   op:['En todo el territorio de la Comunidad Autónoma de Canarias, sin excepción.','Exclusivamente en el ámbito de los espacios de la Red Canaria de ENP y de la Red Natura 2000.','Solo cuando estén catalogadas también como vulnerables o en peligro de extinción.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. La Ley 4/2010 establece que el régimen de protección para las especies "de interés para los ecosistemas canarios" se aplica exclusivamente en el ámbito territorial de los espacios de la Red Canaria de ENP y de la Red Natura 2000.',
+   fw:'Incorrecto. Respuesta correcta: B. Su protección se circunscribe a los espacios de la Red Canaria de ENP y Red Natura 2000, no a todo el territorio canario.'},
+
+  // TEMA 3
+  {id:4,bl:'t3',la:'Tema 3',nu:'4',
+   tx:'Los tratamientos superficiales de los aceros inoxidables incluyen: desengrasado, decapado y pasivado. ¿Cuál es la función específica del decapado?',
+   op:['Formar la capa pasiva de óxido de cromo mediante contacto con el oxígeno del aire.','Eliminar manchas, impurezas y contaminantes producidos por soldaduras mediante un baño ácido, obteniendo una superficie homogénea y descontaminada.','Eliminar contaminaciones con grasa y aceites de los procesos de fabricación.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. El decapado es un tratamiento químico con baño ácido que elimina impurezas, contaminantes y manchas producidas por soldaduras, consiguiendo una superficie satinada, homogénea y libre de marcas de termosoldadura.',
+   fw:'Incorrecto. Respuesta correcta: B. El decapado usa un baño ácido para eliminar las manchas de soldadura y contaminantes. El desengrasado elimina grasas, y el pasivado genera la capa pasiva.'},
+
+  // TEMA 3
+  {id:5,bl:'t3',la:'Tema 3',nu:'5',
+   tx:'La corrosión microbiológica (MIC) en anclajes de barrancos se produce principalmente por:',
+   op:['La presencia de cloruros disueltos en el agua de lluvia que atacan la capa pasiva del acero.','Bacterias reductoras de sulfato (SRB) en presencia de sulfatos, baja concentración de oxígeno y temperatura moderada.','La unión de dos metales distintos en contacto con el electrolito del agua del barranco.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. La corrosión microbiológica (MIC) o bacteriana está producida por bacterias reductoras de sulfato (SRB) que se nutren del hierro del acero. Sus requisitos son: presencia de sulfatos, baja concentración de oxígeno y temperatura moderada. Es típica en el espacio entre chapa y parabolt.',
+   fw:'Incorrecto. Respuesta correcta: B. La MIC la producen bacterias reductoras de sulfato (SRB) en condiciones de sulfatos + poco oxígeno + temperatura moderada.'},
+
+  // TEMA 4
+  {id:6,bl:'t4',la:'Tema 4',nu:'6',
+   tx:'Según la actualización UIAA 123 V4 2020, ¿por qué ya no es suficiente con identificar el tipo de aleación (por ejemplo "316L") para asegurar la resistencia a la corrosión de un anclaje?',
+   op:['Porque las normas de nomenclatura AISI han quedado obsoletas y han sido sustituidas por las normas EN.','Porque la resistencia a la corrosión bajo tensión (SCC) depende también del proceso de fabricación completo, no solo del material, y algunos 316L fallan mientras otros aceros de menor resistencia pasan la prueba.','Porque el titanio es el único material que ha superado todas las pruebas de corrosión establecidas por la UIAA.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. La investigación científica que sustenta la actualización UIAA 123 V4 2020 demostró que la resistencia al SCC depende del proceso de fabricación completo (doblado, soldadura, martilleo, etc.), no solo del material. Algunos 316L pasan la prueba y otros fallan, por lo que el material solo no garantiza nada.',
+   fw:'Incorrecto. Respuesta correcta: B. La actualización UIAA 2020 establece que hay que probar el anclaje completo porque el proceso de fabricación introduce tensiones que afectan decisivamente a la resistencia al SCC, independientemente de la aleación.'},
+
+  // TEMA 4
+  {id:7,bl:'t4',la:'Tema 4',nu:'7',
+   tx:'El taco autoperforante (Spit) tiene un diámetro de agujero de 12 mm y un tornillo de 8 mm. ¿Con qué material se fabrica habitualmente?',
+   op:['Acero inoxidable AISI 316L (A4) por su resistencia a la corrosión.','Acero cementado y galvanizado (CrNi).','Titanio grado 2, para garantizar una vida útil de 50 años.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. El Tema 5 indica que el taco autoperforante (Spit) se fabrica normalmente con acero cementado y galvanizado (CrNi), con resistencia de 31 kN a extracción y 25 kN a cizalladura.',
+   fw:'Incorrecto. Respuesta correcta: B. El Spit está fabricado en acero cementado y galvanizado (CrNi). Por eso hoy está prácticamente en desuso, ya que el galvanizado no ofrece la protección anticorrosión de los materiales actuales.'},
+
+  // TEMA 5
+  {id:8,bl:'t5',la:'Tema 5',nu:'8',
+   tx:'El anclaje autorroscante tiene una característica muy particular en cuanto al tamaño de broca a usar. Si el anclaje es de sección de 10 mm, ¿qué diámetro de broca se debe utilizar?',
+   op:['10 mm, igual al diámetro del anclaje para conseguir el mayor ajuste posible.','12 mm, superior al diámetro del anclaje para permitir la entrada del anclaje y la resina.','8 mm, inferior al diámetro del anclaje para que la rosca cree su propia matriz en la roca.','Ninguna de las anteriores'],
+   co:'c',
+   fc:'Correcto. El Tema 5 especifica que el autorroscante requiere una broca de calibre INFERIOR a su sección: si el anclaje es de 10 mm, la broca debe ser de 8 mm. Así la rosca del anclaje genera su propia matriz al atornillarse en la roca.',
+   fw:'Incorrecto. Respuesta correcta: C — broca de 8 mm para un anclaje de 10 mm. Es la característica más diferencial del autorroscante: broca inferior al diámetro del anclaje.'},
+
+  // TEMA 5
+  {id:9,bl:'t5',la:'Tema 5',nu:'9',
+   tx:'Al instalar un anclaje de expansión por segmentos (parabolt), ¿para qué sirve la llave dinamométrica según el temario?',
+   op:['Para extraer el anclaje viejo del agujero sin dañar el soporte rocoso.','Para medir la resistencia del anclaje durante la prueba de carga con el extractómetro.','Para no sobrepasar el par de apriete recomendado por el fabricante, evitando así generar corrosión bajo tensión.','Ninguna de las anteriores'],
+   co:'c',
+   fc:'Correcto. El Tema 5 explica que la llave dinamométrica se usa para trabajar bajo los parámetros del fabricante y no sobrepasar el par de apriete recomendado, evitando así la corrosión bajo tensión (SCC) que se genera cuando el anclaje se instala con exceso de tensión.',
+   fw:'Incorrecto. Respuesta correcta: C. La llave dinamométrica controla el par de apriete para no superar el máximo del fabricante, previniendo la corrosión bajo tensión (SCC) que provoca el apriete excesivo.'},
+
+  // TEMA 6
+  {id:10,bl:'t6',la:'Tema 6',nu:'10',
+   tx:'En una cabecera con cadena en forma de V, ¿cuál es la apertura ideal entre los dos anclajes según el Tema 6?',
+   op:['10° para maximizar la concentración de carga en el punto central de rapel.','30° para conseguir un reparto equitativo de la carga entre ambos anclajes.','60° porque a partir de ese ángulo la componente de carga en cada anclaje se iguala perfectamente.','Ninguna de las anteriores'],
+   co:'b',
+   fc:'Correcto. El Tema 6 establece que en la cadena en V la apertura ideal entre los dos anclajes es de aproximadamente 30°, permitiendo un reparto equitativo de la carga. Los anclajes deben estar en horizontal y orientados hacia la dirección de la carga.',
+   fw:'Incorrecto. Respuesta correcta: B — 30°. El Tema 6 indica que la apertura ideal de la cadena en V es de unos 30° para lograr el reparto equitativo de la carga entre ambos anclajes.'},
+];
+
+const KM=['a','b','c','d'];
+const BKLA={t1:'Tema 1',t2:'Tema 2',t3:'Tema 3',t4:'Tema 4',t5:'Tema 5',t6:'Tema 6'};
+const TOTAL=Q.length;
+const ans={};const ver=new Set();
+
+function build(){
+  const c=document.getElementById('quiz');
+  Q.forEach(q=>{
+    const card=document.createElement('div');
+    card.className='qcard';
+    card.dataset.q=q.id;
+    const ops=q.op.map((o,i)=>{
+      const v=KM[i];
+      return`<button class="opt" data-val="${v}" onclick="sel(${q.id},'${v}')"><span class="okey">${v.toUpperCase()}.</span>${o}</button>`;
+    }).join('');
+    card.innerHTML=`<div class="tbadge b${q.bl}">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div><div class="opts" id="op${q.id}">${ops}</div><div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
+    c.appendChild(card);
+  });
+}
+
+function sel(id,v){
+  if(ver.has(id))return;
+  document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));
+  document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');
+  ans[id]=v;prog();
+}
+
+function verify(id){
+  if(ver.has(id))return;
+  if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción antes de comprobar.';return;}
+  document.getElementById('warn').textContent='';
+  ver.add(id);
+  const q=Q.find(x=>x.id===id);
+  const ok=ans[id]===q.co;
+  const fb=document.getElementById('fb'+id);
+  const bv=document.getElementById('bv'+id);
+  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{
+    o.classList.add('dis');
+    if(o.dataset.val===q.co)o.classList.add('ok');
+    else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');
+  });
+  fb.className='fb '+(ok?'ok':'ng');
+  fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+  bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
+}
+
+function prog(){
+  const d=Object.keys(ans).length;
+  const p=Math.round(d/TOTAL*100);
+  document.getElementById('pt').textContent=`${d} / ${TOTAL} respondidas`;
+  document.getElementById('pp').textContent=`${p}%`;
+  document.getElementById('pf').style.width=p+'%';
+}
+
+function submitAll(){
+  const un=Q.filter(q=>!ans[q.id]);
+  document.getElementById('warn').textContent=un.length?`⚠ ${un.length} pregunta${un.length>1?'s':''} sin responder.`:'';
+  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
+  const bk={t1:[0,0],t2:[0,0],t3:[0,0],t4:[0,0],t5:[0,0],t6:[0,0]};
+  let tot=0;
+  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.bl][1]++;if(ok)bk[q.bl][0]++;});
+  const p=Math.round(tot/TOTAL*100);
+  document.getElementById('rb').textContent=`${tot}/${TOTAL}`;
+  document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
+  const rr=document.getElementById('rr');
+  if(p>=90)rr.textContent='Sobresaliente';
+  else if(p>=75)rr.textContent='Notable';
+  else if(p>=60)rr.textContent='Bien';
+  else if(p>=50)rr.textContent='Suficiente';
+  else rr.textContent='Insuficiente — repasa el temario';
+  const bkMeta=[{k:'t1',l:'T1'},{k:'t2',l:'T2'},{k:'t3',l:'T3'},{k:'t4',l:'T4'},{k:'t5',l:'T5'},{k:'t6',l:'T6'}];
+  document.getElementById('bkd').innerHTML=bkMeta.map(b=>{
+    const[c,t]=bk[b.k];if(!t)return'';
+    return`<div class="bkc"><div class="bkn">${b.l}</div><div class="bkv">${c}/${t}</div></div>`;
+  }).join('');
+  const rs=document.getElementById('res');rs.style.display='block';
+  rs.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function restart(){
+  Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();
+  document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});
+  document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent='';});
+  document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar';});
+  document.getElementById('warn').textContent='';
+  document.getElementById('res').style.display='none';
+  prog();window.scrollTo({top:0,behavior:'smooth'});
+}
+
+build();prog();
+</script>
+</body>
+</html>
