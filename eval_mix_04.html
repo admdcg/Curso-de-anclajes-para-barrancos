@@ -3,127 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Evaluación Mixta IV</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Evaluación Mixta IV — Reequipamiento de Barrancos</title>
 <style>
-:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
-a.back:hover{color:var(--acc)}
-.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
-.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
-.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
-.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
-.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
-.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
-.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
-.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
-.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
-.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
-.qcard:hover{border-left-color:var(--acc)}
-.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
-.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
-.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
-.opts{display:flex;flex-direction:column;gap:.45rem}
-.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
-.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
-.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+.topbar{background:#374151;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.topbar h1{color:#fff;font-size:1.05rem;font-weight:700;line-height:1.2}
+.topbar a{color:rgba(255,255,255,.8);font-size:.78rem;text-decoration:none;background:rgba(255,255,255,.15);padding:.35rem .8rem;border-radius:6px;white-space:nowrap}
+.topbar a:hover{background:rgba(255,255,255,.25)}
+.topbar-sub{color:rgba(255,255,255,.7);font-size:.75rem}
+.prog-bar{background:rgba(255,255,255,.25);height:5px}
+.prog-fill{height:100%;background:#fff;transition:width .4s;width:0%}
+.wrap{max-width:780px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.stat-row{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:.65rem 1rem;font-size:.8rem;color:#64748b;flex:1;min-width:110px}
+.stat strong{display:block;font-size:1.3rem;font-weight:700;color:#1e293b;line-height:1}
+.qcard{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.4rem;margin-bottom:1rem;border-top:3px solid #374151}
+.qmeta{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap}
+.qnum{font-size:.72rem;font-weight:600;color:#374151;background:#f9fafb;padding:.2rem .55rem;border-radius:4px}
+.qbadge{font-size:.68rem;color:#64748b;background:#f1f5f9;padding:.2rem .55rem;border-radius:4px}
+.qtxt{font-size:.95rem;line-height:1.65;color:#1e293b;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem .9rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:.87rem;line-height:1.5;text-align:left;color:#1e293b;width:100%;transition:all .12s}
+.opt:hover:not(.dis){background:#f9fafb;border-color:#374151}
+.opt.sel{background:#f9fafb;border-color:#374151;color:#1e293b}
+.opt.ok{background:#dcfce7;border-color:#16a34a;color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:#dc2626;color:#b91c1c}
 .opt.dis{cursor:default}
-.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
-.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
-.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
-.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
-.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
-.btnv:disabled{opacity:.3;cursor:default}
-.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
-.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
-.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
-.btnsub:hover{opacity:.88}
-#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
-.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
-.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
-.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
-.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
-.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
-.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
-.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
-.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
-.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnr:hover{background:var(--acc);color:#fff}
-@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+.olet{font-weight:700;font-size:.75rem;opacity:.5;flex-shrink:0;padding-top:.05rem;min-width:1rem}
+.fb{display:none;margin-top:.75rem;padding:.75rem 1rem;border-radius:8px;font-size:.82rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:#16a34a;color:#15803d;display:block}
+.fb.ng{background:#fef2f2;border-color:#dc2626;color:#b91c1c;display:block}
+.chk-btn{margin-top:.8rem;display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1.1rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:7px;font-size:.73rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.chk-btn:hover:not(:disabled){background:#374151;color:#fff}
+.chk-btn:disabled{opacity:.3;cursor:default}
+.actions{text-align:center;padding:2rem 0;border-top:1px solid #e2e8f0;margin-top:.5rem}
+.warn{font-size:.75rem;color:#d97706;margin-bottom:.75rem;min-height:1em;font-weight:500}
+.submit-btn{padding:.8rem 2.2rem;background:#374151;color:#fff;border:none;border-radius:9px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.submit-btn:hover{opacity:.88}
+#results{display:none;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2.5rem 2rem;text-align:center;margin-top:1.5rem}
+.res-score{font-size:4.5rem;font-weight:800;color:#374151;line-height:1}
+.res-pct{font-size:.9rem;color:#64748b;margin:.3rem 0 1.2rem}
+.res-rat{display:inline-block;padding:.4rem 1.2rem;background:#f9fafb;color:#374151;border-radius:20px;font-weight:700;font-size:.95rem;margin-bottom:1.5rem}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:.6rem;margin:1rem 0 1.5rem;text-align:left}
+.res-cell{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem}
+.res-cell-n{font-size:.58rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+.res-cell-v{font-size:1.5rem;font-weight:800;color:#1e293b}
+.restart-btn{padding:.7rem 1.8rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.restart-btn:hover{background:#374151;color:#fff}
+@media(max-width:580px){.wrap{padding:1rem .75rem 4rem}.qcard{padding:1.1rem}.res-score{font-size:3.5rem}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<a class="back" href="index.html">← Volver al índice</a>
-<div class="hdr">
-  <div class="hdr-top">
+<div class="topbar" style="background:#374151">
+  <div>
+    <div class="topbar-sub">Curso de Reequipamiento de Barrancos</div>
     <h1>Evaluación Mixta IV</h1>
-    <div class="hdr-badge">10 preguntas</div>
   </div>
-  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+  <a href="index.html">← Índice</a>
 </div>
-<div class="prog-wrap">
-  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
-  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
-</div>
-<div id="quiz"></div>
-<div class="sub-sec">
-  <div class="warn" id="warn"></div>
-  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
-</div>
-<div id="res">
-  <div class="res-lbl">Resultado</div>
-  <div class="res-big" id="rb"></div>
-  <div class="res-sub" id="rs"></div>
-  <div class="rat" id="rr"></div>
-  <div class="bkd" id="bkd"></div>
-  <button class="btnr" onclick="restart()">↺ Repetir</button>
-</div>
+<div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+<div class="wrap">
+  <div class="stat-row">
+    <div class="stat"><strong id="pp">0/10</strong>Respondidas</div>
+    <div class="stat"><strong>10</strong>Preguntas</div>
+    <div class="stat"><strong style="font-size:.9rem;color:#64748b">Todos los temas · 10 preguntas</strong></div>
+  </div>
+  <div id="quiz"></div>
+  <div class="actions">
+    <div class="warn" id="warn"></div>
+    <button class="submit-btn" onclick="submit()">Finalizar y ver resultados →</button>
+  </div>
+  <div id="results">
+    <div class="res-score" id="rscore"></div>
+    <div class="res-pct" id="rpct"></div>
+    <div class="res-rat" id="rrat"></div>
+    <div class="res-grid" id="rgrid"></div>
+    <button class="restart-btn" onclick="restart()">↺ Repetir</button>
+  </div>
 </div>
 <script>
-const Q=[{"id": 1, "la": "Tema 4", "nu": "1", "tx": "La norma UNE-EN 959:2018 define un 'Anclaje de Aseguramiento para Roca' como:", "op": ["Cualquier elemento metálico instalado en la roca para sujetar una cuerda", "Anclajes para roca conectados entre sí, diseñados para instalación en la parte superior de la pendiente, para asegurar y/o descender a los deportistas", "Solo los tensores con doble anilla certificados por ENAC", "Cualquier punto de anclaje natural o artificial en el medio natural"], "co": "b", "fc": "Correcto. La UNE-EN 959:2018 define así el anclaje de aseguramiento: conectados entre sí, en la parte superior de la pendiente, para que los deportistas se aseguren y desciendan.", "fw": "Incorrecto. Respuesta correcta: B — la definición exacta de la UNE-EN 959:2018."}, {"id": 2, "la": "Tema 4", "nu": "2", "tx": "¿Qué significa la resistencia axial o de extracción de 15 kN que establece la norma UNE-EN 959 para un anclaje?", "op": ["El anclaje puede soportar esa fuerza aplicada perpendicular a su eje longitudinal", "El anclaje debe soportar 15 kN aplicados en la dirección de su eje, tirando hacia fuera del agujero, sin desprenderse ni romperse", "Es la fuerza máxima que puede soportar el conjunto cabecera-cuerda en un rápel", "Es la resistencia al par de apriete durante la instalación"], "co": "b", "fc": "Correcto. La resistencia axial es la carga aplicada en la dirección del eje del anclaje (extracción). La UNE-EN 959 exige 15 kN; la UIAA 123 exige 20 kN.", "fw": "Incorrecto. Respuesta correcta: B — fuerza axial (extracción) de 15 kN según UNE-EN 959."}, {"id": 3, "la": "Tema 4", "nu": "3", "tx": "La EOTA (European Organisation for Technical Assessment) es el organismo que:", "op": ["Certifica individualmente cada anclaje fabricado en Europa", "Elabora las normas UNE a nivel español", "Coordina la elaboración de los Documentos de Evaluación Europeos (DEE) y emite los ETA (Evaluaciones Técnicas Europeas) a través de sus miembros", "Acredita a los laboratorios de ensayo de anclajes en España"], "co": "c", "fc": "Correcto. La EOTA coordina la elaboración de los Documentos de Evaluación Europeos y la emisión de los ETA (Evaluaciones Técnicas Europeas / anteriormente DITE) a través de sus organismos miembros.", "fw": "Incorrecto. Respuesta correcta: C — la EOTA coordina los DEE y la emisión de los ETA."}, {"id": 4, "la": "Tema 4", "nu": "4", "tx": "En un parabolt de expansión, la 'longitud activa' se refiere a:", "op": ["La distancia desde la cabeza del tornillo hasta la plaqueta", "La longitud de la parte del anclaje que queda en contacto con la roca y transmite la carga por expansión", "La distancia desde la superficie de la roca hasta el punto más lejano del cuerpo en contacto con la roca", "El espacio libre entre el fondo del agujero y la punta del anclaje"], "co": "b", "fc": "Correcto. La longitud activa es la parte del anclaje en contacto real con la roca que transmite la carga al sustrato mediante el mecanismo de expansión.", "fw": "Incorrecto. Respuesta correcta: B — longitud activa es la parte en contacto con la roca que transmite la carga."}, {"id": 5, "la": "Tema 4", "nu": "5", "tx": "Un anclaje con marcado CE y ETA Opción 1 garantiza que ha sido ensayado para aplicaciones en:", "op": ["Uso recreativo de bajo riesgo en interiores", "Riesgo real de pérdidas humanas, tanto en hormigón fisurado como no fisurado", "Obras civiles de construcción sin riesgo personal", "Uso exclusivo en rocas ígneas con resistencia superior a 400 kg/cm²"], "co": "b", "fc": "Correcto. La ETA Opción 1 es la categoría más exigente, que requiere ensayos en hormigón fisurado y no fisurado para aplicaciones con riesgo real de vidas humanas.", "fw": "Incorrecto. Respuesta correcta: B — ETA Opción 1 es para riesgo de vidas humanas en hormigón fisurado y no fisurado."}, {"id": 6, "la": "Tema 4", "nu": "6", "tx": "Las resinas viniléster se diferencian de las epoxi en que las viniléster son:", "op": ["Inadecuadas para zonas de bajas temperaturas; perfectas para zonas cálidas", "Inadecuadas para altas temperaturas y perfectas para zonas frías, con leve retracción", "Sin retracción y con tiempo de trabajabilidad alto, igual que las epoxi", "Componente B exclusivamente, sin necesidad de catalizador"], "co": "b", "fc": "Correcto. Las viniléster son: trabajabilidad corta, inadecuadas para altas temperaturas (perfectas para frío y alta montaña), leve retracción, y pueden fraguarse en taladros húmedos.", "fw": "Incorrecto. Respuesta correcta: B — viniléster: inadecuadas para calor, perfectas para frío, leve retracción."}, {"id": 7, "la": "Tema 4", "nu": "7", "tx": "El Componente B de la formulación química de una resina de anclaje es responsable de:", "op": ["Contener los áridos que aportan resistencia mecánica a la mezcla", "Contener el endurecedor, responsable del inicio de la reacción de endurecimiento", "Contener el pigmento que determina el color final del anclaje", "Contener los acelerantes que ajustan el tiempo de trabajabilidad"], "co": "b", "fc": "Correcto. El Componente B es donde se añade el endurecedor o catalizador, responsable del inicio y desarrollo de la reacción de endurecimiento al mezclarse con el Componente A.", "fw": "Incorrecto. Respuesta correcta: B — el Componente B contiene el endurecedor/catalizador."}, {"id": 8, "la": "Tema 4", "nu": "8", "tx": "El cartucho 'side-by-side' de resina consiste en:", "op": ["Un único tubo con la resina ya mezclada lista para inyectar", "Dos tubos cilíndricos lado a lado conectados en un cabezal, con los componentes A y B separados que se mezclan en la boquilla", "Una ampolla de cristal que se rompe con la varilla al introducirla", "Un cartucho de papel aluminio con dos cámaras cilíndricas internas"], "co": "b", "fc": "Correcto. El cartucho side-by-side tiene dos tubos cilíndricos paralelos con los componentes A y B, que se mezclan automáticamente al pasar por la boquilla mezcladora.", "fw": "Incorrecto. Respuesta correcta: B — dos tubos paralelos que se mezclan en la boquilla mezcladora."}, {"id": 9, "la": "Tema 4", "nu": "9", "tx": "La norma UNE-EN 795:2012 regula los equipos de protección individual contra caídas. ¿Qué aspecto de los anclajes de barrancos está también cubierto por esta norma?", "op": ["Exclusivamente los arneses de escalada", "Los dispositivos de anclaje usados como EPI (equipos de protección individual) contra caídas", "Los cierres y mosquetones de barranquismo", "Solo los anclajes de hormigón en instalaciones fijas"], "co": "b", "fc": "Correcto. La UNE-EN 795:2012 regula los dispositivos de anclaje utilizados como EPI contra caídas, siendo una de las tres normativas principales para el reequipamiento de barrancos.", "fw": "Incorrecto. Respuesta correcta: B — dispositivos de anclaje como EPI contra caídas."}, {"id": 10, "la": "Tema 4", "nu": "10", "tx": "Las resinas de poliéster no se recomiendan para anclajes de barrancos principalmente porque:", "op": ["Son demasiado viscosas para inyectarse correctamente con pistola", "En condiciones de humedad o presencia de materiales alcalinos se descomponen, pudiendo perder hasta el 60% de resistencia en pocos años", "Tienen un tiempo de trabajabilidad excesivamente largo", "Son incompatibles con aceros inoxidables austeníticos"], "co": "b", "fc": "Correcto. Las resinas de poliéster pueden descomponerse en ambientes húmedos o alcalinos, perdiendo hasta el 60% de resistencia. Por eso no se recomiendan para escalada y barrancos.", "fw": "Incorrecto. Respuesta correcta: B — en ambientes húmedos o alcalinos pueden perder hasta el 60% de resistencia."}];
-const KM=['a','b','c','d'];
-const ans={};const ver=new Set();
-function build(){
-  const c=document.getElementById('quiz');
-  Q.forEach(q=>{
-    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
-    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
-      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
-      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
-      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
-    c.appendChild(d);
-  });
-}
-function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
-function verify(id){
-  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
-  document.getElementById('warn').textContent='';ver.add(id);
-  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
-  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
-  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
-  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
-}
-function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
-function submitAll(){
-  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
-  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
-  let tot=0;const bk={};
-  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
-  const p=Math.round(tot/10*100);
-  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
-  const rr=document.getElementById('rr');
-  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
-  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
-  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+const Q=[{"id": 1, "bl": "T1", "la": "Tema 1", "tx": "Un barranquista cede un anclaje durante el descenso y sufre una lesión grave. El anclaje había sido instalado hace dos años por un reequipador particular sin formación acreditada. ¿Qué tipo de responsabilidad puede recaer sobre ese reequipador?", "op": ["Ninguna, ya que el barranquista asume el riesgo al practicar la actividad", "Solo responsabilidad moral ante la comunidad barranquista local", "Responsabilidad civil por los daños causados y potencialmente responsabilidad penal por imprudencia", "Exclusivamente responsabilidad administrativa ante la federación deportiva"], "co": "c", "fc": "Correcto. Una instalación defectuosa que cause lesiones puede generar responsabilidad civil (indemnización de daños y perjuicios) y responsabilidad penal si se aprecia imprudencia grave en la conducta del reequipador.", "fw": "Incorrecto. La instalación defectuosa con resultado lesivo expone al reequipador a responsabilidad civil y potencialmente penal por imprudencia, independientemente de su condición de particular."}, {"id": 2, "bl": "T2", "la": "Tema 2", "tx": "La Red Canaria de Espacios Naturales Protegidos se compone de 146 espacios que representan aproximadamente el _____ de la superficie del Archipiélago:", "op": ["20%", "30%", "40%", "55%"], "co": "c", "fc": "Correcto. La Red Canaria de ENP integra 146 espacios que constituyen aproximadamente el 40% de la superficie del Archipiélago Canario.", "fw": "Incorrecto. La Red Canaria de ENP abarca aproximadamente el 40% de la superficie del Archipiélago."}, {"id": 3, "bl": "T3", "la": "Tema 3", "tx": "Los aceros inoxidables ferríticos se caracterizan por:", "op": ["Contener Cr y Ni, ser no magnéticos y muy usados en anclajes", "Contener Cr entre 10,5% y 30%, bajo carbono, ser magnéticos y NO usarse para fabricar anclajes", "Ser los más duros por su elevado contenido en carbono martensítico", "Tener molibdeno como elemento principal para resistir los cloruros marinos"], "co": "b", "fc": "Correcto. Los ferríticos contienen Cr 10,5-30%, C muy bajo (~0,08%), son magnéticos y no se utilizan para fabricar anclajes de escalada o barrancos.", "fw": "Incorrecto. Los aceros ferríticos contienen Cr 10,5-30%, son magnéticos y NO se usan para anclajes."}, {"id": 4, "bl": "T3", "la": "Tema 3", "tx": "El molibdeno (Mo) presente en el acero inoxidable AISI 316 (A4) tiene como función principal:", "op": ["Aumentar la dureza superficial del acero para resistir el desgaste mecánico", "Mejorar la resistencia a la corrosión por cloruros y a la corrosión por picadura", "Reducir el coste de fabricación sustituyendo parte del cromo necesario", "Aumentar el punto de fusión para facilitar el proceso de soldadura"], "co": "b", "fc": "Correcto. El Mo en el AISI 316 mejora específicamente la resistencia a los cloruros y a la corrosión por picadura, haciendo al A4 preferible al A2 en entornos marinos.", "fw": "Incorrecto. El molibdeno en el 316 mejora la resistencia a los cloruros y a la corrosión por picadura."}, {"id": 5, "bl": "T4", "la": "Tema 4", "tx": "El Componente A de la formulación de una resina de anclaje químico contiene:", "op": ["Solo el endurecedor o catalizador que inicia la reacción", "La resina base junto con acelerantes del fraguado, áridos, inhibidores y pigmentos", "Exclusivamente el árido que forma el mortero de relleno", "Solo los pigmentos que determinan el color final de la mezcla"], "co": "b", "fc": "Correcto. El Componente A contiene la resina base y también acelerantes del fraguado, inhibidores, áridos que dan resistencia y pigmentos que ajustan el color final.", "fw": "Incorrecto. El Componente A contiene la resina base + acelerantes + áridos + inhibidores + pigmentos."}, {"id": 6, "bl": "T4", "la": "Tema 4", "tx": "Las resinas epoxi se recomiendan para barranquismo principalmente porque:", "op": ["Tienen tiempo de trabajabilidad corto, lo que agiliza el proceso de instalación", "Son las resinas más adherentes que existen, con nula retracción y excelentes capacidades mecánicas", "Son las más económicas del mercado y tienen tiempo de trabajabilidad largo", "Pueden aplicarse a muy bajas temperaturas mejor que cualquier otro tipo de resina"], "co": "b", "fc": "Correcto. Las resinas epoxi son las más adherentes, con nula retracción y excepcionales capacidades mecánicas, siendo la opción preferida para barranquismo.", "fw": "Incorrecto. Las epoxi son las más adherentes y con nula retracción; su tiempo de trabajabilidad es alto (no corto)."}, {"id": 7, "bl": "T5", "la": "Tema 5", "tx": "Al instalar un anclaje de expansión por segmentos (parabolt), el agujero debe realizarse con:", "op": ["El mismo diámetro que el anclaje y exactamente su misma longitud", "El mismo diámetro que el anclaje y unos 2 cm más largo que la longitud del modelo elegido", "Un diámetro 2 mm mayor que el anclaje y la misma longitud", "Un diámetro 2 mm mayor y unos 5 cm más largo para garantizar el espacio de expansión"], "co": "b", "fc": "Correcto. Para parabolts: mismo diámetro que el anclaje y aproximadamente 2 cm más largo que la longitud del modelo para que el expansor tenga espacio de actuación.", "fw": "Incorrecto. El agujero para parabolt debe ser del mismo diámetro y unos 2 cm más largo que el anclaje."}, {"id": 8, "bl": "T5", "la": "Tema 5", "tx": "La llave dinamométrica se usa en la instalación de parabolts para:", "op": ["Medir la resistencia del anclaje instalado en una prueba de carga no destructiva", "No superar el par de apriete recomendado por el fabricante, evitando generar corrosión bajo tensión (SCC)", "Extraer los anclajes viejos sin dañar la roca circundante", "Comprobar el nivel de la plaqueta antes del apriete definitivo"], "co": "b", "fc": "Correcto. Trabajar dentro del par de apriete del fabricante evita someter al acero a tensiones excesivas que podrían generar corrosión bajo tensión (SCC).", "fw": "Incorrecto. La llave dinamométrica controla el par de apriete para evitar el SCC generado por el apriete excesivo."}, {"id": 9, "bl": "T6", "la": "Tema 6", "tx": "En la planificación de un reequipamiento, el primer acto ético recomendado antes de comenzar los trabajos es:", "op": ["Publicar en redes sociales la intención de reequipar para recabar voluntarios y financiación", "Recabar información sobre los aperturistas originales y tomar contacto con ellos", "Solicitar presupuesto a varios fabricantes de anclajes homologados", "Comunicar el inicio del proyecto al club de barranquismo más cercano a la zona"], "co": "b", "fc": "Correcto. El Tema 6 señala que contactar con los aperturistas originales es un acto ético recomendado que puede ser muy productivo y evitar futuros malentendidos sobre criterios de instalación.", "fw": "Incorrecto. El acto ético prioritario es buscar y contactar con los aperturistas originales del barranco."}, {"id": 10, "bl": "T6", "la": "Tema 6", "tx": "El inicio de pasamanos se identifica visualmente por una configuración diferente a la cabecera de rápel. La que se ha extendido como identificativa es:", "op": ["Cadena en V orientada hacia la cabecera principal del rápel", "Cadena en forma de L, que visualmente indica que no es la cabecera de descenso", "Dos tensores de doble anilla solidarizados con cadena en D", "Tensor simple con anilla única orientado perpendicular a la línea de rápel"], "co": "b", "fc": "Correcto. La configuración en L para el inicio de pasamanos se ha extendido como señal visual que evita que el barranquista confunda el pasamanos con la cabecera de rápel.", "fw": "Incorrecto. La cadena en L identifica visualmente el inicio del pasamanos, diferenciándolo de la cabecera de rápel."}];
+const ans={},ver=new Set();
+function build(){const c=document.getElementById('quiz');Q.forEach(q=>{const d=document.createElement('div');d.className='qcard';
+d.innerHTML=`<div class="qmeta"><span class="qnum">Pregunta ${q.id}</span><span class="qbadge">${q.la}</span></div>`+
+`<div class="qtxt">${q.tx}</div><div class="opts" id="o${q.id}">`+
+q.op.map((t,i)=>`<button class="opt" data-v="${'abcd'[i]}" onclick="pick(${q.id},'${'abcd'[i]}')"><span class="olet">${'ABCD'[i]}</span>${t}</button>`).join('')+
+`</div><div class="fb" id="f${q.id}"></div><button class="chk-btn" id="b${q.id}" onclick="check(${q.id})">▶ Comprobar</button>`;
+document.getElementById('quiz').appendChild(d);});}
+function pick(id,v){if(ver.has(id))return;document.querySelectorAll(`#o${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#o${id} [data-v="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function check(id){if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción primero.';return;}document.getElementById('warn').textContent='';
+ver.add(id);const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+document.querySelectorAll(`#o${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.v===q.co)o.classList.add('ok');else if(o.dataset.v===ans[id]&&!ok)o.classList.add('ng');});
+const f=document.getElementById('f'+id);f.className='fb '+(ok?'ok':'ng');f.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+const b=document.getElementById('b'+id);b.disabled=true;b.textContent=ok?'✓ Correcto':'✗ Incorrecto';}
+function prog(){const d=Object.keys(ans).length,p=Math.round(d/Q.length*100);
+document.getElementById('pp').textContent=`${d}/${Q.length} respondidas`;document.getElementById('pf').style.width=p+'%';}
+function submit(){const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} pregunta(s) sin responder.`:'';
+Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])check(q.id);});
+let tot=0;const bk={};Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=bk[q.la]||[0,0];bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+const p=Math.round(tot/Q.length*100);document.getElementById('rscore').textContent=`${tot}/${Q.length}`;document.getElementById('rpct').textContent=`${p}% de respuestas correctas`;
+const r=['❗ Necesitas repasar','📖 Suficiente','📚 Bien','👍 Notable','🏆 Sobresaliente'];
+document.getElementById('rrat').textContent=r[p>=90?4:p>=75?3:p>=60?2:p>=50?1:0];
+document.getElementById('rgrid').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="res-cell"><div class="res-cell-n">${k}</div><div class="res-cell-v">${c}/${t}</div></div>`).join('');
+document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>o.className='opt');document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent='';});document.querySelectorAll('.chk-btn').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar';});document.getElementById('warn').textContent='';document.getElementById('results').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
 build();prog();
 </script>
 </body>
