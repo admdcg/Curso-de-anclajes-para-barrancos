@@ -3,127 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Evaluación Mixta VI</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Evaluación Mixta VI — Reequipamiento de Barrancos</title>
 <style>
-:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
-a.back:hover{color:var(--acc)}
-.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
-.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
-.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
-.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
-.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
-.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
-.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
-.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
-.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
-.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
-.qcard:hover{border-left-color:var(--acc)}
-.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
-.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
-.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
-.opts{display:flex;flex-direction:column;gap:.45rem}
-.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
-.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
-.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+.topbar{background:#374151;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.topbar h1{color:#fff;font-size:1.05rem;font-weight:700;line-height:1.2}
+.topbar a{color:rgba(255,255,255,.8);font-size:.78rem;text-decoration:none;background:rgba(255,255,255,.15);padding:.35rem .8rem;border-radius:6px;white-space:nowrap}
+.topbar a:hover{background:rgba(255,255,255,.25)}
+.topbar-sub{color:rgba(255,255,255,.7);font-size:.75rem}
+.prog-bar{background:rgba(255,255,255,.25);height:5px}
+.prog-fill{height:100%;background:#fff;transition:width .4s;width:0%}
+.wrap{max-width:780px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.stat-row{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:.65rem 1rem;font-size:.8rem;color:#64748b;flex:1;min-width:110px}
+.stat strong{display:block;font-size:1.3rem;font-weight:700;color:#1e293b;line-height:1}
+.qcard{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.4rem;margin-bottom:1rem;border-top:3px solid #374151}
+.qmeta{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap}
+.qnum{font-size:.72rem;font-weight:600;color:#374151;background:#f9fafb;padding:.2rem .55rem;border-radius:4px}
+.qbadge{font-size:.68rem;color:#64748b;background:#f1f5f9;padding:.2rem .55rem;border-radius:4px}
+.qtxt{font-size:.95rem;line-height:1.65;color:#1e293b;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem .9rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:.87rem;line-height:1.5;text-align:left;color:#1e293b;width:100%;transition:all .12s}
+.opt:hover:not(.dis){background:#f9fafb;border-color:#374151}
+.opt.sel{background:#f9fafb;border-color:#374151;color:#1e293b}
+.opt.ok{background:#dcfce7;border-color:#16a34a;color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:#dc2626;color:#374151}
 .opt.dis{cursor:default}
-.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
-.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
-.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
-.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
-.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
-.btnv:disabled{opacity:.3;cursor:default}
-.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
-.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
-.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
-.btnsub:hover{opacity:.88}
-#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
-.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
-.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
-.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
-.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
-.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
-.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
-.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
-.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
-.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnr:hover{background:var(--acc);color:#fff}
-@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+.olet{font-weight:700;font-size:.75rem;opacity:.5;flex-shrink:0;padding-top:.05rem;min-width:1rem}
+.fb{display:none;margin-top:.75rem;padding:.75rem 1rem;border-radius:8px;font-size:.82rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:#16a34a;color:#15803d;display:block}
+.fb.ng{background:#f9fafb;border-color:#dc2626;color:#374151;display:block}
+.chk-btn{margin-top:.8rem;display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1.1rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:7px;font-size:.73rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.chk-btn:hover:not(:disabled){background:#374151;color:#fff}
+.chk-btn:disabled{opacity:.3;cursor:default}
+.actions{text-align:center;padding:2rem 0;border-top:1px solid #e2e8f0;margin-top:.5rem}
+.warn{font-size:.75rem;color:#d97706;margin-bottom:.75rem;min-height:1em;font-weight:500}
+.submit-btn{padding:.8rem 2.2rem;background:#374151;color:#fff;border:none;border-radius:9px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.submit-btn:hover{opacity:.88}
+#results{display:none;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2.5rem 2rem;text-align:center;margin-top:1.5rem}
+.res-score{font-size:4.5rem;font-weight:800;color:#374151;line-height:1}
+.res-pct{font-size:.9rem;color:#64748b;margin:.3rem 0 1.2rem}
+.res-rat{display:inline-block;padding:.4rem 1.2rem;background:#f9fafb;color:#374151;border-radius:20px;font-weight:700;font-size:.95rem;margin-bottom:1.5rem}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:.6rem;margin:1rem 0 1.5rem;text-align:left}
+.res-cell{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem}
+.res-cell-n{font-size:.58rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+.res-cell-v{font-size:1.5rem;font-weight:800;color:#1e293b}
+.restart-btn{padding:.7rem 1.8rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.restart-btn:hover{background:#374151;color:#fff}
+@media(max-width:580px){.wrap{padding:1rem .75rem 4rem}.qcard{padding:1.1rem}.res-score{font-size:3.5rem}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<a class="back" href="index.html">← Volver al índice</a>
-<div class="hdr">
-  <div class="hdr-top">
+<div class="topbar" style="background:#374151">
+  <div>
+    <div class="topbar-sub">Curso de Reequipamiento de Barrancos</div>
     <h1>Evaluación Mixta VI</h1>
-    <div class="hdr-badge">10 preguntas</div>
   </div>
-  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+  <a href="index.html">← Índice</a>
 </div>
-<div class="prog-wrap">
-  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
-  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
-</div>
-<div id="quiz"></div>
-<div class="sub-sec">
-  <div class="warn" id="warn"></div>
-  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
-</div>
-<div id="res">
-  <div class="res-lbl">Resultado</div>
-  <div class="res-big" id="rb"></div>
-  <div class="res-sub" id="rs"></div>
-  <div class="rat" id="rr"></div>
-  <div class="bkd" id="bkd"></div>
-  <button class="btnr" onclick="restart()">↺ Repetir</button>
-</div>
+<div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+<div class="wrap">
+  <div class="stat-row">
+    <div class="stat"><strong id="pp">0/10</strong>Respondidas</div>
+    <div class="stat"><strong>10</strong>Preguntas</div>
+    <div class="stat"><strong style="font-size:.9rem;color:#64748b">Responsabilidad · Normativa · TD Barrancos</strong></div>
+  </div>
+  <div id="quiz"></div>
+  <div class="actions">
+    <div class="warn" id="warn"></div>
+    <button class="submit-btn" onclick="submit()">Finalizar y ver resultados →</button>
+  </div>
+  <div id="results">
+    <div class="res-score" id="rscore"></div>
+    <div class="res-pct" id="rpct"></div>
+    <div class="res-rat" id="rrat"></div>
+    <div class="res-grid" id="rgrid"></div>
+    <button class="restart-btn" onclick="restart()">↺ Repetir</button>
+  </div>
 </div>
 <script>
-const Q=[{"id": 1, "la": "Tema 6", "nu": "1", "tx": "En el reequipamiento de barrancos, el material instalado debe ser:", "op": ["Idéntico al existente para respetar la instalación original del aperturista", "Mejor que el empleado anteriormente en diseño, calidad y seguridad", "El más económico que cumpla la normativa mínima", "El mismo tipo pero con certificación ETA adicional"], "co": "b", "fc": "Correcto. El Tema 6 establece que el material del reequipamiento debe ser mejor al anteriormente empleado en diseño, calidad y seguridad.", "fw": "Incorrecto. Respuesta correcta: B — mejor en diseño, calidad y seguridad que el material sustituido."}, {"id": 2, "la": "Tema 6", "nu": "2", "tx": "En la configuración de cabeceras, el 'modo reaseguro' de una cadena en L significa que:", "op": ["Los dos anclajes soportan la carga simultáneamente (modo solidario)", "Solo el anclaje inferior soporta la carga; el superior está inactivo como seguro", "Los dos anclajes trabajan en paralelo con igual participación", "La carga se distribuye según la cadena en V hacia ambos anclajes"], "co": "b", "fc": "Correcto. En el modo reaseguro, la carga la soporta solo el anclaje inferior (principal); el superior permanece inactivo como seguro en caso de rotura del inferior.", "fw": "Incorrecto. Respuesta correcta: B — solo el anclaje inferior soporta la carga; el superior es seguro pasivo."}, {"id": 3, "la": "Tema 3", "nu": "3", "tx": "El desviador en barrancos tiene como función principal:", "op": ["Solidarizar los dos anclajes de la cabecera para cumplir la normativa UNE-EN 959", "Desviar la cuerda de la línea de rápel para evitar roces severos o péndulos peligrosos", "Actuar como tercer anclaje de seguridad en una cabecera de triple punto", "Guiar al barranquista hacia la zona de escape en caso de emergencia"], "co": "b", "fc": "Correcto. El desviador se instala para desviar la cuerda de la línea de rápel, evitando roces sobre aristas o situaciones peligrosas como péndulos.", "fw": "Incorrecto. Respuesta correcta: B — desviar la cuerda para evitar roces o péndulos."}, {"id": 4, "la": "Tema 6", "nu": "4", "tx": "¿Por qué el anclaje tipo U-Bolt requiere incluir una o dos anillas antes de su instalación?", "op": ["Para facilitar el correcto encastrado del tensor en la roca", "Para evitar el desgaste por fricción directa de la cuerda sobre el acero del U-Bolt y añadir redundancia", "Para garantizar el cumplimiento de la norma UNE-EN 959:2018", "Para poder ajustar la dirección del anclaje después de la instalación"], "co": "b", "fc": "Correcto. Sin anillas, la cuerda rozaría directamente el acero del U-Bolt produciendo desgaste. Las anillas protegen el anclaje y añaden redundancia de seguridad.", "fw": "Incorrecto. Respuesta correcta: B — evitar el desgaste por fricción directa de la cuerda y añadir redundancia."}, {"id": 5, "la": "Tema 6", "nu": "5", "tx": "En la fase de planificación de un proyecto de reequipamiento, ¿cuál es el paso ético recomendado antes de comenzar?", "op": ["Publicar en redes sociales la intención de reequipar para recabar voluntarios", "Recabar información de los aperturistas originales y tomar contacto con ellos", "Solicitar presupuesto a los fabricantes de anclajes homologados", "Comunicar el inicio del proyecto al club de barranquismo más cercano"], "co": "b", "fc": "Correcto. El Tema 6 indica que recabar información de los aperturistas y tomar contacto con ellos es un acto ético que puede ser productivo y evitar futuros malentendidos.", "fw": "Incorrecto. Respuesta correcta: B — contactar con los aperturistas originales es el acto ético previo recomendado."}, {"id": 6, "la": "Tema 6", "nu": "6", "tx": "En un rápel volado donde la cuerda pasa por anclajes sin orientar correctamente, se genera principalmente:", "op": ["Una reducción del rozamiento que facilita la recuperación", "Un esfuerzo de torsión sobre los anclajes que puede comprometer su integridad", "Un aumento de la carga de extracción que puede superar los 20 kN", "Una distribución más equitativa de la carga entre los dos anclajes"], "co": "b", "fc": "Correcto. Si la cuerda no está orientada con la dirección del rápel, genera una fuerza de torsión sobre los anclajes, siendo especialmente perjudicial en cabeceras horizontales.", "fw": "Incorrecto. Respuesta correcta: B — fuerza de torsión sobre los anclajes."}, {"id": 7, "la": "Tema 6", "nu": "7", "tx": "El factor de caída en barrancos es especialmente peligroso en las propias cabeceras. ¿Por qué?", "op": ["Porque las cabeceras están siempre mojadas y el coeficiente de fricción es mayor", "Porque cuando estamos anclados a ellas, la caída se disipa entre la distancia de los cabos de anclaje, pudiendo alcanzar factor 2", "Porque las cabeceras de barrancos no están dimensionadas para absorber el impacto dinámico de una caída", "Porque la cuerda está siempre en doble en la cabecera, aumentando la carga sobre los anclajes"], "co": "b", "fc": "Correcto. El factor de caída 2 es el más peligroso y puede ocurrir en la cabecera cuando estamos anclados a ella: la caída se disipa entre la distancia de los cabos de anclaje.", "fw": "Incorrecto. Respuesta correcta: B — en la cabecera la caída se disipa entre los cabos, pudiendo generar factor 2."}, {"id": 8, "la": "Tema 6", "nu": "8", "tx": "El inicio de pasamanos se diferencia visualmente de la cabecera principal del rápel. La configuración que se ha extendido como identificativo para el inicio de pasamanos es:", "op": ["Cadena en V orientada hacia la cabecera principal", "Cadena en forma de L, que indica visualmente que no es la cabecera de rápel", "Tensor simple con anilla única orientado perpendicular al rápel", "Dos tensores de doble anilla solidarizados con cadena en D"], "co": "b", "fc": "Correcto. La configuración en L para el inicio de pasamanos se ha extendido como señal visual clara para que el barranquista no confunda el pasamanos con la cabecera de rápel.", "fw": "Incorrecto. Respuesta correcta: B — cadena en L identifica el inicio del pasamanos."}, {"id": 9, "la": "Tema 6", "nu": "9", "tx": "En un reequipamiento de grupo pequeño con pocos recursos, ¿cuál es la organización habitual por jornadas?", "op": ["Jornada 1: perforación + resinado simultáneo; jornada 2: retirada de anclajes viejos", "Jornada 1: perforación de todas las cabeceras; jornada 2: resinado; jornada 3: retirada de anclajes viejos", "Jornada única con todos los roles trabajando simultáneamente en distintos rápeles", "Jornada 1: retirada de anclajes viejos; jornada 2: perforación; jornada 3: resinado"], "co": "b", "fc": "Correcto. Para grupos pequeños, el Tema 6 recomienda: jornada 1 toda la perforación, jornada 2 todo el resinado, jornada 3 retirada de viejos. Así se minimiza el material transportado cada día.", "fw": "Incorrecto. Respuesta correcta: B — tres jornadas: perforación / resinado / retirada de viejos."}, {"id": 10, "la": "Tema 6", "nu": "10", "tx": "Una vez mimetizados y retirados todos los anclajes viejos, ¿cuándo se considera formalmente concluido el trabajo de reequipamiento?", "op": ["Cuando los nuevos anclajes han fraguado completamente según la ficha técnica", "Cuando se han retirado los cartelitos de aviso de los nuevos anclajes", "Cuando se han comprobado los anclajes con un extractómetro", "Cuando se ha cumplimentado y archivado la ficha técnica del barranco"], "co": "c", "fc": "Correcto. El reequipamiento se da por concluido cuando se han verificado los anclajes con el extractómetro, que confirma que soportan la carga prevista.", "fw": "Incorrecto. Respuesta correcta: C — comprobación con extractómetro da por concluido el trabajo."}];
-const KM=['a','b','c','d'];
-const ans={};const ver=new Set();
-function build(){
-  const c=document.getElementById('quiz');
-  Q.forEach(q=>{
-    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
-    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
-      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
-      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
-      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
-    c.appendChild(d);
-  });
-}
-function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
-function verify(id){
-  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
-  document.getElementById('warn').textContent='';ver.add(id);
-  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
-  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
-  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
-  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
-}
-function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
-function submitAll(){
-  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
-  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
-  let tot=0;const bk={};
-  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
-  const p=Math.round(tot/10*100);
-  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
-  const rr=document.getElementById('rr');
-  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
-  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
-  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+const Q=[{"id": 1, "bl": "T1", "la": "Tema 1", "tx": "Antes de iniciar un proyecto de reequipamiento en un barranco situado dentro de un Espacio Natural Protegido, ¿cuál es el trámite administrativo imprescindible que debe realizar el reequipador?", "op": ["Comunicarlo por redes sociales para recabar voluntarios y financiación", "Notificarlo al club de barranquismo más cercano a la zona", "Solicitar la autorización previa a la Administración competente (Cabildo Insular en Canarias)", "Registrar el proyecto en el Censo de Instalaciones Deportivas antes de comenzar"], "co": "c", "fc": "Correcto. Actuar en un ENP sin la preceptiva autorización del Cabildo Insular expone al reequipador a responsabilidad administrativa y puede invalidar legalmente los trabajos realizados. Solicitar el permiso es el primer paso obligatorio.", "fw": "Incorrecto. El trámite imprescindible es solicitar la autorización previa a la Administración competente (el Cabildo Insular en Canarias), sin la cual la actuación en un ENP es ilegal."}, {"id": 2, "bl": "T1", "la": "Tema 1", "tx": "Según el Tema 1, ¿cuál de las siguientes afirmaciones sobre la Administración Pública y los barrancos deportivos es CORRECTA?", "op": ["La Administración solo responde si el barranco figura en el Censo de Instalaciones Deportivas", "La Administración queda exonerada si el accidente ocurre fuera del horario de supervisión oficial", "La Administración tiene obligación de velar por la seguridad de las instalaciones de uso público con independencia del Censo", "La responsabilidad recae exclusivamente sobre quien instaló los anclajes defectuosos"], "co": "c", "fc": "Correcto. La obligación de la Administración de garantizar la seguridad de instalaciones de uso público (art. 51.1 CE) no depende de si el barranco figura o no en el Censo.", "fw": "Incorrecto. La obligación de seguridad de la Administración existe independientemente del registro censal."}, {"id": 3, "bl": "T2", "la": "Tema 2", "tx": "Las rocas sedimentarias constituyen el 75% de las rocas existentes en el mundo y se forman principalmente por:", "op": ["El enfriamiento lento del magma en el interior de la Tierra, formando cristales grandes", "La acumulación y posterior compactación y cementación de sedimentos procedentes de otras rocas o restos orgánicos transportados por agua o aire", "La transformación de rocas preexistentes por efecto de altas presiones y temperaturas en el interior de la corteza", "La solidificación rápida de la lava en la superficie terrestre tras una erupción volcánica"], "co": "b", "fc": "Correcto. Las rocas sedimentarias se forman por la acumulación de sedimentos (fragmentos de otras rocas, restos orgánicos) que, durante largos períodos, se compactan y cementan formando roca sólida. Son las más abundantes superficialmente.", "fw": "Incorrecto. Las rocas sedimentarias se forman por acumulación, compactación y cementación de sedimentos. El enfriamiento del magma produce ígneas intrusivas; la lava enfriada produce extrusivas; la presión y temperatura producen metamórficas."}, {"id": 4, "bl": "T2", "la": "Tema 2", "tx": "El basalto es una roca magmática extrusiva muy común en Canarias. ¿Cuál es su categoría de resistencia según el Tema 2 y qué implica para la elección de anclajes?", "op": ["Roca muy frágil (< 20 MPa); solo se recomiendan anclajes de gran longitud con resina", "Roca frágil (20-60 MPa); se desaconsejan los anclajes de expansión fuertes", "Roca dura (> 60 MPa); es adecuada tanto para anclajes mecánicos de expansión como para anclajes químicos", "Roca metamórfica de alta resistencia; requiere brocas de diamante para su perforación"], "co": "c", "fc": "Correcto. El basalto es una roca dura (> 60 MPa), junto con el granito y la caliza dura. En roca dura son adecuados los anclajes mecánicos de expansión (W-FA/FAZ) y también los químicos, siendo la opción preferente estos últimos por sus mejores características.", "fw": "Incorrecto. El basalto se clasifica como roca dura (> 60 MPa), lo que lo hace apto para anclajes de expansión y también para anclajes químicos."}, {"id": 5, "bl": "T3", "la": "Tema 3", "tx": "La clase 'SCC' de la norma UIAA 123 V4 2020 es la única que:", "op": ["Garantiza que el anclaje es de titanio de grado 2", "Ha demostrado resistencia tanto a la corrosión general como a la corrosión bajo tensión (Stress Corrosion Cracking)", "Exige que el fabricante sea europeo y esté certificado por ENAC", "Permite el uso del anclaje en rocas con resistencia a compresión inferior a 400 kg/cm²"], "co": "b", "fc": "Correcto. La clase SCC es la única de las tres clases (SCC, GC, LC) que ha superado las pruebas tanto de corrosión general como de corrosión bajo tensión.", "fw": "Incorrecto. La clase SCC es la única que resiste tanto la corrosión general como el SCC."}, {"id": 6, "bl": "T3", "la": "Tema 3", "tx": "El 'tratamiento marino' (desengrasado + decapado + pasivado) es utilizado por fabricantes como Lappas Climbing, Vertical Evolution y Raumer para:", "op": ["Reducir el coste de producción de los aceros inoxidables A2", "Mejorar la resistencia a la corrosión de los anclajes especialmente en entornos marinos", "Cumplir el requisito obligatorio de la norma UNE-EN 959:2018", "Aumentar la dureza superficial y la resistencia mecánica del anclaje"], "co": "b", "fc": "Correcto. El tratamiento marino mejora la resistencia a la corrosión de los anclajes, siendo especialmente relevante para entornos con alta concentración de cloruros como los barrancos costeros.", "fw": "Incorrecto. El tratamiento marino mejora la resistencia a la corrosión, especialmente en entornos costeros."}, {"id": 7, "bl": "T4", "la": "Tema 4", "tx": "Las resinas de poliéster NO se recomiendan para anclajes de barrancos principalmente porque:", "op": ["Son demasiado viscosas para inyectarse con pistola estándar", "En condiciones de humedad o materiales alcalinos pueden degradarse y perder hasta el 60% de resistencia", "Tienen un tiempo de trabajabilidad excesivamente largo para uso en campo", "Son incompatibles químicamente con los aceros inoxidables austeníticos"], "co": "b", "fc": "Correcto. Las resinas de poliéster pueden degradarse en presencia de humedad o materiales alcalinos, llegando a perder hasta el 60% de resistencia frente al valor de una instalación seca.", "fw": "Incorrecto. Las poliéster pueden degradarse en ambientes húmedos o alcalinos, perdiendo hasta el 60% de resistencia."}, {"id": 8, "bl": "T4", "la": "Tema 4", "tx": "La norma UNE-EN 959:2018 exige para un anclaje de aseguramiento para roca una resistencia a la carga axial (extracción) de al menos:", "op": ["10 kN", "15 kN", "20 kN", "25 kN"], "co": "b", "fc": "Correcto. La UNE-EN 959:2018 exige 15 kN a extracción (axial) y 25 kN a cizalladura (radial). La UIAA 123 es más exigente: 20 kN axial y 25 kN radial.", "fw": "Incorrecto. La UNE-EN 959:2018 exige 15 kN a extracción y 25 kN a cizalladura."}, {"id": 9, "bl": "T5", "la": "Tema 5", "tx": "Los taladros a batería más utilizados en reequipamiento trabajan con un voltaje de:", "op": ["12V, por su ligereza extrema", "18V, equilibrio entre voltaje, intensidad y peso", "36V, para maximizar la fuerza de percusión", "48V, estándar actual de la industria de la construcción"], "co": "b", "fc": "Correcto. Los 18V son los más habituales en reequipamiento por ofrecer el mejor equilibrio entre voltaje, intensidad de batería y peso transportable.", "fw": "Incorrecto. Los taladros de 18V son los más comunes en reequipamiento por equilibrio entre potencia y peso."}, {"id": 10, "bl": "T6", "la": "Tema 6", "tx": "En el 'modo solidario' de una cabecera con cadena en L, la carga es soportada por:", "op": ["Solo el anclaje inferior; el superior permanece inactivo como seguro", "Ambos anclajes simultáneamente; la carga se comparte entre los dos", "El anclaje superior únicamente, siendo el inferior un refuerzo opcional", "La propia cadena que distribuye la carga según el ángulo de la cuerda"], "co": "a", "fc": "Correcto. En una cabecera solidarizada (modo reaseguro), solo el anclaje inferior soporta la carga activamente; el superior permanece inactivo como respaldo. Si el inferior falla, el superior entra en carga. A esto se le llama solidarizar la cabecera.", "fw": "Incorrecto. Respuesta correcta: A. Solidarizar una cabecera significa que si un anclaje falla el otro responde. En la cadena en L, el anclaje inferior soporta la carga y el superior actúa como seguro de respaldo."}];
+const ans={},ver=new Set();
+function build(){const c=document.getElementById('quiz');Q.forEach(q=>{const d=document.createElement('div');d.className='qcard';
+d.innerHTML=`<div class="qmeta"><span class="qnum">Pregunta ${q.id}</span><span class="qbadge">${q.la}</span></div>`+
+`<div class="qtxt">${q.tx}</div><div class="opts" id="o${q.id}">`+
+q.op.map((t,i)=>`<button class="opt" data-v="${'abcd'[i]}" onclick="pick(${q.id},'${'abcd'[i]}')"><span class="olet">${'ABCD'[i]}</span>${t}</button>`).join('')+
+`</div><div class="fb" id="f${q.id}"></div><button class="chk-btn" id="b${q.id}" onclick="check(${q.id})">▶ Comprobar</button>`;
+document.getElementById('quiz').appendChild(d);});}
+function pick(id,v){if(ver.has(id))return;document.querySelectorAll(`#o${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#o${id} [data-v="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function check(id){if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción primero.';return;}document.getElementById('warn').textContent='';
+ver.add(id);const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+document.querySelectorAll(`#o${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.v===q.co)o.classList.add('ok');else if(o.dataset.v===ans[id]&&!ok)o.classList.add('ng');});
+const f=document.getElementById('f'+id);f.className='fb '+(ok?'ok':'ng');f.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+const b=document.getElementById('b'+id);b.disabled=true;b.textContent=ok?'✓ Correcto':'✗ Incorrecto';}
+function prog(){const d=Object.keys(ans).length,p=Math.round(d/Q.length*100);
+document.getElementById('pp').textContent=`${d}/${Q.length} respondidas`;document.getElementById('pf').style.width=p+'%';}
+function submit(){const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} pregunta(s) sin responder.`:'';
+Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])check(q.id);});
+let tot=0;const bk={};Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=bk[q.la]||[0,0];bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+const p=Math.round(tot/Q.length*100);document.getElementById('rscore').textContent=`${tot}/${Q.length}`;document.getElementById('rpct').textContent=`${p}% de respuestas correctas`;
+const r=['❗ Necesitas repasar','📖 Suficiente','📚 Bien','👍 Notable','🏆 Sobresaliente'];
+document.getElementById('rrat').textContent=r[p>=90?4:p>=75?3:p>=60?2:p>=50?1:0];
+document.getElementById('rgrid').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="res-cell"><div class="res-cell-n">${k}</div><div class="res-cell-v">${c}/${t}</div></div>`).join('');
+document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>o.className='opt');document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent='';});document.querySelectorAll('.chk-btn').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar';});document.getElementById('warn').textContent='';document.getElementById('results').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
 build();prog();
 </script>
 </body>

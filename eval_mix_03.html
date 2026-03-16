@@ -3,127 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Evaluación Mixta III</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Evaluación Mixta III — Reequipamiento de Barrancos</title>
 <style>
-:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
-a.back:hover{color:var(--acc)}
-.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
-.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
-.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
-.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
-.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
-.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
-.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
-.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
-.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
-.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
-.qcard:hover{border-left-color:var(--acc)}
-.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
-.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
-.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
-.opts{display:flex;flex-direction:column;gap:.45rem}
-.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
-.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
-.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+.topbar{background:#374151;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.topbar h1{color:#fff;font-size:1.05rem;font-weight:700;line-height:1.2}
+.topbar a{color:rgba(255,255,255,.8);font-size:.78rem;text-decoration:none;background:rgba(255,255,255,.15);padding:.35rem .8rem;border-radius:6px;white-space:nowrap}
+.topbar a:hover{background:rgba(255,255,255,.25)}
+.topbar-sub{color:rgba(255,255,255,.7);font-size:.75rem}
+.prog-bar{background:rgba(255,255,255,.25);height:5px}
+.prog-fill{height:100%;background:#fff;transition:width .4s;width:0%}
+.wrap{max-width:780px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.stat-row{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:.65rem 1rem;font-size:.8rem;color:#64748b;flex:1;min-width:110px}
+.stat strong{display:block;font-size:1.3rem;font-weight:700;color:#1e293b;line-height:1}
+.qcard{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.4rem;margin-bottom:1rem;border-top:3px solid #374151}
+.qmeta{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap}
+.qnum{font-size:.72rem;font-weight:600;color:#374151;background:#f9fafb;padding:.2rem .55rem;border-radius:4px}
+.qbadge{font-size:.68rem;color:#64748b;background:#f1f5f9;padding:.2rem .55rem;border-radius:4px}
+.qtxt{font-size:.95rem;line-height:1.65;color:#1e293b;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem .9rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:.87rem;line-height:1.5;text-align:left;color:#1e293b;width:100%;transition:all .12s}
+.opt:hover:not(.dis){background:#f9fafb;border-color:#374151}
+.opt.sel{background:#f9fafb;border-color:#374151;color:#1e293b}
+.opt.ok{background:#dcfce7;border-color:#16a34a;color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:#dc2626;color:#374151}
 .opt.dis{cursor:default}
-.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
-.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
-.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
-.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
-.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
-.btnv:disabled{opacity:.3;cursor:default}
-.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
-.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
-.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
-.btnsub:hover{opacity:.88}
-#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
-.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
-.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
-.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
-.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
-.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
-.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
-.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
-.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
-.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnr:hover{background:var(--acc);color:#fff}
-@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+.olet{font-weight:700;font-size:.75rem;opacity:.5;flex-shrink:0;padding-top:.05rem;min-width:1rem}
+.fb{display:none;margin-top:.75rem;padding:.75rem 1rem;border-radius:8px;font-size:.82rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:#16a34a;color:#15803d;display:block}
+.fb.ng{background:#f9fafb;border-color:#dc2626;color:#374151;display:block}
+.chk-btn{margin-top:.8rem;display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1.1rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:7px;font-size:.73rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.chk-btn:hover:not(:disabled){background:#374151;color:#fff}
+.chk-btn:disabled{opacity:.3;cursor:default}
+.actions{text-align:center;padding:2rem 0;border-top:1px solid #e2e8f0;margin-top:.5rem}
+.warn{font-size:.75rem;color:#d97706;margin-bottom:.75rem;min-height:1em;font-weight:500}
+.submit-btn{padding:.8rem 2.2rem;background:#374151;color:#fff;border:none;border-radius:9px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.submit-btn:hover{opacity:.88}
+#results{display:none;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2.5rem 2rem;text-align:center;margin-top:1.5rem}
+.res-score{font-size:4.5rem;font-weight:800;color:#374151;line-height:1}
+.res-pct{font-size:.9rem;color:#64748b;margin:.3rem 0 1.2rem}
+.res-rat{display:inline-block;padding:.4rem 1.2rem;background:#f9fafb;color:#374151;border-radius:20px;font-weight:700;font-size:.95rem;margin-bottom:1.5rem}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:.6rem;margin:1rem 0 1.5rem;text-align:left}
+.res-cell{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem}
+.res-cell-n{font-size:.58rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+.res-cell-v{font-size:1.5rem;font-weight:800;color:#1e293b}
+.restart-btn{padding:.7rem 1.8rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.restart-btn:hover{background:#374151;color:#fff}
+@media(max-width:580px){.wrap{padding:1rem .75rem 4rem}.qcard{padding:1.1rem}.res-score{font-size:3.5rem}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<a class="back" href="index.html">← Volver al índice</a>
-<div class="hdr">
-  <div class="hdr-top">
+<div class="topbar" style="background:#374151">
+  <div>
+    <div class="topbar-sub">Curso de Reequipamiento de Barrancos</div>
     <h1>Evaluación Mixta III</h1>
-    <div class="hdr-badge">10 preguntas</div>
   </div>
-  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+  <a href="index.html">← Índice</a>
 </div>
-<div class="prog-wrap">
-  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
-  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
-</div>
-<div id="quiz"></div>
-<div class="sub-sec">
-  <div class="warn" id="warn"></div>
-  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
-</div>
-<div id="res">
-  <div class="res-lbl">Resultado</div>
-  <div class="res-big" id="rb"></div>
-  <div class="res-sub" id="rs"></div>
-  <div class="rat" id="rr"></div>
-  <div class="bkd" id="bkd"></div>
-  <button class="btnr" onclick="restart()">↺ Repetir</button>
-</div>
+<div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+<div class="wrap">
+  <div class="stat-row">
+    <div class="stat"><strong id="pp">0/10</strong>Respondidas</div>
+    <div class="stat"><strong>10</strong>Preguntas</div>
+    <div class="stat"><strong style="font-size:.9rem;color:#64748b">Responsabilidad · Normativa · TD Barrancos</strong></div>
+  </div>
+  <div id="quiz"></div>
+  <div class="actions">
+    <div class="warn" id="warn"></div>
+    <button class="submit-btn" onclick="submit()">Finalizar y ver resultados →</button>
+  </div>
+  <div id="results">
+    <div class="res-score" id="rscore"></div>
+    <div class="res-pct" id="rpct"></div>
+    <div class="res-rat" id="rrat"></div>
+    <div class="res-grid" id="rgrid"></div>
+    <button class="restart-btn" onclick="restart()">↺ Repetir</button>
+  </div>
 </div>
 <script>
-const Q=[{"id": 1, "la": "Tema 3", "nu": "1", "tx": "¿Cuál es el contenido máximo de carbono del acero para diferenciarlo de la fundición?", "op": ["0,5%", "2,1%", "4,3%", "0,08%"], "co": "b", "fc": "Correcto. El acero es una aleación Fe-C con contenido de carbono entre 0,008% y 2,1%. Por encima del 2,1% se considera fundición.", "fw": "Incorrecto. Respuesta correcta: B — hasta 2,1% de carbono."}, {"id": 2, "la": "Tema 3", "nu": "2", "tx": "El tratamiento térmico de 'revenido' se aplica después del temple para:", "op": ["Aumentar más la dureza del acero", "Reducir la fragilidad excesiva generada por el temple, mejorando la tenacidad", "Eliminar la martensita y obtener ferrita", "Aumentar el contenido en carbono de la superficie del acero"], "co": "b", "fc": "Correcto. El revenido se aplica tras el temple para reducir la fragilidad y las tensiones internas de la martensita, mejorando la tenacidad a costa de algo de dureza.", "fw": "Incorrecto. Respuesta correcta: B — el revenido reduce la fragilidad del temple y mejora la tenacidad."}, {"id": 3, "la": "Tema 3", "nu": "3", "tx": "Los aceros inoxidables ferríticos se caracterizan por:", "op": ["Contener Cr y Ni, ser austeníticos y no magnéticos", "Contener Cr del 10,5 al 30%, no utilizarse para anclajes, y tener resistencia moderada a la corrosión", "Ser los más duros por su alto contenido en carbono martensítico", "Contener molibdeno como elemento principal para resistir los cloruros"], "co": "b", "fc": "Correcto. Los ferríticos contienen Cr del 10,5 al 30%, carbono muy bajo (~0,08%), tienen resistencia moderada a buena a la corrosión y NO se utilizan para fabricar anclajes.", "fw": "Incorrecto. Respuesta correcta: B — ferríticos: Cr 10,5-30%, resistencia moderada, no usados para anclajes."}, {"id": 4, "la": "Tema 3", "nu": "4", "tx": "El tratamiento 'Tratamiento Marino' (Desengrasado + Decapado + Pasivado) es utilizado por marcas como:", "op": ["Hilti, Bosch y Makita", "Lappas Climbing, Vertical Evolution y Raumer", "FEDME, UIAA y CEN", "Sika, Hilti y Fischer"], "co": "b", "fc": "Correcto. El Tema 3 menciona que marcas como Lappas Climbing, Vertical Evolution y Raumer utilizan el proceso de tratamiento marino (desengrasado + decapado + pasivado) para mejorar la resistencia a la corrosión.", "fw": "Incorrecto. Respuesta correcta: B — Lappas Climbing, Vertical Evolution y Raumer."}, {"id": 5, "la": "Tema 3", "nu": "5", "tx": "La corrosión por picadura se produce cuando:", "op": ["La capa pasiva del acero inoxidable se rompe localmente por la acción de los cloruros, generando picaduras profundas", "Dos metales distintos están en contacto en un electrolito", "Existe tensión mecánica alta combinada con ambiente corrosivo", "Hay bacterias reductoras de sulfatos en el espacio entre el anclaje y la roca"], "co": "a", "fc": "Correcto. La corrosión por picadura ocurre cuando los cloruros rompen localmente la capa pasiva del inoxidable, generando ataques muy localizados y profundos con apariencia de pequeños cráteres.", "fw": "Incorrecto. Respuesta correcta: A — ruptura local de la capa pasiva por cloruros, generando picaduras profundas."}, {"id": 6, "la": "Tema 3", "nu": "6", "tx": "En la escala de resistencia a la corrosión UIAA 123 V4 2020, ¿cuál de las tres clases (SCC, GC, LC) es la única que resiste la corrosión bajo tensión?", "op": ["LC — baja resistencia", "GC — resistencia general", "SCC — alta resistencia general y alta resistencia al SCC", "Las tres clases resisten el SCC en diferente medida"], "co": "c", "fc": "Correcto. La clase SCC es la única de las tres que ha demostrado resistencia al fenómeno de corrosión bajo tensión (Stress Corrosion Cracking), siendo obligatoria en zonas de riesgo.", "fw": "Incorrecto. Respuesta correcta: C — solo la clase SCC resiste la corrosión bajo tensión."}, {"id": 7, "la": "Tema 3", "nu": "7", "tx": "El molibdeno (Mo) en los aceros inoxidables austeníticos como el AISI 316 tiene como función principal:", "op": ["Aumentar la dureza y resistencia mecánica como en el temple", "Mejorar la resistencia a la corrosión por cloruros y a la corrosión por picadura", "Reducir el coste de fabricación al sustituir al cromo", "Aumentar la magnetización del acero para facilitar su detección"], "co": "b", "fc": "Correcto. El molibdeno en el AISI 316 (A4) mejora específicamente la resistencia a la corrosión por cloruros y a la corrosión por picadura, siendo clave para entornos marinos.", "fw": "Incorrecto. Respuesta correcta: B — el Mo mejora la resistencia a cloruros y corrosión por picadura."}, {"id": 8, "la": "Tema 3", "nu": "8", "tx": "Un tensor con anilla comparado con un conjunto parabolt + chapa + arandela es MENOS propenso a la corrosión intersticial porque:", "op": ["Está fabricado en un acero de mayor resistencia a la corrosión", "Es más grueso y la capa pasiva tarda más en romperse", "No tiene hendiduras entre piezas donde pueda quedar retenido el electrolito sin renovarse", "Tiene un menor par de apriete durante la instalación"], "co": "c", "fc": "Correcto. La corrosión intersticial requiere que el electrolito quede atrapado en una hendidura sin renovarse. El tensor con anilla es una pieza más continua y sin esas juntas críticas.", "fw": "Incorrecto. Respuesta correcta: C — el tensor con anilla carece de las hendiduras donde el electrolito queda atrapado."}, {"id": 9, "la": "Tema 3", "nu": "9", "tx": "La corrosión bajo tensión (SCC) puede iniciarse en un anclaje recién instalado en:", "op": ["Más de 10 años desde la instalación", "2-3 años seguramente, y a veces en pocos meses", "Solo después de que la capa galvánica desaparezca por completo", "Solo si la temperatura supera los 60°C de forma continuada"], "co": "b", "fc": "Correcto. El Anexo II UIAA 2020 indica que la SCC puede iniciar fisuras muy rápidamente: quizás en unos meses, 2-3 años seguramente, especialmente en zonas costeras cálidas.", "fw": "Incorrecto. Respuesta correcta: B — la SCC puede aparecer en meses, 2-3 años seguramente."}, {"id": 10, "la": "Tema 3", "nu": "10", "tx": "Para detectar la presencia de la corrosión bajo tensión (SCC) en anclajes ya instalados, la UIAA indica que:", "op": ["Es fácil de detectar visualmente por la formación de óxido rojizo en la superficie", "Solo las pruebas destructivas pueden confirmar la presencia de SCC, ya que suele ser invisible", "Un simple golpe con el martillo revela si el anclaje está afectado por SCC", "El uso de un extractómetro detecta el SCC de forma no destructiva"], "co": "b", "fc": "Correcto. La UIAA advierte que el riesgo del SCC es que suele ser invisible; solo las pruebas destructivas pueden confirmar su presencia en los anclajes instalados.", "fw": "Incorrecto. Respuesta correcta: B — solo pruebas destructivas confirman el SCC; suele ser invisible a simple vista."}];
-const KM=['a','b','c','d'];
-const ans={};const ver=new Set();
-function build(){
-  const c=document.getElementById('quiz');
-  Q.forEach(q=>{
-    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
-    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
-      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
-      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
-      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
-    c.appendChild(d);
-  });
-}
-function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
-function verify(id){
-  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
-  document.getElementById('warn').textContent='';ver.add(id);
-  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
-  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
-  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
-  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
-}
-function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
-function submitAll(){
-  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
-  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
-  let tot=0;const bk={};
-  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
-  const p=Math.round(tot/10*100);
-  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
-  const rr=document.getElementById('rr');
-  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
-  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
-  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+const Q=[{"id": 1, "bl": "T1", "la": "Tema 1", "tx": "Según el Tema 1, ¿cuál de las siguientes afirmaciones sobre la Administración Pública y los barrancos deportivos es CORRECTA?", "op": ["La Administración solo responde si el barranco figura en el Censo de Instalaciones Deportivas", "La Administración queda exonerada si el accidente ocurre fuera del horario de supervisión oficial", "La Administración tiene obligación de velar por la seguridad de las instalaciones de uso público con independencia del Censo", "La responsabilidad recae exclusivamente sobre quien instaló los anclajes defectuosos"], "co": "c", "fc": "Correcto. La obligación de la Administración de garantizar la seguridad de instalaciones de uso público (art. 51.1 CE) no depende de si el barranco figura o no en el Censo.", "fw": "Incorrecto. La obligación de seguridad de la Administración existe independientemente del registro censal."}, {"id": 2, "bl": "T1", "la": "Tema 1", "tx": "El Real Decreto 702/2019 establece las titulaciones de Técnico Deportivo (TD). ¿Cuál de las siguientes competencias corresponde al TD en Barrancos?", "op": ["Homologar anclajes para su comercialización en España", "Diseñar e instalar equipamientos en itinerarios de acceso y descenso de barrancos", "Otorgar licencias de reequipamiento en espacios naturales protegidos", "Certificar la resistencia estructural de los anclajes instalados"], "co": "b", "fc": "Correcto. El RD 702/2019 atribuye al TD en Barrancos la competencia de diseñar e instalar equipamientos en itinerarios de barrancos respetando la normativa medioambiental.", "fw": "Incorrecto. El TD en Barrancos diseña e instala equipamientos; la homologación y certificación de anclajes corresponde a otros organismos."}, {"id": 3, "bl": "T2", "la": "Tema 2", "tx": "El basalto es una roca magmática extrusiva muy común en Canarias. ¿Cuál es su categoría de resistencia según el Tema 2 y qué implica para la elección de anclajes?", "op": ["Roca muy frágil (< 20 MPa); solo se recomiendan anclajes de gran longitud con resina", "Roca frágil (20-60 MPa); se desaconsejan los anclajes de expansión fuertes", "Roca dura (> 60 MPa); es adecuada tanto para anclajes mecánicos de expansión como para anclajes químicos", "Roca metamórfica de alta resistencia; requiere brocas de diamante para su perforación"], "co": "c", "fc": "Correcto. El basalto es una roca dura (> 60 MPa), junto con el granito y la caliza dura. En roca dura son adecuados los anclajes mecánicos de expansión (W-FA/FAZ) y también los químicos, siendo la opción preferente estos últimos por sus mejores características.", "fw": "Incorrecto. El basalto se clasifica como roca dura (> 60 MPa), lo que lo hace apto para anclajes de expansión y también para anclajes químicos."}, {"id": 4, "bl": "T2", "la": "Tema 2", "tx": "Las rocas metamórficas se originan a partir de rocas preexistentes transformadas por altas presiones y temperaturas en el interior de la corteza. ¿Cuál de las siguientes es un ejemplo de roca metamórfica y qué característica la hace problemática para instalar anclajes?", "op": ["El granito; su grano grueso dificulta la adhesión de la resina en el agujero", "La caliza; su porosidad hace que absorba la resina antes de que fragüe", "La pizarra; su estructura foliada (en capas paralelas) puede provocar la rotura del soporte al aplicar carga", "El basalto; su dureza extrema impide perforarlo con brocas estándar de widia"], "co": "c", "fc": "Correcto. La pizarra es una roca metamórfica foliada típica. Su estructura en capas paralelas (foliación) es su principal debilidad para el reequipamiento: al aplicar carga sobre el anclaje, la roca puede ceder siguiendo los planos de foliación, haciendo la instalación poco fiable.", "fw": "Incorrecto. La pizarra es el ejemplo de roca metamórfica foliada del temario. Su foliación (estructura en capas) es problemática para los anclajes porque la roca puede desplazarse o romperse siguiendo esos planos al recibir carga."}, {"id": 5, "bl": "T3", "la": "Tema 3", "tx": "El 'tratamiento marino' (desengrasado + decapado + pasivado) es utilizado por fabricantes como Lappas Climbing, Vertical Evolution y Raumer para:", "op": ["Reducir el coste de producción de los aceros inoxidables A2", "Mejorar la resistencia a la corrosión de los anclajes especialmente en entornos marinos", "Cumplir el requisito obligatorio de la norma UNE-EN 959:2018", "Aumentar la dureza superficial y la resistencia mecánica del anclaje"], "co": "b", "fc": "Correcto. El tratamiento marino mejora la resistencia a la corrosión de los anclajes, siendo especialmente relevante para entornos con alta concentración de cloruros como los barrancos costeros.", "fw": "Incorrecto. El tratamiento marino mejora la resistencia a la corrosión, especialmente en entornos costeros."}, {"id": 6, "bl": "T3", "la": "Tema 3", "tx": "El contenido máximo de carbono (C) que puede tener un acero para no considerarse fundición es:", "op": ["0,5%", "2,1%", "3,5%", "0,08%"], "co": "b", "fc": "Correcto. El acero es una aleación hierro-carbono con contenido de C entre 0,008% y 2,1%. Por encima se denomina fundición.", "fw": "Incorrecto. El límite superior del acero es 2,1% de carbono; por encima de ese valor se considera fundición."}, {"id": 7, "bl": "T4", "la": "Tema 4", "tx": "La norma UNE-EN 959:2018 exige para un anclaje de aseguramiento para roca una resistencia a la carga axial (extracción) de al menos:", "op": ["10 kN", "15 kN", "20 kN", "25 kN"], "co": "b", "fc": "Correcto. La UNE-EN 959:2018 exige 15 kN a extracción (axial) y 25 kN a cizalladura (radial). La UIAA 123 es más exigente: 20 kN axial y 25 kN radial.", "fw": "Incorrecto. La UNE-EN 959:2018 exige 15 kN a extracción y 25 kN a cizalladura."}, {"id": 8, "bl": "T4", "la": "Tema 4", "tx": "La EOTA (European Organisation for Technical Assessment) coordina la elaboración de:", "op": ["Las normas EN de obligado cumplimiento en todos los países UE", "Los Documentos de Evaluación Europeos (DEE) y la emisión de las ETA (Evaluaciones Técnicas Europeas)", "Las acreditaciones de laboratorios de ensayo en España", "Los registros de instalaciones deportivas a escala europea"], "co": "b", "fc": "Correcto. La EOTA coordina los DEE y la emisión de los ETA (antes DITE) a través de sus organismos miembros, permitiendo la comercialización de productos con marcado CE bajo este régimen.", "fw": "Incorrecto. La EOTA coordina los DEE y emite las ETA; no elabora normas EN ni acredita laboratorios."}, {"id": 9, "bl": "T5", "la": "Tema 5", "tx": "La escobilla para limpiar el agujero tras el taladro debe ser:", "op": ["Del mismo diámetro que el agujero, para deslizarse sin rozar las paredes", "Más delgada que el diámetro del agujero, para no atascarla", "Más gruesa que el diámetro del agujero, para que ejerza presión en las paredes y limpie bien", "De cerdas metálicas finas independientemente del diámetro del agujero"], "co": "c", "fc": "Correcto. El Tema 5 especifica que la escobilla debe ser más gruesa que el diámetro del agujero para que ejerza presión en las paredes y limpie correctamente los restos de polvo adheridos.", "fw": "Incorrecto. La escobilla debe ser MÁS GRUESA que el agujero para ejercer presión sobre las paredes y limpiar eficazmente."}, {"id": 10, "bl": "T6", "la": "Tema 6", "tx": "Las cadenas en 'L' están totalmente desaconsejadas en barrancos acuáticos porque:", "op": ["Son más difíciles de instalar en posición horizontal que las cadenas en V", "El material arrastrado por una crecida puede golpear o insertarse en la cadena deteriorando el conjunto", "No permiten la recuperación de la cuerda con nudo en forma de ocho", "Generan un ángulo crítico de la cuerda superior al recomendado por la norma"], "co": "b", "fc": "Correcto. El Tema 6 indica que en barrancos acuáticos, el material arrastrado por crecidas puede golpear o insertarse en la cadena en L, produciendo deterioro o debilitamiento crítico del conjunto.", "fw": "Incorrecto. En barrancos acuáticos, las crecidas pueden insertar material en la cadena en L deteriorando el conjunto."}];
+const ans={},ver=new Set();
+function build(){const c=document.getElementById('quiz');Q.forEach(q=>{const d=document.createElement('div');d.className='qcard';
+d.innerHTML=`<div class="qmeta"><span class="qnum">Pregunta ${q.id}</span><span class="qbadge">${q.la}</span></div>`+
+`<div class="qtxt">${q.tx}</div><div class="opts" id="o${q.id}">`+
+q.op.map((t,i)=>`<button class="opt" data-v="${'abcd'[i]}" onclick="pick(${q.id},'${'abcd'[i]}')"><span class="olet">${'ABCD'[i]}</span>${t}</button>`).join('')+
+`</div><div class="fb" id="f${q.id}"></div><button class="chk-btn" id="b${q.id}" onclick="check(${q.id})">▶ Comprobar</button>`;
+document.getElementById('quiz').appendChild(d);});}
+function pick(id,v){if(ver.has(id))return;document.querySelectorAll(`#o${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#o${id} [data-v="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function check(id){if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción primero.';return;}document.getElementById('warn').textContent='';
+ver.add(id);const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+document.querySelectorAll(`#o${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.v===q.co)o.classList.add('ok');else if(o.dataset.v===ans[id]&&!ok)o.classList.add('ng');});
+const f=document.getElementById('f'+id);f.className='fb '+(ok?'ok':'ng');f.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+const b=document.getElementById('b'+id);b.disabled=true;b.textContent=ok?'✓ Correcto':'✗ Incorrecto';}
+function prog(){const d=Object.keys(ans).length,p=Math.round(d/Q.length*100);
+document.getElementById('pp').textContent=`${d}/${Q.length} respondidas`;document.getElementById('pf').style.width=p+'%';}
+function submit(){const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} pregunta(s) sin responder.`:'';
+Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])check(q.id);});
+let tot=0;const bk={};Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=bk[q.la]||[0,0];bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+const p=Math.round(tot/Q.length*100);document.getElementById('rscore').textContent=`${tot}/${Q.length}`;document.getElementById('rpct').textContent=`${p}% de respuestas correctas`;
+const r=['❗ Necesitas repasar','📖 Suficiente','📚 Bien','👍 Notable','🏆 Sobresaliente'];
+document.getElementById('rrat').textContent=r[p>=90?4:p>=75?3:p>=60?2:p>=50?1:0];
+document.getElementById('rgrid').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="res-cell"><div class="res-cell-n">${k}</div><div class="res-cell-v">${c}/${t}</div></div>`).join('');
+document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>o.className='opt');document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent='';});document.querySelectorAll('.chk-btn').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar';});document.getElementById('warn').textContent='';document.getElementById('results').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
 build();prog();
 </script>
 </body>
