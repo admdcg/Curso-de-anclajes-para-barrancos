@@ -3,127 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Evaluación Mixta II</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Evaluación Mixta II — Reequipamiento de Barrancos</title>
 <style>
-:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
-a.back:hover{color:var(--acc)}
-.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
-.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
-.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
-.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
-.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
-.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
-.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
-.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
-.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
-.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
-.qcard:hover{border-left-color:var(--acc)}
-.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
-.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
-.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
-.opts{display:flex;flex-direction:column;gap:.45rem}
-.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
-.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
-.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
-.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+.topbar{background:#374151;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.topbar h1{color:#fff;font-size:1.05rem;font-weight:700;line-height:1.2}
+.topbar a{color:rgba(255,255,255,.8);font-size:.78rem;text-decoration:none;background:rgba(255,255,255,.15);padding:.35rem .8rem;border-radius:6px;white-space:nowrap}
+.topbar a:hover{background:rgba(255,255,255,.25)}
+.topbar-sub{color:rgba(255,255,255,.7);font-size:.75rem}
+.prog-bar{background:rgba(255,255,255,.25);height:5px}
+.prog-fill{height:100%;background:#fff;transition:width .4s;width:0%}
+.wrap{max-width:780px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.stat-row{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:.65rem 1rem;font-size:.8rem;color:#64748b;flex:1;min-width:110px}
+.stat strong{display:block;font-size:1.3rem;font-weight:700;color:#1e293b;line-height:1}
+.qcard{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.4rem;margin-bottom:1rem;border-top:3px solid #374151}
+.qmeta{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap}
+.qnum{font-size:.72rem;font-weight:600;color:#374151;background:#f9fafb;padding:.2rem .55rem;border-radius:4px}
+.qbadge{font-size:.68rem;color:#64748b;background:#f1f5f9;padding:.2rem .55rem;border-radius:4px}
+.qtxt{font-size:.95rem;line-height:1.65;color:#1e293b;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.4rem}
+.opt{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem .9rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:.87rem;line-height:1.5;text-align:left;color:#1e293b;width:100%;transition:all .12s}
+.opt:hover:not(.dis){background:#f9fafb;border-color:#374151}
+.opt.sel{background:#f9fafb;border-color:#374151;color:#1e293b}
+.opt.ok{background:#dcfce7;border-color:#16a34a;color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:#dc2626;color:#374151}
 .opt.dis{cursor:default}
-.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
-.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
-.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
-.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
-.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
-.btnv:disabled{opacity:.3;cursor:default}
-.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
-.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
-.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
-.btnsub:hover{opacity:.88}
-#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
-.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
-.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
-.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
-.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
-.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
-.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
-.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
-.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
-.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
-.btnr:hover{background:var(--acc);color:#fff}
-@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+.olet{font-weight:700;font-size:.75rem;opacity:.5;flex-shrink:0;padding-top:.05rem;min-width:1rem}
+.fb{display:none;margin-top:.75rem;padding:.75rem 1rem;border-radius:8px;font-size:.82rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:#16a34a;color:#15803d;display:block}
+.fb.ng{background:#f9fafb;border-color:#dc2626;color:#374151;display:block}
+.chk-btn{margin-top:.8rem;display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1.1rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:7px;font-size:.73rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.chk-btn:hover:not(:disabled){background:#374151;color:#fff}
+.chk-btn:disabled{opacity:.3;cursor:default}
+.actions{text-align:center;padding:2rem 0;border-top:1px solid #e2e8f0;margin-top:.5rem}
+.warn{font-size:.75rem;color:#d97706;margin-bottom:.75rem;min-height:1em;font-weight:500}
+.submit-btn{padding:.8rem 2.2rem;background:#374151;color:#fff;border:none;border-radius:9px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.submit-btn:hover{opacity:.88}
+#results{display:none;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:2.5rem 2rem;text-align:center;margin-top:1.5rem}
+.res-score{font-size:4.5rem;font-weight:800;color:#374151;line-height:1}
+.res-pct{font-size:.9rem;color:#64748b;margin:.3rem 0 1.2rem}
+.res-rat{display:inline-block;padding:.4rem 1.2rem;background:#f9fafb;color:#374151;border-radius:20px;font-weight:700;font-size:.95rem;margin-bottom:1.5rem}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:.6rem;margin:1rem 0 1.5rem;text-align:left}
+.res-cell{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem}
+.res-cell-n{font-size:.58rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+.res-cell-v{font-size:1.5rem;font-weight:800;color:#1e293b}
+.restart-btn{padding:.7rem 1.8rem;border:1.5px solid #374151;color:#374151;background:transparent;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.restart-btn:hover{background:#374151;color:#fff}
+@media(max-width:580px){.wrap{padding:1rem .75rem 4rem}.qcard{padding:1.1rem}.res-score{font-size:3.5rem}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<a class="back" href="index.html">← Volver al índice</a>
-<div class="hdr">
-  <div class="hdr-top">
+<div class="topbar" style="background:#374151">
+  <div>
+    <div class="topbar-sub">Curso de Reequipamiento de Barrancos</div>
     <h1>Evaluación Mixta II</h1>
-    <div class="hdr-badge">10 preguntas</div>
   </div>
-  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+  <a href="index.html">← Índice</a>
 </div>
-<div class="prog-wrap">
-  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
-  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
-</div>
-<div id="quiz"></div>
-<div class="sub-sec">
-  <div class="warn" id="warn"></div>
-  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
-</div>
-<div id="res">
-  <div class="res-lbl">Resultado</div>
-  <div class="res-big" id="rb"></div>
-  <div class="res-sub" id="rs"></div>
-  <div class="rat" id="rr"></div>
-  <div class="bkd" id="bkd"></div>
-  <button class="btnr" onclick="restart()">↺ Repetir</button>
-</div>
+<div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+<div class="wrap">
+  <div class="stat-row">
+    <div class="stat"><strong id="pp">0/10</strong>Respondidas</div>
+    <div class="stat"><strong>10</strong>Preguntas</div>
+    <div class="stat"><strong style="font-size:.9rem;color:#64748b">Responsabilidad · Normativa · TD Barrancos</strong></div>
+  </div>
+  <div id="quiz"></div>
+  <div class="actions">
+    <div class="warn" id="warn"></div>
+    <button class="submit-btn" onclick="submit()">Finalizar y ver resultados →</button>
+  </div>
+  <div id="results">
+    <div class="res-score" id="rscore"></div>
+    <div class="res-pct" id="rpct"></div>
+    <div class="res-rat" id="rrat"></div>
+    <div class="res-grid" id="rgrid"></div>
+    <button class="restart-btn" onclick="restart()">↺ Repetir</button>
+  </div>
 </div>
 <script>
-const Q=[{"id": 1, "la": "Tema 2", "nu": "1", "tx": "El artículo 45 de la Constitución Española establece que para quienes violen las obligaciones medioambientales se establecerán:", "op": ["Solo sanciones económicas proporcionales al daño causado", "Sanciones penales o administrativas y obligación de reparar el daño", "Únicamente medidas preventivas sin carácter sancionador", "Sanciones exclusivamente administrativas gestionadas por los Cabildos"], "co": "b", "fc": "Correcto. El art. 45.3 CE prevé que la ley establecerá sanciones penales o administrativas y la obligación de reparar el daño para quienes violen las obligaciones medioambientales.", "fw": "Incorrecto. Respuesta correcta: B — sanciones penales o administrativas más la obligación de reparar el daño."}, {"id": 2, "la": "Tema 2", "nu": "2", "tx": "¿Qué figura de protección de la Red Canaria de ENP incluye zonas donde coexisten valores naturales importantes con actividades humanas productivas tradicionales?", "op": ["Parque Nacional", "Reserva Natural Integral", "Parque Rural", "Sitio de Interés Científico"], "co": "c", "fc": "Correcto. El Parque Rural es la figura que incluye zonas donde coexisten valores naturales de importancia con actividades humanas productivas de tipo tradicional (Zona B del PORN).", "fw": "Incorrecto. Respuesta correcta: C — Parque Rural."}, {"id": 3, "la": "Tema 2", "nu": "3", "tx": "La Directiva Hábitats (92/43/CEE) y la Directiva Aves son el pilar de la política de biodiversidad de la UE y la base de:", "op": ["El Catálogo Español de Especies Amenazadas", "La Red Natura 2000", "El Convenio de Ramsar sobre humedales", "El Protocolo de Kioto"], "co": "b", "fc": "Correcto. La Directiva Hábitats y la Directiva Aves son el eje de la política europea de biodiversidad y constituyen la base de la Red Natura 2000 (ZEC + ZEPA).", "fw": "Incorrecto. Respuesta correcta: B — la Red Natura 2000."}, {"id": 4, "la": "Tema 2", "nu": "4", "tx": "En Canarias, la gestión y administración de los Parques Rurales corresponde a:", "op": ["La Consejería de Medio Ambiente del Gobierno de Canarias", "El Cabildo Insular de la respectiva isla", "El Ayuntamiento del municipio donde se ubica el parque", "El Ministerio para la Transición Ecológica"], "co": "b", "fc": "Correcto. Según el art. 189 de la Ley 4/2017, la administración y gestión de los Parques Rurales corresponde al Cabildo Insular de la respectiva isla.", "fw": "Incorrecto. Respuesta correcta: B — el Cabildo Insular correspondiente."}, {"id": 5, "la": "Tema 2", "nu": "5", "tx": "La Ley 4/2017 del Suelo y de los Espacios Naturales Protegidos de Canarias establece que la celebración de eventos deportivos por el cauce de barrancos dentro de un ENP requiere:", "op": ["Solo comunicación previa al ayuntamiento del municipio", "Previa autorización del Cabildo Insular", "Autorización del Ministerio de Medio Ambiente", "No requiere ningún trámite si el evento es sin ánimo de lucro"], "co": "b", "fc": "Correcto. El art. 80 de la Ley 4/2017 establece que los eventos deportivos en ENP requieren previa autorización del Cabildo Insular.", "fw": "Incorrecto. Respuesta correcta: B — previa autorización del Cabildo Insular."}, {"id": 6, "la": "Tema 2", "nu": "6", "tx": "La meteorización química de la roca se diferencia de la física en que:", "op": ["Solo actúa en zonas costeras con presencia de sal marina", "Implica una alteración de la composición química de los minerales de la roca, no solo su fragmentación mecánica", "Solo se produce a temperaturas superiores a 30°C", "No tiene influencia sobre la elección del tipo de anclaje"], "co": "b", "fc": "Correcto. La meteorización química altera la composición química de los minerales (hidratación, oxidación, carbonatación), a diferencia de la física que solo fragmenta mecánicamente.", "fw": "Incorrecto. Respuesta correcta: B — la meteorización química implica alteración de la composición química de los minerales."}, {"id": 7, "la": "Tema 2", "nu": "7", "tx": "¿Cuál de los siguientes tipos de roca es magmática intrusiva y se caracteriza por su gran dureza y resistencia, siendo muy adecuada para los anclajes?", "op": ["Caliza", "Arenisca", "Granito", "Yeso"], "co": "c", "fc": "Correcto. El granito es una roca magmática intrusiva de gran dureza y resistencia a la compresión, muy adecuada para la instalación de anclajes.", "fw": "Incorrecto. Respuesta correcta: C — el granito, roca ígnea intrusiva muy dura."}, {"id": 8, "la": "Tema 2", "nu": "8", "tx": "Las Zonas de Especial Conservación (ZEC) y las Zonas de Especial Protección para las Aves (ZEPA) forman conjuntamente:", "op": ["El Catálogo Canario de Espacios Protegidos", "La Red Natura 2000", "El Inventario Español del Patrimonio Natural", "El Plan de Ordenación de los Recursos Naturales (PORN)"], "co": "b", "fc": "Correcto. Las ZEC (derivadas de la Directiva Hábitats) y las ZEPA (Directiva Aves) forman conjuntamente la Red Natura 2000 en la UE.", "fw": "Incorrecto. Respuesta correcta: B — la Red Natura 2000."}, {"id": 9, "la": "Tema 2", "nu": "9", "tx": "Según la Ley 4/2010 del Catálogo Canario de Especies Protegidas, ¿qué categoría de protección abarca a aquellas especies sin situación de amenaza pero merecedoras de protección por su valor científico o singularidad en cualquier parte del territorio?", "op": ["En peligro de extinción", "Vulnerable", "Protección especial", "Interés para los ecosistemas canarios"], "co": "c", "fc": "Correcto. Las especies de 'protección especial' son aquellas que, sin estar amenazadas, merecen protección en cualquier parte del territorio canario por su valor científico, ecológico, cultural o singularidad.", "fw": "Incorrecto. Respuesta correcta: C — especies de protección especial."}, {"id": 10, "la": "Tema 2", "nu": "10", "tx": "El proceso por el que el agua se filtra entre las grietas de la roca, se congela en invierno y al expandirse rompe la roca se denomina:", "op": ["Meteorización química por carbonatación", "Gelifracción (meteorización física por hielo-deshielo)", "Exfoliación por descarga de presión", "Meteorización biológica"], "co": "b", "fc": "Correcto. La gelifracción es un proceso de meteorización física: el agua al congelarse aumenta su volumen (~9%) y ejerce presión suficiente para romper la roca.", "fw": "Incorrecto. Respuesta correcta: B — gelifracción, meteorización física por ciclos hielo-deshielo."}];
-const KM=['a','b','c','d'];
-const ans={};const ver=new Set();
-function build(){
-  const c=document.getElementById('quiz');
-  Q.forEach(q=>{
-    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
-    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
-      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
-      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
-      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
-    c.appendChild(d);
-  });
-}
-function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
-function verify(id){
-  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
-  document.getElementById('warn').textContent='';ver.add(id);
-  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
-  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
-  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
-  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
-}
-function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
-function submitAll(){
-  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
-  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
-  let tot=0;const bk={};
-  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
-  const p=Math.round(tot/10*100);
-  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
-  const rr=document.getElementById('rr');
-  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
-  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
-  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+const Q=[{"id": 1, "bl": "T1", "la": "Tema 1", "tx": "Un evento de descenso de barrancos organizado que discurre por el cauce de un barranco y afecta a un espacio natural protegido requiere:", "op": ["Solo comunicación previa al ayuntamiento del municipio afectado", "Previa autorización del Cabildo Insular, que impondrá las medidas correctoras necesarias", "Autorización del Ministerio de Medio Ambiente por tratarse de un ENP", "Ningún trámite si el evento no supera los 25 participantes"], "co": "b", "fc": "Correcto. La Ley 4/2017 (art. 80) establece que cuando un evento deportivo por el cauce de barrancos afecte a un ENP, requerirá previa autorización del Cabildo Insular, que impondrá las medidas de protección necesarias.", "fw": "Incorrecto. Respuesta correcta: B. La Ley 4/2017 exige autorización previa del Cabildo Insular para eventos en ENP, con independencia del número de participantes."}, {"id": 2, "bl": "T1", "la": "Tema 1", "tx": "Si un reequipador quiere instalar anclajes en un barranco situado en terreno de propiedad privada, ¿qué debe hacer antes de comenzar?", "op": ["Nada; los cauces de barrancos son siempre dominio público, independientemente del terreno colindante", "Solicitar cesión de uso al titular del terreno y suscribir un contrato de comodato o arrendamiento", "Obtener solo el visto bueno del club de barranquismo local", "Registrar la actividad en el Censo de Instalaciones Deportivas"], "co": "b", "fc": "Correcto. El Tema 1 indica que en propiedad privada el reequipador debe solicitar permiso al titular y suscribir un contrato de comodato (cesión gratuita) o arrendamiento (con contraprestación económica).", "fw": "Incorrecto. Respuesta correcta: B. En terreno privado hay que solicitar permiso al propietario y formalizar un comodato o arrendamiento."}, {"id": 3, "bl": "T2", "la": "Tema 2", "tx": "Las rocas metamórficas se forman a partir de:", "op": ["La acumulación y cementación de sedimentos transportados por agua o aire", "El enfriamiento rápido de la lava en la superficie terrestre", "La transformación de rocas preexistentes por efecto de altas presiones y temperaturas en el interior de la corteza", "La precipitación de minerales disueltos en soluciones acuosas"], "co": "c", "fc": "Correcto. Las rocas metamórficas se originan cuando rocas preexistentes (ígneas, sedimentarias u otras metamórficas) son sometidas a altas presiones y temperaturas en el interior de la corteza terrestre, transformando su mineralogía y textura.", "fw": "Incorrecto. Respuesta correcta: C. Las metamórficas se forman por presión y temperatura en el interior de la corteza; no por sedimentación ni por enfriamiento de lava."}, {"id": 4, "bl": "T2", "la": "Tema 2", "tx": "El proceso de litificación por el que los sedimentos se convierten en roca sedimentaria sólida implica principalmente:", "op": ["Fusión del material sedimentario a altas temperaturas seguida de enfriamiento", "Compactación (reducción de porosidad) y cementación (unión de partículas por minerales precipitados)", "Transformación química de los minerales por presión tectónica", "Cristalización directa del magma en el interior de la corteza"], "co": "b", "fc": "Correcto. La litificación transforma sedimentos en roca sólida mediante dos procesos: compactación (el peso de los sedimentos superpuestos reduce el espacio poroso) y cementación (minerales precipitados unen las partículas).", "fw": "Incorrecto. Respuesta correcta: B. La litificación se produce por compactación y cementación, no por fusión ni cristalización del magma."}, {"id": 5, "bl": "T3", "la": "Tema 3", "tx": "El tratamiento térmico de 'normalizado' aplicado a los aceros consiste en:", "op": ["Enfriar el acero muy rápidamente desde alta temperatura para obtener martensita y máxima dureza", "Calentar el acero por encima de la temperatura crítica y dejarlo enfriar al aire, afinar la estructura y eliminar tensiones internas", "Ablandar el material calentándolo lentamente y enfriándolo en el horno para facilitar su mecanizado", "Calentar a temperatura inferior al primer tratamiento para reducir la fragilidad de la martensita"], "co": "b", "fc": "Correcto. El normalizado consiste en calentar el acero entre 40-50°C por encima de la temperatura crítica y dejar enfriar al aire. Refina la estructura, elimina tensiones internas y es el tratamiento más utilizado en anclajes.", "fw": "Incorrecto. Respuesta correcta: B. El normalizado calienta el acero y lo enfría al aire para afinar la estructura. El temple enfría rápido; el recocido enfría lento en horno; el revenido reduce fragilidad del temple."}, {"id": 6, "bl": "T3", "la": "Tema 3", "tx": "Al conjunto de los tratamientos de 'temple + revenido' se le denomina:", "op": ["Normalizado", "Recocido", "Bonificado", "Cementado"], "co": "c", "fc": "Correcto. El temple más el revenido combinados se denominan bonificado. El temple aporta dureza y el revenido posterior reduce la fragilidad excesiva generada por el temple, obteniendo un material de alta resistencia y buena tenacidad.", "fw": "Incorrecto. Respuesta correcta: C — bonificado. Es la combinación de temple (dureza) + revenido (reduce fragilidad), dando como resultado un material resistente y tenaz."}, {"id": 7, "bl": "T4", "la": "Tema 4", "tx": "El cartucho de resina tipo 'side-by-side' tiene dos tubos paralelos con los componentes A y B. ¿Cómo se produce la mezcla?", "op": ["El instalador mezcla manualmente los dos componentes en un recipiente antes de inyectar", "Los dos componentes se mezclan automáticamente al pasar por la boquilla mezcladora al salir del cartucho", "La varilla del tensor rompe los tabiques internos al introducirse en el agujero", "El calor de la reacción exotérmica funde los tabiques separadores durante el fraguado"], "co": "b", "fc": "Correcto. En el cartucho side-by-side, los componentes A y B permanecen separados hasta que son forzados a través de la boquilla mezcladora, donde se combinan automáticamente antes de ser inyectados en el agujero.", "fw": "Incorrecto. Respuesta correcta: B. La mezcla se produce al pasar por la boquilla mezcladora, no manualmente ni por la varilla."}, {"id": 8, "bl": "T4", "la": "Tema 4", "tx": "La resistencia a la carga radial (cizalladura) que exige la UNE-EN 959:2018 para un anclaje de aseguramiento en roca es de:", "op": ["12 kN", "15 kN", "20 kN", "25 kN"], "co": "d", "fc": "Correcto. La UNE-EN 959:2018 exige 15 kN a extracción axial y 25 kN a carga radial (cizalladura). La UIAA 123 V4 es más exigente: 20 kN axial y 25 kN radial.", "fw": "Incorrecto. Respuesta correcta: D — 25 kN a cizalladura (carga radial). La resistencia axial exigida es 15 kN, pero la radial es 25 kN."}, {"id": 9, "bl": "T5", "la": "Tema 5", "tx": "El Pulse Petzl o anclaje de posicionamiento se incluye en la mochila de perforación principalmente para:", "op": ["Medir la resistencia de los nuevos anclajes instalados durante el resinado", "Instalar como anclaje temporal recuperable que permite trabajar con seguridad mientras se perfora", "Fijar la cuerda de rappel durante el descenso de verificación de los nuevos anclajes", "Reemplazar definitivamente un anclaje viejo mientras fragua la resina del nuevo"], "co": "b", "fc": "Correcto. El anclaje de posicionamiento (tipo Pulse Petzl) es recuperable y se usa para anclarse con seguridad mientras se trabaja en la perforación. Su función de bloqueo y fácil instalación lo hacen ideal para esta fase.", "fw": "Incorrecto. Respuesta correcta: B. El Pulse Petzl es un anclaje temporal recuperable para posicionarse con seguridad durante la perforación."}, {"id": 10, "bl": "T6", "la": "Tema 6", "tx": "En la configuración de cabecera en posición diagonal, ¿cuál es la ventaja principal respecto a la posición horizontal?", "op": ["La distribución de carga es perfectamente equitativa entre los dos anclajes", "La cuerda produce menor rozamiento y la carga principal recae sobre el anclaje superior, actuando el inferior de forma redundante y como desviador", "Permite usar cadenas en L sin riesgo de deterioro en barrancos acuáticos", "El anclaje inferior soporta toda la carga, reduciendo el desgaste del anclaje superior"], "co": "b", "fc": "Correcto. En posición diagonal la cuerda produce menor rozamiento. La carga principal recae sobre el anclaje superior (que debe estar en la vertical del rápel para la retención), y el inferior actúa de forma redundante y como desviador. Es la configuración recomendada para barrancos.", "fw": "Incorrecto. Respuesta correcta: B. La posición diagonal reduce el rozamiento; la carga principal va al anclaje superior y el inferior actúa como redundante y desviador."}];
+const ans={},ver=new Set();
+function build(){const c=document.getElementById('quiz');Q.forEach(q=>{const d=document.createElement('div');d.className='qcard';
+d.innerHTML=`<div class="qmeta"><span class="qnum">Pregunta ${q.id}</span><span class="qbadge">${q.la}</span></div>`+
+`<div class="qtxt">${q.tx}</div><div class="opts" id="o${q.id}">`+
+q.op.map((t,i)=>`<button class="opt" data-v="${'abcd'[i]}" onclick="pick(${q.id},'${'abcd'[i]}')"><span class="olet">${'ABCD'[i]}</span>${t}</button>`).join('')+
+`</div><div class="fb" id="f${q.id}"></div><button class="chk-btn" id="b${q.id}" onclick="check(${q.id})">▶ Comprobar</button>`;
+document.getElementById('quiz').appendChild(d);});}
+function pick(id,v){if(ver.has(id))return;document.querySelectorAll(`#o${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#o${id} [data-v="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function check(id){if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción primero.';return;}document.getElementById('warn').textContent='';
+ver.add(id);const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+document.querySelectorAll(`#o${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.v===q.co)o.classList.add('ok');else if(o.dataset.v===ans[id]&&!ok)o.classList.add('ng');});
+const f=document.getElementById('f'+id);f.className='fb '+(ok?'ok':'ng');f.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+const b=document.getElementById('b'+id);b.disabled=true;b.textContent=ok?'✓ Correcto':'✗ Incorrecto';}
+function prog(){const d=Object.keys(ans).length,p=Math.round(d/Q.length*100);
+document.getElementById('pp').textContent=`${d}/${Q.length} respondidas`;document.getElementById('pf').style.width=p+'%';}
+function submit(){const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} pregunta(s) sin responder.`:'';
+Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])check(q.id);});
+let tot=0;const bk={};Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=bk[q.la]||[0,0];bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+const p=Math.round(tot/Q.length*100);document.getElementById('rscore').textContent=`${tot}/${Q.length}`;document.getElementById('rpct').textContent=`${p}% de respuestas correctas`;
+const r=['❗ Necesitas repasar','📖 Suficiente','📚 Bien','👍 Notable','🏆 Sobresaliente'];
+document.getElementById('rrat').textContent=r[p>=90?4:p>=75?3:p>=60?2:p>=50?1:0];
+document.getElementById('rgrid').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="res-cell"><div class="res-cell-n">${k}</div><div class="res-cell-v">${c}/${t}</div></div>`).join('');
+document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>o.className='opt');document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent='';});document.querySelectorAll('.chk-btn').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar';});document.getElementById('warn').textContent='';document.getElementById('results').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
 build();prog();
 </script>
 </body>
