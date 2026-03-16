@@ -3,139 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Autoevaluaciones — Curso de Reequipamiento de Barrancos</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Autoevaluaciones · Reequipamiento de Barrancos</title>
 <style>
-:root{--bg:#0d1117;--card:#161b22;--card2:#1c2129;--brd:#30363d;--ink:#e6edf3;--sub:#8b949e;--acc:#3fb950;--acc2:#238636;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-.hero{background:linear-gradient(135deg,#0d1117 0%,#161b22 50%,#0d2818 100%);border-bottom:1px solid var(--brd);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(63,185,80,.12) 0%,transparent 65%);pointer-events:none}
-.hero-badge{display:inline-block;background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3);color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.3rem .8rem;border-radius:20px;margin-bottom:1.25rem}
-.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;margin-bottom:.75rem}
-.hero h1 span{color:var(--acc)}
-.hero-sub{font-size:1rem;color:var(--sub);max-width:540px;margin:0 auto 2rem;line-height:1.6}
-.hero-stats{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap}
-.stat{text-align:center}
-.stat-n{font-size:2.2rem;font-weight:800;color:var(--acc);font-family:'JetBrains Mono',monospace;line-height:1}
-.stat-l{font-size:.75rem;color:var(--sub);margin-top:.2rem;text-transform:uppercase;letter-spacing:.08em}
-.wrap{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-.section-hdr{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1.25rem}
-.section-hdr h2{font-size:1.15rem;font-weight:600;color:var(--ink)}
-.section-line{flex:1;height:1px;background:var(--brd)}
-.section-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;font-weight:500;white-space:nowrap}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
-.card{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.4rem;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:.5rem;transition:all .18s;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px;opacity:0;transition:opacity .18s}
-.card:hover{border-color:var(--card-acc,var(--acc));transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.card:hover::before{opacity:1}
-.card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;margin-bottom:.25rem}
-.card-title{font-size:1rem;font-weight:600;line-height:1.3}
-.card-sub{font-size:.8rem;color:var(--sub);line-height:1.4}
-.card-meta{display:flex;gap:.5rem;margin-top:.25rem;flex-wrap:wrap}
-.tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;padding:.15rem .5rem;border-radius:4px;text-transform:uppercase}
-/* Tema colors */
-.t1{--card-acc:#c0392b} .t1 .card-icon{background:rgba(192,57,43,.15);color:#c0392b} .t1::before{background:#c0392b} .t1 .tag{background:rgba(192,57,43,.15);color:#c0392b}
-.t2{--card-acc:#1a5276} .t2 .card-icon{background:rgba(26,82,118,.15);color:#3498db} .t2::before{background:#1a5276} .t2 .tag{background:rgba(26,82,118,.15);color:#3498db}
-.t3{--card-acc:#6c3483} .t3 .card-icon{background:rgba(108,52,131,.15);color:#9b59b6} .t3::before{background:#6c3483} .t3 .tag{background:rgba(108,52,131,.15);color:#9b59b6}
-.t4{--card-acc:#b7770d} .t4 .card-icon{background:rgba(183,119,13,.15);color:#e67e22} .t4::before{background:#b7770d} .t4 .tag{background:rgba(183,119,13,.15);color:#e67e22}
-.t5{--card-acc:#1e8449} .t5 .card-icon{background:rgba(30,132,73,.15);color:#2ecc71} .t5::before{background:#1e8449} .t5 .tag{background:rgba(30,132,73,.15);color:#2ecc71}
-.t6{--card-acc:#0e6655} .t6 .card-icon{background:rgba(14,102,85,.15);color:#1abc9c} .t6::before{background:#0e6655} .t6 .tag{background:rgba(14,102,85,.15);color:#1abc9c}
-.mix{--card-acc:#3fb950} .mix .card-icon{background:rgba(63,185,80,.15);color:#3fb950} .mix::before{background:#3fb950} .mix .tag{background:rgba(63,185,80,.15);color:#3fb950}
-.mix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:.75rem}
-.mix-card{background:var(--card2);border:1px solid var(--brd);border-radius:10px;padding:1.1rem;text-decoration:none;color:var(--ink);transition:all .15s;display:flex;flex-direction:column;gap:.3rem}
-.mix-card:hover{border-color:var(--acc);background:var(--card);transform:translateY(-1px)}
-.mix-num{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--acc);line-height:1}
-.mix-lbl{font-size:.82rem;font-weight:500}
-.mix-sub{font-size:.72rem;color:var(--sub)}
-.footer{text-align:center;padding:2rem;color:var(--sub);font-size:.78rem;border-top:1px solid var(--brd)}
-@media(max-width:600px){.hero{padding:2.5rem 1.25rem 2rem}.wrap{padding:1.5rem 1rem 4rem}.hero-stats{gap:1.5rem}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+/* HEADER */
+.hero{padding:3.5rem 1.5rem 3rem;text-align:center;background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);border-bottom:1px solid #1e293b;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(99,102,241,.15),transparent);pointer-events:none}
+.hero-eyebrow{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#94a3b8;margin-bottom:1rem}
+.hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;color:#f8fafc;margin-bottom:.75rem}
+.hero h1 em{color:#4ade80;font-style:normal}
+.hero-sub{font-size:.95rem;color:#94a3b8;max-width:520px;margin:0 auto 2.5rem}
+.chips{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+.chip{background:#1e293b;border:1px solid #334155;border-radius:20px;padding:.4rem 1rem;font-size:.78rem;color:#cbd5e1}
+.chip strong{color:#4ade80}
+
+/* LAYOUT */
+.wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.25rem 5rem}
+.section{margin-bottom:3rem}
+.sec-hdr{display:flex;align-items:center;gap:.85rem;margin-bottom:1.25rem}
+.sec-hdr h2{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#64748b;white-space:nowrap}
+.sec-line{flex:1;height:1px;background:#1e293b}
+
+/* TEMA CARDS */
+.tema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:1rem}
+.tcard{display:flex;flex-direction:column;background:#1e293b;border:1px solid #334155;border-radius:14px;padding:1.4rem;text-decoration:none;color:#e2e8f0;transition:all .18s;position:relative;overflow:hidden}
+.tcard::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c)}
+.tcard:hover{border-color:var(--c);transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.4)}
+.tcard-icon{width:42px;height:42px;border-radius:10px;background:color-mix(in srgb,var(--c) 15%,transparent);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.9rem;border:1px solid color-mix(in srgb,var(--c) 30%,transparent)}
+.tcard-title{font-size:1rem;font-weight:700;margin-bottom:.35rem;line-height:1.25}
+.tcard-sub{font-size:.78rem;color:#94a3b8;line-height:1.5;flex:1}
+.tcard-meta{display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap}
+.tag{font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c)}
+.tcard-arrow{margin-top:.65rem;font-size:.8rem;color:var(--c);font-weight:600}
+
+/* MIX GRID */
+.mix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem}
+.mcard{display:flex;flex-direction:column;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:1.1rem;text-decoration:none;color:#e2e8f0;transition:all .15s;gap:.25rem}
+.mcard:hover{border-color:#4ade80;background:#1a2f1a}
+.mcard-num{font-size:1.5rem;font-weight:800;color:#4ade80;line-height:1}
+.mcard-lbl{font-size:.85rem;font-weight:600}
+.mcard-sub{font-size:.72rem;color:#64748b}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem;color:#475569;font-size:.75rem;border-top:1px solid #1e293b}
+
+/* TEMA COLORS */
+.t1{--c:#ef4444}.t2{--c:#3b82f6}.t3{--c:#a855f7}.t4{--c:#f59e0b}.t5{--c:#22c55e}.t6{--c:#06b6d4}
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="hero-badge">Curso de Reequipamiento de Barrancos</div>
-  <h1>Banco de <span>Autoevaluaciones</span></h1>
-  <p class="hero-sub">16 autoevaluaciones interactivas · 160 preguntas · Temas 1 al 6</p>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-n">6</div><div class="stat-l">por tema</div></div>
-    <div class="stat"><div class="stat-n">10</div><div class="stat-l">mixtas</div></div>
-    <div class="stat"><div class="stat-n">160</div><div class="stat-l">preguntas</div></div>
+  <div class="hero-eyebrow">Curso de Reequipamiento de Barrancos</div>
+  <h1>Banco de <em>Autoevaluaciones</em></h1>
+  <p class="hero-sub">Practica con 160 preguntas únicas basadas en el temario oficial. Feedback inmediato en cada respuesta.</p>
+  <div class="chips">
+    <div class="chip"><strong>6</strong> evaluaciones por tema</div>
+    <div class="chip"><strong>10</strong> evaluaciones mixtas</div>
+    <div class="chip"><strong>160</strong> preguntas únicas</div>
+    <div class="chip"><strong>16</strong> autoevaluaciones</div>
   </div>
 </div>
 
 <div class="wrap">
 
-  <div class="section-hdr">
-    <div class="section-line"></div>
-    <h2>Autoevaluaciones por tema</h2>
-    <div class="section-line"></div>
+  <!-- POR TEMA -->
+  <div class="section">
+    <div class="sec-hdr">
+      <div class="sec-line"></div>
+      <h2>Por tema</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="tema-grid">
+
+      <a class="tcard t1" href="eval_t1.html?v=1773686479">
+        <div class="tcard-icon">⚖️</div>
+        <div class="tcard-title">Tema 1 — Fundamentos Jurídicos</div>
+        <div class="tcard-sub">Constitución, dominio público, normativa UNE/UIAA, responsabilidad del reequipador, TD Barrancos</div>
+        <div class="tcard-meta"><span class="tag">10 preguntas</span><span class="tag">Tema 1</span></div>
+        <div class="tcard-arrow">Empezar →</div>
+      </a>
+
+      <a class="tcard t2" href="eval_t2.html?v=1773686479">
+        <div class="tcard-icon">🌿</div>
+        <div class="tcard-title">Tema 2 — Medioambiente y Geología</div>
+        <div class="tcard-sub">ENP Canarias, Red Natura 2000, tipos de roca, meteorización, especies protegidas</div>
+        <div class="tcard-meta"><span class="tag">10 preguntas</span><span class="tag">Tema 2</span></div>
+        <div class="tcard-arrow">Empezar →</div>
+      </a>
+
+      <a class="tcard t3" href="eval_t3.html?v=1773686479">
+        <div class="tcard-icon">🔬</div>
+        <div class="tcard-title">Tema 3 — Aceros y Corrosión</div>
+        <div class="tcard-sub">Aleaciones, tratamientos térmicos y superficiales, tipos de corrosión, SCC, UIAA 123 V4</div>
+        <div class="tcard-meta"><span class="tag">10 preguntas</span><span class="tag">Tema 3</span></div>
+        <div class="tcard-arrow">Empezar →</div>
+      </a>
+
+      <a class="tcard t4" href="eval_t4.html?v=1773686479">
+        <div class="tcard-icon">📋</div>
+        <div class="tcard-title">Tema 4 — Normativa y Anclajes</div>
+        <div class="tcard-sub">UNE-EN 959, UIAA 123, ETA Opción 1, tipos de resinas y su formulación, EOTA</div>
+        <div class="tcard-meta"><span class="tag">10 preguntas</span><span class="tag">Tema 4</span></div>
+        <div class="tcard-arrow">Empezar →</div>
+      </a>
+
+      <a class="tcard t5" href="eval_t5.html?v=1773686479">
+        <div class="tcard-icon">🔧</div>
+        <div class="tcard-title">Tema 5 — Instalación de Anclajes</div>
+        <div class="tcard-sub">Herramientas, taladros, tipos de anclajes y tensores, procedimiento de instalación, limpieza</div>
+        <div class="tcard-meta"><span class="tag">10 preguntas</span><span class="tag">Tema 5</span></div>
+        <div class="tcard-arrow">Empezar →</div>
+      </a>
+
+      <a class="tcard t6" href="eval_t6.html?v=1773686479">
+        <div class="tcard-icon">📐</div>
+        <div class="tcard-title">Tema 6 — Metodología</div>
+        <div class="tcard-sub">Configuración de cabeceras, cadenas V y L, roles del equipo, planificación, ficha técnica</div>
+        <div class="tcard-meta"><span class="tag">10 preguntas</span><span class="tag">Tema 6</span></div>
+        <div class="tcard-arrow">Empezar →</div>
+      </a>
+
+    </div>
   </div>
 
-  <div class="grid">
-    <a class="card t1" href="eval_t1.html">
-      <div class="card-icon">⚖️</div>
-      <div class="card-title">Tema 1 — Fundamentos Jurídicos</div>
-      <div class="card-sub">Responsabilidad, normativa, instalaciones deportivas, TD Barrancos</div>
-      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T1</span></div>
-    </a>
-    <a class="card t2" href="eval_t2.html">
-      <div class="card-icon">🌿</div>
-      <div class="card-title">Tema 2 — Medioambiente y Geología</div>
-      <div class="card-sub">ENP, Red Natura 2000, tipos de roca, meteorización</div>
-      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T2</span></div>
-    </a>
-    <a class="card t3" href="eval_t3.html">
-      <div class="card-icon">🔬</div>
-      <div class="card-title">Tema 3 — Aceros y Corrosión</div>
-      <div class="card-sub">Aleaciones, tratamientos térmicos, tipos de corrosión, SCC</div>
-      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T3</span></div>
-    </a>
-    <a class="card t4" href="eval_t4.html">
-      <div class="card-icon">📋</div>
-      <div class="card-title">Tema 4 — Normativa y Anclajes</div>
-      <div class="card-sub">UNE-EN 959, UIAA 123, ETA, resinas, tipos de anclaje</div>
-      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T4</span></div>
-    </a>
-    <a class="card t5" href="eval_t5.html">
-      <div class="card-icon">🔧</div>
-      <div class="card-title">Tema 5 — Instalación de Anclajes</div>
-      <div class="card-sub">Materiales, herramientas, procedimientos, tipos de tensores</div>
-      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T5</span></div>
-    </a>
-    <a class="card t6" href="eval_t6.html">
-      <div class="card-icon">📐</div>
-      <div class="card-title">Tema 6 — Metodología</div>
-      <div class="card-sub">Cabeceras, planificación, roles, protocolo, cadenas en V y L</div>
-      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T6</span></div>
-    </a>
-  </div>
-
-  <div class="section-hdr">
-    <div class="section-line"></div>
-    <h2>Evaluaciones mixtas — todos los temas</h2>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="mix-grid">
-    <a class="mix-card" href="eval_mix_01.html"><div class="mix-num">I</div><div class="mix-lbl">Mixta I</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_02.html"><div class="mix-num">II</div><div class="mix-lbl">Mixta II</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_03.html"><div class="mix-num">III</div><div class="mix-lbl">Mixta III</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_04.html"><div class="mix-num">IV</div><div class="mix-lbl">Mixta IV</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_05.html"><div class="mix-num">V</div><div class="mix-lbl">Mixta V</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_06.html"><div class="mix-num">VI</div><div class="mix-lbl">Mixta VI</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_07.html"><div class="mix-num">VII</div><div class="mix-lbl">Mixta VII</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_08.html"><div class="mix-num">VIII</div><div class="mix-lbl">Mixta VIII</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_09.html"><div class="mix-num">IX</div><div class="mix-lbl">Mixta IX</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
-    <a class="mix-card" href="eval_mix_10.html"><div class="mix-num">X</div><div class="mix-lbl">Mixta X</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+  <!-- MIXTAS -->
+  <div class="section">
+    <div class="sec-hdr">
+      <div class="sec-line"></div>
+      <h2>Evaluaciones mixtas — todos los temas</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="mix-grid">
+      <a class="mcard" href="eval_mix_01.html?v=1773686479"><div class="mcard-num">I</div><div class="mcard-lbl">Mixta I</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_02.html?v=1773686479"><div class="mcard-num">II</div><div class="mcard-lbl">Mixta II</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_03.html?v=1773686479"><div class="mcard-num">III</div><div class="mcard-lbl">Mixta III</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_04.html?v=1773686479"><div class="mcard-num">IV</div><div class="mcard-lbl">Mixta IV</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_05.html?v=1773686479"><div class="mcard-num">V</div><div class="mcard-lbl">Mixta V</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_06.html?v=1773686479"><div class="mcard-num">VI</div><div class="mcard-lbl">Mixta VI</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_07.html?v=1773686479"><div class="mcard-num">VII</div><div class="mcard-lbl">Mixta VII</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_08.html?v=1773686479"><div class="mcard-num">VIII</div><div class="mcard-lbl">Mixta VIII</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_09.html?v=1773686479"><div class="mcard-num">IX</div><div class="mcard-lbl">Mixta IX</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+      <a class="mcard" href="eval_mix_10.html?v=1773686479"><div class="mcard-num">X</div><div class="mcard-lbl">Mixta X</div><div class="mcard-sub">10 preg. · Todos los temas</div></a>
+    </div>
   </div>
 
 </div>
 
-<div class="footer">
-  Curso de Reequipamiento de Barrancos · Banco de autoevaluaciones interactivas
-</div>
+<footer>Curso de Reequipamiento de Barrancos · Banco de Autoevaluaciones Interactivas</footer>
 
 </body>
 </html>
