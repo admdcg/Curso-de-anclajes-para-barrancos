@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluación Mixta V</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
+a.back:hover{color:var(--acc)}
+.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
+.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
+.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
+.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
+.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
+.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
+.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
+.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
+.qcard:hover{border-left-color:var(--acc)}
+.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
+.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
+.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
+.opts{display:flex;flex-direction:column;gap:.45rem}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
+.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
+.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
+.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+.opt.dis{cursor:default}
+.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
+.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
+.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
+.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
+.btnv:disabled{opacity:.3;cursor:default}
+.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
+.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
+.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.btnsub:hover{opacity:.88}
+#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
+.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
+.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
+.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
+.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
+.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
+.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
+.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
+.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.btnr:hover{background:var(--acc);color:#fff}
+@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Volver al índice</a>
+<div class="hdr">
+  <div class="hdr-top">
+    <h1>Evaluación Mixta V</h1>
+    <div class="hdr-badge">10 preguntas</div>
+  </div>
+  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+</div>
+<div class="prog-wrap">
+  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
+  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
+</div>
+<div id="quiz"></div>
+<div class="sub-sec">
+  <div class="warn" id="warn"></div>
+  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
+</div>
+<div id="res">
+  <div class="res-lbl">Resultado</div>
+  <div class="res-big" id="rb"></div>
+  <div class="res-sub" id="rs"></div>
+  <div class="rat" id="rr"></div>
+  <div class="bkd" id="bkd"></div>
+  <button class="btnr" onclick="restart()">↺ Repetir</button>
+</div>
+</div>
+<script>
+const Q=[{"id": 1, "la": "Tema 5", "nu": "1", "tx": "Los taladros a batería más comunes para reequipamiento utilizan un voltaje de:", "op": ["12V, por su ligereza y facilidad de transporte", "18V, equilibrio entre voltaje, intensidad y peso", "36V, para maximizar la fuerza de percusión", "48V, estándar actual de la industria de la construcción"], "co": "b", "fc": "Correcto. El Tema 5 indica que los 18V son los más utilizados actualmente por el equilibrio entre voltaje, intensidad de la batería y peso.", "fw": "Incorrecto. Respuesta correcta: B — 18V es el estándar más habitual en reequipamiento."}, {"id": 2, "la": "Tema 5", "nu": "2", "tx": "El extractor de anclajes mecánicos expansivos permite:", "op": ["Comprobar la resistencia del anclaje sin extraerlo mediante prueba de arranque parcial", "Extraer el parabolt dejando el agujero libre para su reutilización, a diferencia del método de corte y hundimiento tradicional", "Instalar anclajes químicos en agujeros previamente ocupados por mecánicos", "Medir el par de apriete residual del anclaje instalado"], "co": "b", "fc": "Correcto. El extractor permite extraer el parabolt completo dejando el agujero libre para reutilizarlo. En el método tradicional se corta, se hunde el resto y se mimetiza sin posibilidad de reusar el agujero.", "fw": "Incorrecto. Respuesta correcta: B — extrae el parabolt dejando el agujero libre para reutilizar."}, {"id": 3, "la": "Tema 5", "nu": "3", "tx": "La Esclerómetro o Martillo de Schmidt es una herramienta que determina:", "op": ["La resistencia a la tracción del anclaje ya instalado", "La resistencia a la compresión del soporte rocoso de forma no destructiva", "El par de apriete aplicado durante la instalación del parabolt", "La profundidad exacta del agujero taladrado"], "co": "b", "fc": "Correcto. El esclerómetro (Martillo de Schmidt) realiza ensayos no destructivos midiendo el rebote de una masa sobre el hormigón o roca, determinando su resistencia a la compresión superficial.", "fw": "Incorrecto. Respuesta correcta: B — determina la resistencia a compresión del soporte de forma no destructiva."}, {"id": 4, "la": "Tema 5", "nu": "4", "tx": "Al instalar un anclaje de expansión (parabolt), el agujero debe realizarse con una profundidad de aproximadamente:", "op": ["Exactamente igual a la longitud del anclaje", "Unos 2 cm más largo que la longitud del modelo elegido", "La mitad de la longitud del anclaje para evitar el sobreapriete", "Un tercio más largo para garantizar el correcto anclaje del expansor"], "co": "b", "fc": "Correcto. El Tema 5 especifica que el agujero debe ser del mismo diámetro que el anclaje y aproximadamente 2 cm más largo que la longitud del modelo elegido.", "fw": "Incorrecto. Respuesta correcta: B — mismo diámetro y unos 2 cm más largo que el anclaje."}, {"id": 5, "la": "Tema 5", "nu": "5", "tx": "Un tensor de doble anilla se elige preferentemente para:", "op": ["Inicios de pasamanos, por su mayor resistencia lateral", "Puntos intermedios de pasamanos, por facilitar la progresión", "Las cabeceras de rápel, porque facilita la recuperación de las cuerdas", "Los fraccionamientos de largas verticales, por su menor peso"], "co": "c", "fc": "Correcto. El Tema 5 indica que los tensores de doble anilla se usan para las cabeceras, pues facilitan la recuperación de las cuerdas. Si son dos puntos independientes deben solidarizarse para cumplir normativa.", "fw": "Incorrecto. Respuesta correcta: C — los tensores de doble anilla son para cabeceras de rápel."}, {"id": 6, "la": "Tema 5", "nu": "6", "tx": "El tiempo de endurecimiento de la resina epoxi varía con la temperatura en la misma proporción que la trabajabilidad. Esto significa que a mayor temperatura:", "op": ["El tiempo de trabajabilidad y el de endurecimiento son ambos más largos", "El tiempo de trabajabilidad es más corto y el de endurecimiento también es más corto", "El tiempo de trabajabilidad es más largo pero el de endurecimiento es más corto", "La temperatura no afecta significativamente ni al tiempo de trabajabilidad ni al de endurecimiento"], "co": "b", "fc": "Correcto. A mayor temperatura: más rápido el endurecimiento Y también más corto el tiempo de trabajabilidad. Ambos varían en la misma proporción con la temperatura.", "fw": "Incorrecto. Respuesta correcta: B — a mayor temperatura, tanto la trabajabilidad como el endurecimiento son más cortos."}, {"id": 7, "la": "Tema 5", "nu": "7", "tx": "La cinta americana (cinta de carrocero) en el proceso de instalación de anclajes químicos se utiliza para:", "op": ["Limpiar los restos de resina de las manos durante la instalación", "Fijar provisionalmente los anclajes químicos para que no se desplacen hacia abajo mientras fragua la resina", "Tapar el orificio de mosquetoneo para protegerlo de la resina sobrante antes de la instalación", "Marcar el diámetro correcto de la broca en la pared"], "co": "b", "fc": "Correcto. La cinta americana sirve para fijar los anclajes químicos en posición durante el fraguado, evitando que se desplacen ligeramente hacia abajo por gravedad.", "fw": "Incorrecto. Respuesta correcta: B — fijar los anclajes en posición durante el fraguado."}, {"id": 8, "la": "Tema 5", "nu": "8", "tx": "Cuando se verifica el correcto fraguado de un anclaje químico mediante los testigos y uno de ellos está blando (no ha endurecido), ¿qué debe hacerse según el Tema 5?", "op": ["Esperar 24 horas adicionales y volver a comprobar el testigo", "Considerar que si el otro testigo está duro, el anclaje también lo está y puede cargarse", "Dudar del endurecimiento de la resina, desecharlo y volver a instalar", "Aplicar calor externo para acelerar el curado del anclaje dudoso"], "co": "c", "fc": "Correcto. El Tema 5 indica: 'si alguno falla, deberemos tener dudas del endurecimiento de la resina', y en ese caso hay que desecharlo y volver a instalar. La anomalía obliga a desechar.", "fw": "Incorrecto. Respuesta correcta: C — desecharlo y reinstalar si hay cualquier anomalía en el testigo."}, {"id": 9, "la": "Tema 5", "nu": "9", "tx": "El cartucho foil-tube (dos cámaras de papel aluminio) se aplica usando:", "op": ["Una pistola especializada de doble émbolo exclusiva para este formato", "Una pistola estándar para silicona, ya que ambos tubos están en un cilindro de cuerpo único", "El mismo sistema que la ampolla: introducción manual y percusión con taladro", "Una pistola hidráulica industrial para garantizar la presión de inyección"], "co": "b", "fc": "Correcto. El cartucho foil-tube incorpora dos cámaras en un cilindro único y puede aplicarse con una pistola estándar de silicona, siendo compatible con equipos comunes.", "fw": "Incorrecto. Respuesta correcta: B — pistola estándar para silicona, ya que el cartucho foil-tube tiene un cuerpo único."}, {"id": 10, "la": "Tema 5", "nu": "10", "tx": "Según el Tema 5, ¿cuál es la resistencia a extracción del taco autoperforante (Spit) Raumer TAP Art. 720?", "op": ["25 kN a extracción y 15 kN a cizalladura", "31 kN a extracción y 25 kN a cizalladura", "20 kN a extracción y 20 kN a cizalladura", "15 kN a extracción y 25 kN a cizalladura"], "co": "b", "fc": "Correcto. El Anexo I del temario (Raumer TAP Art. 720) especifica 31 kN a extracción y 25 kN a cizalladura.", "fw": "Incorrecto. Respuesta correcta: B — 31 kN a extracción y 25 kN a cizalladura (Raumer TAP Art. 720)."}];
+const KM=['a','b','c','d'];
+const ans={};const ver=new Set();
+function build(){
+  const c=document.getElementById('quiz');
+  Q.forEach(q=>{
+    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
+    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
+      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
+      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
+      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
+    c.appendChild(d);
+  });
+}
+function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function verify(id){
+  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
+  document.getElementById('warn').textContent='';ver.add(id);
+  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
+  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
+}
+function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
+function submitAll(){
+  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
+  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
+  let tot=0;const bk={};
+  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+  const p=Math.round(tot/10*100);
+  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
+  const rr=document.getElementById('rr');
+  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
+  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
+  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+build();prog();
+</script>
+</body>
+</html>

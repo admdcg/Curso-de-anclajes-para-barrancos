@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Autoevaluaciones — Curso de Reequipamiento de Barrancos</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2129;--brd:#30363d;--ink:#e6edf3;--sub:#8b949e;--acc:#3fb950;--acc2:#238636;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hero{background:linear-gradient(135deg,#0d1117 0%,#161b22 50%,#0d2818 100%);border-bottom:1px solid var(--brd);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(63,185,80,.12) 0%,transparent 65%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3);color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.3rem .8rem;border-radius:20px;margin-bottom:1.25rem}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;margin-bottom:.75rem}
+.hero h1 span{color:var(--acc)}
+.hero-sub{font-size:1rem;color:var(--sub);max-width:540px;margin:0 auto 2rem;line-height:1.6}
+.hero-stats{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-size:2.2rem;font-weight:800;color:var(--acc);font-family:'JetBrains Mono',monospace;line-height:1}
+.stat-l{font-size:.75rem;color:var(--sub);margin-top:.2rem;text-transform:uppercase;letter-spacing:.08em}
+.wrap{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+.section-hdr{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1.25rem}
+.section-hdr h2{font-size:1.15rem;font-weight:600;color:var(--ink)}
+.section-line{flex:1;height:1px;background:var(--brd)}
+.section-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;font-weight:500;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.card{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.4rem;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:.5rem;transition:all .18s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px;opacity:0;transition:opacity .18s}
+.card:hover{border-color:var(--card-acc,var(--acc));transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.card:hover::before{opacity:1}
+.card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;margin-bottom:.25rem}
+.card-title{font-size:1rem;font-weight:600;line-height:1.3}
+.card-sub{font-size:.8rem;color:var(--sub);line-height:1.4}
+.card-meta{display:flex;gap:.5rem;margin-top:.25rem;flex-wrap:wrap}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;padding:.15rem .5rem;border-radius:4px;text-transform:uppercase}
+/* Tema colors */
+.t1{--card-acc:#c0392b} .t1 .card-icon{background:rgba(192,57,43,.15);color:#c0392b} .t1::before{background:#c0392b} .t1 .tag{background:rgba(192,57,43,.15);color:#c0392b}
+.t2{--card-acc:#1a5276} .t2 .card-icon{background:rgba(26,82,118,.15);color:#3498db} .t2::before{background:#1a5276} .t2 .tag{background:rgba(26,82,118,.15);color:#3498db}
+.t3{--card-acc:#6c3483} .t3 .card-icon{background:rgba(108,52,131,.15);color:#9b59b6} .t3::before{background:#6c3483} .t3 .tag{background:rgba(108,52,131,.15);color:#9b59b6}
+.t4{--card-acc:#b7770d} .t4 .card-icon{background:rgba(183,119,13,.15);color:#e67e22} .t4::before{background:#b7770d} .t4 .tag{background:rgba(183,119,13,.15);color:#e67e22}
+.t5{--card-acc:#1e8449} .t5 .card-icon{background:rgba(30,132,73,.15);color:#2ecc71} .t5::before{background:#1e8449} .t5 .tag{background:rgba(30,132,73,.15);color:#2ecc71}
+.t6{--card-acc:#0e6655} .t6 .card-icon{background:rgba(14,102,85,.15);color:#1abc9c} .t6::before{background:#0e6655} .t6 .tag{background:rgba(14,102,85,.15);color:#1abc9c}
+.mix{--card-acc:#3fb950} .mix .card-icon{background:rgba(63,185,80,.15);color:#3fb950} .mix::before{background:#3fb950} .mix .tag{background:rgba(63,185,80,.15);color:#3fb950}
+.mix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:.75rem}
+.mix-card{background:var(--card2);border:1px solid var(--brd);border-radius:10px;padding:1.1rem;text-decoration:none;color:var(--ink);transition:all .15s;display:flex;flex-direction:column;gap:.3rem}
+.mix-card:hover{border-color:var(--acc);background:var(--card);transform:translateY(-1px)}
+.mix-num{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--acc);line-height:1}
+.mix-lbl{font-size:.82rem;font-weight:500}
+.mix-sub{font-size:.72rem;color:var(--sub)}
+.footer{text-align:center;padding:2rem;color:var(--sub);font-size:.78rem;border-top:1px solid var(--brd)}
+@media(max-width:600px){.hero{padding:2.5rem 1.25rem 2rem}.wrap{padding:1.5rem 1rem 4rem}.hero-stats{gap:1.5rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Curso de Reequipamiento de Barrancos</div>
+  <h1>Banco de <span>Autoevaluaciones</span></h1>
+  <p class="hero-sub">16 autoevaluaciones interactivas · 160 preguntas · Temas 1 al 6</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">por tema</div></div>
+    <div class="stat"><div class="stat-n">10</div><div class="stat-l">mixtas</div></div>
+    <div class="stat"><div class="stat-n">160</div><div class="stat-l">preguntas</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section-hdr">
+    <div class="section-line"></div>
+    <h2>Autoevaluaciones por tema</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid">
+    <a class="card t1" href="eval_t1.html">
+      <div class="card-icon">⚖️</div>
+      <div class="card-title">Tema 1 — Fundamentos Jurídicos</div>
+      <div class="card-sub">Responsabilidad, normativa, instalaciones deportivas, TD Barrancos</div>
+      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T1</span></div>
+    </a>
+    <a class="card t2" href="eval_t2.html">
+      <div class="card-icon">🌿</div>
+      <div class="card-title">Tema 2 — Medioambiente y Geología</div>
+      <div class="card-sub">ENP, Red Natura 2000, tipos de roca, meteorización</div>
+      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T2</span></div>
+    </a>
+    <a class="card t3" href="eval_t3.html">
+      <div class="card-icon">🔬</div>
+      <div class="card-title">Tema 3 — Aceros y Corrosión</div>
+      <div class="card-sub">Aleaciones, tratamientos térmicos, tipos de corrosión, SCC</div>
+      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T3</span></div>
+    </a>
+    <a class="card t4" href="eval_t4.html">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Tema 4 — Normativa y Anclajes</div>
+      <div class="card-sub">UNE-EN 959, UIAA 123, ETA, resinas, tipos de anclaje</div>
+      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T4</span></div>
+    </a>
+    <a class="card t5" href="eval_t5.html">
+      <div class="card-icon">🔧</div>
+      <div class="card-title">Tema 5 — Instalación de Anclajes</div>
+      <div class="card-sub">Materiales, herramientas, procedimientos, tipos de tensores</div>
+      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T5</span></div>
+    </a>
+    <a class="card t6" href="eval_t6.html">
+      <div class="card-icon">📐</div>
+      <div class="card-title">Tema 6 — Metodología</div>
+      <div class="card-sub">Cabeceras, planificación, roles, protocolo, cadenas en V y L</div>
+      <div class="card-meta"><span class="tag">10 preguntas</span><span class="tag">T6</span></div>
+    </a>
+  </div>
+
+  <div class="section-hdr">
+    <div class="section-line"></div>
+    <h2>Evaluaciones mixtas — todos los temas</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="mix-grid">
+    <a class="mix-card" href="eval_mix_01.html"><div class="mix-num">I</div><div class="mix-lbl">Mixta I</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_02.html"><div class="mix-num">II</div><div class="mix-lbl">Mixta II</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_03.html"><div class="mix-num">III</div><div class="mix-lbl">Mixta III</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_04.html"><div class="mix-num">IV</div><div class="mix-lbl">Mixta IV</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_05.html"><div class="mix-num">V</div><div class="mix-lbl">Mixta V</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_06.html"><div class="mix-num">VI</div><div class="mix-lbl">Mixta VI</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_07.html"><div class="mix-num">VII</div><div class="mix-lbl">Mixta VII</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_08.html"><div class="mix-num">VIII</div><div class="mix-lbl">Mixta VIII</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_09.html"><div class="mix-num">IX</div><div class="mix-lbl">Mixta IX</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+    <a class="mix-card" href="eval_mix_10.html"><div class="mix-num">X</div><div class="mix-lbl">Mixta X</div><div class="mix-sub">10 preguntas · Todos los temas</div></a>
+  </div>
+
+</div>
+
+<div class="footer">
+  Curso de Reequipamiento de Barrancos · Banco de autoevaluaciones interactivas
+</div>
+
+</body>
+</html>

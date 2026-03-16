@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluación Mixta VII</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
+a.back:hover{color:var(--acc)}
+.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
+.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
+.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
+.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
+.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
+.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
+.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
+.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
+.qcard:hover{border-left-color:var(--acc)}
+.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
+.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
+.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
+.opts{display:flex;flex-direction:column;gap:.45rem}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
+.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
+.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
+.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+.opt.dis{cursor:default}
+.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
+.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
+.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
+.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
+.btnv:disabled{opacity:.3;cursor:default}
+.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
+.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
+.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.btnsub:hover{opacity:.88}
+#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
+.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
+.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
+.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
+.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
+.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
+.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
+.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
+.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.btnr:hover{background:var(--acc);color:#fff}
+@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Volver al índice</a>
+<div class="hdr">
+  <div class="hdr-top">
+    <h1>Evaluación Mixta VII</h1>
+    <div class="hdr-badge">10 preguntas</div>
+  </div>
+  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+</div>
+<div class="prog-wrap">
+  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
+  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
+</div>
+<div id="quiz"></div>
+<div class="sub-sec">
+  <div class="warn" id="warn"></div>
+  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
+</div>
+<div id="res">
+  <div class="res-lbl">Resultado</div>
+  <div class="res-big" id="rb"></div>
+  <div class="res-sub" id="rs"></div>
+  <div class="rat" id="rr"></div>
+  <div class="bkd" id="bkd"></div>
+  <button class="btnr" onclick="restart()">↺ Repetir</button>
+</div>
+</div>
+<script>
+const Q=[{"id": 1, "la": "Tema 1", "nu": "1", "tx": "¿Qué artículo de la Constitución Española establece el derecho a disfrutar de un medio ambiente adecuado y el deber de conservarlo?", "op": ["Art. 45", "Art. 51", "Art. 149", "Art. 33"], "co": "a", "fc": "Correcto. El art. 45 CE establece tanto el derecho a un medio ambiente adecuado como el deber de conservarlo, y prevé sanciones penales o administrativas para quienes lo violen.", "fw": "Incorrecto. Respuesta correcta: A — Art. 45 CE, que protege el medio ambiente y prevé sanciones para sus infractores."}, {"id": 2, "la": "Tema 1", "nu": "2", "tx": "Un barranco de uso deportivo integrado en el patrimonio de la Administración Pública como bien de dominio público se denomina bien:", "op": ["Patrimonial o privado", "Demanial o de dominio público", "Comunal", "De libre disposición"], "co": "b", "fc": "Correcto. Los barrancos de uso público son bienes demaniales o de dominio público, inalienables, inembargables e imprescriptibles.", "fw": "Incorrecto. Respuesta correcta: B — bienes demaniales o de dominio público."}, {"id": 3, "la": "Tema 1", "nu": "3", "tx": "Según el art. 51.1 de la Constitución Española, los poderes públicos garantizarán la defensa de:", "op": ["Los propietarios de inmuebles en suelo rústico", "Los consumidores y usuarios, protegiendo su seguridad, salud e intereses económicos", "Las federaciones deportivas en el uso del medio natural", "Los funcionarios que supervisan instalaciones deportivas"], "co": "b", "fc": "Correcto. El art. 51.1 CE obliga a los poderes públicos a garantizar la defensa de los consumidores y usuarios, protegiendo su seguridad, salud y legítimos intereses económicos.", "fw": "Incorrecto. Respuesta correcta: B — el art. 51.1 CE protege a consumidores y usuarios."}, {"id": 4, "la": "Tema 1", "nu": "4", "tx": "El Censo de Instalaciones Deportivas es fundamentalmente:", "op": ["Un registro obligatorio que determina el carácter de instalación deportiva", "Un registro administrativo con fines estadísticos; no es lo que otorga el carácter de instalación deportiva", "Un documento que exime a la Administración de responsabilidad", "Una homologación técnica de seguridad de la instalación"], "co": "b", "fc": "Correcto. El Censo es un registro estadístico. El carácter de instalación deportiva lo otorga la propia naturaleza del lugar (zonas de barrancos son susceptibles de ser censadas), independientemente de si están registradas.", "fw": "Incorrecto. Respuesta correcta: B — el Censo tiene fines estadísticos y no es lo que determina el carácter de instalación deportiva."}, {"id": 5, "la": "Tema 1", "nu": "5", "tx": "¿Cuál de los siguientes organismos acredita en España a las entidades de certificación de productos?", "op": ["UNE — Asociación Española de Normalización", "ENAC — Entidad Nacional de Acreditación", "EOTA — Organización Europea de Evaluación Técnica", "FEDME — Federación Española de Deportes de Montaña"], "co": "b", "fc": "Correcto. ENAC es el organismo español de acreditación, que verifica la competencia de laboratorios, entidades de certificación e inspección.", "fw": "Incorrecto. Respuesta correcta: B — ENAC (Entidad Nacional de Acreditación)."}, {"id": 6, "la": "Tema 1", "nu": "6", "tx": "Las normas UNE dictadas por la Asociación Española de Normalización tienen carácter:", "op": ["Obligatorio siempre en todo el territorio nacional", "Voluntario, salvo que una disposición legal las haga obligatorias", "Exclusivamente orientativo para fabricantes extranjeros", "Obligatorio solo para las Administraciones Públicas"], "co": "b", "fc": "Correcto. Las normas UNE son de aplicación voluntaria, salvo que una norma legal o reglamentaria las declare de obligado cumplimiento.", "fw": "Incorrecto. Respuesta correcta: B — las normas UNE son voluntarias salvo remisión legal expresa."}, {"id": 7, "la": "Tema 1", "nu": "7", "tx": "Un reequipador instala anclajes en un barranco sin solicitar los permisos pertinentes. Desde el punto de vista jurídico, ¿a qué responsabilidad se expone principalmente?", "op": ["Ninguna, ya que los barrancos son de libre acceso", "Responsabilidad administrativa, civil y potencialmente penal", "Solo responsabilidad civil ante los usuarios", "Solo responsabilidad ante la federación deportiva correspondiente"], "co": "b", "fc": "Correcto. Actuar sin permisos puede acarrear responsabilidad administrativa (sanción), civil (indemnización de daños) y penal (si hay imprudencia grave con resultado lesivo).", "fw": "Incorrecto. Respuesta correcta: B — la responsabilidad puede ser administrativa, civil y penal."}, {"id": 8, "la": "Tema 1", "nu": "8", "tx": "El Real Decreto 702/2019 establece los títulos de Técnico Deportivo. ¿Desde qué fecha el TD Barrancos tiene competencias para diseñar e instalar equipamientos?", "op": ["Desde el 1 de enero de 2015", "Desde el 30 de noviembre de 2019", "Desde el 1 de julio de 2021", "Desde su primera publicación en 1997"], "co": "b", "fc": "Correcto. El RD 702/2019, publicado el 29 de noviembre de 2019, establece los títulos de TD y fija las competencias profesionales desde el 30 de noviembre de 2019.", "fw": "Incorrecto. Respuesta correcta: B — desde el 30 de noviembre de 2019, por el RD 702/2019."}, {"id": 9, "la": "Tema 1", "nu": "9", "tx": "Las normas UIAA actúan en el sector del equipamiento de escalada y barrancos principalmente como:", "op": ["Normas de obligado cumplimiento por ley europea", "Parámetros de referencia sobre la DILIGENCIA aplicada por el reequipador", "Requisitos exclusivos para fabricantes asiáticos", "Normas que sustituyen completamente a las normas UNE"], "co": "b", "fc": "Correcto. Las normas UIAA funcionan como parámetros de referencia sobre la diligencia exigible al reequipador, y en algunos casos establecen estándares más estrictos que el CEN.", "fw": "Incorrecto. Respuesta correcta: B — las normas UIAA son parámetros de referencia sobre la diligencia del reequipador."}, {"id": 10, "la": "Tema 1", "nu": "10", "tx": "¿Cuál de las siguientes afirmaciones sobre la responsabilidad de la Administración Pública en barrancos deportivos es CORRECTA?", "op": ["La Administración solo responde si el barranco está incluido en el Censo de Instalaciones Deportivas", "La Administración no responde si el accidente ocurre fuera del horario de supervisión", "La Administración tiene obligación de velar por la seguridad de las instalaciones de uso público con independencia de su registro censal", "La responsabilidad recae exclusivamente sobre el reequipador que instaló los anclajes"], "co": "c", "fc": "Correcto. La Administración tiene obligación constitucional (art. 51.1 CE) de garantizar la seguridad de las instalaciones de uso público independientemente de si están censadas o no.", "fw": "Incorrecto. Respuesta correcta: C — la obligación de seguridad de la Administración no depende del registro censal."}];
+const KM=['a','b','c','d'];
+const ans={};const ver=new Set();
+function build(){
+  const c=document.getElementById('quiz');
+  Q.forEach(q=>{
+    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
+    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
+      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
+      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
+      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
+    c.appendChild(d);
+  });
+}
+function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function verify(id){
+  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
+  document.getElementById('warn').textContent='';ver.add(id);
+  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
+  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
+}
+function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
+function submitAll(){
+  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
+  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
+  let tot=0;const bk={};
+  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+  const p=Math.round(tot/10*100);
+  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
+  const rr=document.getElementById('rr');
+  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
+  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
+  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+build();prog();
+</script>
+</body>
+</html>

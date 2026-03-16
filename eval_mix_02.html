@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluación Mixta II</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--acc:#2c3e50;--acc2:color-mix(in srgb,#2c3e50 70%,#000);--bg:#f8f9fa;--card:#fff;--ink:#1a1a2e;--sub:#64748b;--brd:#e2e8f0;--ok:#16a34a;--ng:#dc2626;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+a.back{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--sub);text-decoration:none;padding:.5rem 0;letter-spacing:.05em}
+a.back:hover{color:var(--acc)}
+.wrap{max-width:800px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
+.hdr{background:var(--acc);border-radius:16px;padding:2rem;margin-bottom:2rem;color:#fff}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.hdr h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.15}
+.hdr-badge{background:rgba(255,255,255,.2);border-radius:8px;padding:.35rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
+.hdr-sub{margin-top:.6rem;font-size:.9rem;opacity:.85}
+.prog-wrap{position:sticky;top:0;z-index:50;background:rgba(248,249,250,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);padding:.65rem 0;margin-bottom:1.75rem}
+.prog-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--sub);margin-bottom:.35rem}
+.prog-bg{height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;width:0%}
+.qcard{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;border-left:4px solid var(--brd);transition:border-left-color .2s}
+.qcard:hover{border-left-color:var(--acc)}
+.qbadge{display:inline-block;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;margin-bottom:.8rem;font-weight:500}
+.qnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--sub);margin-bottom:.4rem}
+.qtxt{font-size:.96rem;line-height:1.65;font-weight:400;margin-bottom:1.1rem}
+.opts{display:flex;flex-direction:column;gap:.45rem}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;background:#f8fafc;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;transition:all .12s;font-size:.88rem;line-height:1.5;text-align:left;color:var(--ink);width:100%}
+.opt:hover:not(.dis){background:color-mix(in srgb,var(--acc) 8%,#fff);border-color:var(--acc);color:var(--acc2)}
+.opt.sel{background:color-mix(in srgb,var(--acc) 10%,#fff);border-color:var(--acc);color:var(--acc2)}
+.opt.ok{background:#dcfce7;border-color:var(--ok);color:#15803d;font-weight:500}
+.opt.ng{background:#fee2e2;border-color:var(--ng);color:#b91c1c}
+.opt.dis{cursor:default}
+.okey{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:500;opacity:.5;flex-shrink:0;margin-top:.15rem;min-width:1rem}
+.fb{display:none;margin-top:.85rem;padding:.8rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.6;border-left:3px solid}
+.fb.ok{background:#f0fdf4;border-color:var(--ok);color:#15803d;display:block}
+.fb.ng{background:#fff1f2;border-color:var(--ng);color:#b91c1c;display:block}
+.btnv{display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;padding:.5rem 1.2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.btnv:hover:not(:disabled){background:var(--acc);color:#fff}
+.btnv:disabled{opacity:.3;cursor:default}
+.sub-sec{text-align:center;padding:2.5rem 0;border-top:1px solid var(--brd);margin-top:1rem}
+.warn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#d97706;margin-bottom:.9rem;min-height:1em}
+.btnsub{padding:.85rem 2.4rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .12s}
+.btnsub:hover{opacity:.88}
+#res{display:none;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem}
+.res-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--sub);text-transform:uppercase;margin-bottom:.5rem}
+.res-big{font-family:'Outfit',sans-serif;font-size:5rem;font-weight:700;color:var(--acc);line-height:1;margin:.5rem 0 .25rem}
+.res-sub{font-size:.9rem;color:var(--sub);margin-bottom:1.5rem}
+.rat{display:inline-block;padding:.4rem 1.3rem;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc2);border-radius:20px;font-weight:600;font-size:1rem;margin-bottom:1.5rem}
+.bkd{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:.7rem;margin:1rem 0 1.5rem;text-align:left}
+.bkc{background:#f8fafc;border:1px solid var(--brd);border-radius:8px;padding:.75rem}
+.bkn{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.bkv{font-size:1.6rem;font-weight:700;color:var(--acc)}
+.btnr{padding:.75rem 2rem;background:transparent;border:1.5px solid var(--acc);color:var(--acc);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .12s}
+.btnr:hover{background:var(--acc);color:#fff}
+@media(max-width:600px){.wrap{padding:1rem 1rem 4rem}.hdr{padding:1.5rem}.res-big{font-size:3.5rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Volver al índice</a>
+<div class="hdr">
+  <div class="hdr-top">
+    <h1>Evaluación Mixta II</h1>
+    <div class="hdr-badge">10 preguntas</div>
+  </div>
+  <div class="hdr-sub">10 preguntas de todos los temas · Curso de Reequipamiento de Barrancos</div>
+</div>
+<div class="prog-wrap">
+  <div class="prog-row"><span id="pt">0 / 10 respondidas</span><span id="pp">0%</span></div>
+  <div class="prog-bg"><div class="prog-fill" id="pf"></div></div>
+</div>
+<div id="quiz"></div>
+<div class="sub-sec">
+  <div class="warn" id="warn"></div>
+  <button class="btnsub" onclick="submitAll()">Finalizar y ver resultados →</button>
+</div>
+<div id="res">
+  <div class="res-lbl">Resultado</div>
+  <div class="res-big" id="rb"></div>
+  <div class="res-sub" id="rs"></div>
+  <div class="rat" id="rr"></div>
+  <div class="bkd" id="bkd"></div>
+  <button class="btnr" onclick="restart()">↺ Repetir</button>
+</div>
+</div>
+<script>
+const Q=[{"id": 1, "la": "Tema 2", "nu": "1", "tx": "El artículo 45 de la Constitución Española establece que para quienes violen las obligaciones medioambientales se establecerán:", "op": ["Solo sanciones económicas proporcionales al daño causado", "Sanciones penales o administrativas y obligación de reparar el daño", "Únicamente medidas preventivas sin carácter sancionador", "Sanciones exclusivamente administrativas gestionadas por los Cabildos"], "co": "b", "fc": "Correcto. El art. 45.3 CE prevé que la ley establecerá sanciones penales o administrativas y la obligación de reparar el daño para quienes violen las obligaciones medioambientales.", "fw": "Incorrecto. Respuesta correcta: B — sanciones penales o administrativas más la obligación de reparar el daño."}, {"id": 2, "la": "Tema 2", "nu": "2", "tx": "¿Qué figura de protección de la Red Canaria de ENP incluye zonas donde coexisten valores naturales importantes con actividades humanas productivas tradicionales?", "op": ["Parque Nacional", "Reserva Natural Integral", "Parque Rural", "Sitio de Interés Científico"], "co": "c", "fc": "Correcto. El Parque Rural es la figura que incluye zonas donde coexisten valores naturales de importancia con actividades humanas productivas de tipo tradicional (Zona B del PORN).", "fw": "Incorrecto. Respuesta correcta: C — Parque Rural."}, {"id": 3, "la": "Tema 2", "nu": "3", "tx": "La Directiva Hábitats (92/43/CEE) y la Directiva Aves son el pilar de la política de biodiversidad de la UE y la base de:", "op": ["El Catálogo Español de Especies Amenazadas", "La Red Natura 2000", "El Convenio de Ramsar sobre humedales", "El Protocolo de Kioto"], "co": "b", "fc": "Correcto. La Directiva Hábitats y la Directiva Aves son el eje de la política europea de biodiversidad y constituyen la base de la Red Natura 2000 (ZEC + ZEPA).", "fw": "Incorrecto. Respuesta correcta: B — la Red Natura 2000."}, {"id": 4, "la": "Tema 2", "nu": "4", "tx": "En Canarias, la gestión y administración de los Parques Rurales corresponde a:", "op": ["La Consejería de Medio Ambiente del Gobierno de Canarias", "El Cabildo Insular de la respectiva isla", "El Ayuntamiento del municipio donde se ubica el parque", "El Ministerio para la Transición Ecológica"], "co": "b", "fc": "Correcto. Según el art. 189 de la Ley 4/2017, la administración y gestión de los Parques Rurales corresponde al Cabildo Insular de la respectiva isla.", "fw": "Incorrecto. Respuesta correcta: B — el Cabildo Insular correspondiente."}, {"id": 5, "la": "Tema 2", "nu": "5", "tx": "La Ley 4/2017 del Suelo y de los Espacios Naturales Protegidos de Canarias establece que la celebración de eventos deportivos por el cauce de barrancos dentro de un ENP requiere:", "op": ["Solo comunicación previa al ayuntamiento del municipio", "Previa autorización del Cabildo Insular", "Autorización del Ministerio de Medio Ambiente", "No requiere ningún trámite si el evento es sin ánimo de lucro"], "co": "b", "fc": "Correcto. El art. 80 de la Ley 4/2017 establece que los eventos deportivos en ENP requieren previa autorización del Cabildo Insular.", "fw": "Incorrecto. Respuesta correcta: B — previa autorización del Cabildo Insular."}, {"id": 6, "la": "Tema 2", "nu": "6", "tx": "La meteorización química de la roca se diferencia de la física en que:", "op": ["Solo actúa en zonas costeras con presencia de sal marina", "Implica una alteración de la composición química de los minerales de la roca, no solo su fragmentación mecánica", "Solo se produce a temperaturas superiores a 30°C", "No tiene influencia sobre la elección del tipo de anclaje"], "co": "b", "fc": "Correcto. La meteorización química altera la composición química de los minerales (hidratación, oxidación, carbonatación), a diferencia de la física que solo fragmenta mecánicamente.", "fw": "Incorrecto. Respuesta correcta: B — la meteorización química implica alteración de la composición química de los minerales."}, {"id": 7, "la": "Tema 2", "nu": "7", "tx": "¿Cuál de los siguientes tipos de roca es magmática intrusiva y se caracteriza por su gran dureza y resistencia, siendo muy adecuada para los anclajes?", "op": ["Caliza", "Arenisca", "Granito", "Yeso"], "co": "c", "fc": "Correcto. El granito es una roca magmática intrusiva de gran dureza y resistencia a la compresión, muy adecuada para la instalación de anclajes.", "fw": "Incorrecto. Respuesta correcta: C — el granito, roca ígnea intrusiva muy dura."}, {"id": 8, "la": "Tema 2", "nu": "8", "tx": "Las Zonas de Especial Conservación (ZEC) y las Zonas de Especial Protección para las Aves (ZEPA) forman conjuntamente:", "op": ["El Catálogo Canario de Espacios Protegidos", "La Red Natura 2000", "El Inventario Español del Patrimonio Natural", "El Plan de Ordenación de los Recursos Naturales (PORN)"], "co": "b", "fc": "Correcto. Las ZEC (derivadas de la Directiva Hábitats) y las ZEPA (Directiva Aves) forman conjuntamente la Red Natura 2000 en la UE.", "fw": "Incorrecto. Respuesta correcta: B — la Red Natura 2000."}, {"id": 9, "la": "Tema 2", "nu": "9", "tx": "Según la Ley 4/2010 del Catálogo Canario de Especies Protegidas, ¿qué categoría de protección abarca a aquellas especies sin situación de amenaza pero merecedoras de protección por su valor científico o singularidad en cualquier parte del territorio?", "op": ["En peligro de extinción", "Vulnerable", "Protección especial", "Interés para los ecosistemas canarios"], "co": "c", "fc": "Correcto. Las especies de 'protección especial' son aquellas que, sin estar amenazadas, merecen protección en cualquier parte del territorio canario por su valor científico, ecológico, cultural o singularidad.", "fw": "Incorrecto. Respuesta correcta: C — especies de protección especial."}, {"id": 10, "la": "Tema 2", "nu": "10", "tx": "El proceso por el que el agua se filtra entre las grietas de la roca, se congela en invierno y al expandirse rompe la roca se denomina:", "op": ["Meteorización química por carbonatación", "Gelifracción (meteorización física por hielo-deshielo)", "Exfoliación por descarga de presión", "Meteorización biológica"], "co": "b", "fc": "Correcto. La gelifracción es un proceso de meteorización física: el agua al congelarse aumenta su volumen (~9%) y ejerce presión suficiente para romper la roca.", "fw": "Incorrecto. Respuesta correcta: B — gelifracción, meteorización física por ciclos hielo-deshielo."}];
+const KM=['a','b','c','d'];
+const ans={};const ver=new Set();
+function build(){
+  const c=document.getElementById('quiz');
+  Q.forEach(q=>{
+    const d=document.createElement('div');d.className='qcard';d.dataset.q=q.id;
+    d.innerHTML=`<div class="qbadge">${q.la}</div><div class="qnum">Pregunta ${q.nu}</div><div class="qtxt">${q.tx}</div>`+
+      `<div class="opts" id="op${q.id}">${q.op.map((o,i)=>`<button class="opt" data-val="${KM[i]}" onclick="sel(${q.id},'${KM[i]}')">`+
+      `<span class="okey">${KM[i].toUpperCase()}.</span>${o}</button>`).join('')}</div>`+
+      `<div class="fb" id="fb${q.id}"></div><button class="btnv" id="bv${q.id}" onclick="verify(${q.id})">▶ Comprobar</button>`;
+    c.appendChild(d);
+  });
+}
+function sel(id,v){if(ver.has(id))return;document.querySelectorAll(`#op${id} .opt`).forEach(o=>o.classList.remove('sel'));document.querySelector(`#op${id} .opt[data-val="${v}"]`).classList.add('sel');ans[id]=v;prog();}
+function verify(id){
+  if(ver.has(id))return;if(!ans[id]){document.getElementById('warn').textContent='⚠ Selecciona una opción.';return;}
+  document.getElementById('warn').textContent='';ver.add(id);
+  const q=Q.find(x=>x.id===id);const ok=ans[id]===q.co;
+  document.querySelectorAll(`#op${id} .opt`).forEach(o=>{o.classList.add('dis');if(o.dataset.val===q.co)o.classList.add('ok');else if(o.dataset.val===ans[id]&&!ok)o.classList.add('ng');});
+  const fb=document.getElementById('fb'+id);fb.className='fb '+(ok?'ok':'ng');fb.textContent=(ok?'✓ ':'✗ ')+(ok?q.fc:q.fw);
+  const bv=document.getElementById('bv'+id);bv.disabled=true;bv.textContent=ok?'✓ Correcto':'✗ Incorrecto';
+}
+function prog(){const d=Object.keys(ans).length;const p=Math.round(d/10*100);document.getElementById('pt').textContent=`${d} / 10 respondidas`;document.getElementById('pp').textContent=p+'%';document.getElementById('pf').style.width=p+'%';}
+function submitAll(){
+  const un=Q.filter(q=>!ans[q.id]);document.getElementById('warn').textContent=un.length?`⚠ ${un.length} sin responder`:'';
+  Q.forEach(q=>{if(!ver.has(q.id)&&ans[q.id])verify(q.id);});
+  let tot=0;const bk={};
+  Q.forEach(q=>{const ok=ans[q.id]===q.co;if(ok)tot++;bk[q.la]=(bk[q.la]||[0,0]);bk[q.la][1]++;if(ok)bk[q.la][0]++;});
+  const p=Math.round(tot/10*100);
+  document.getElementById('rb').textContent=`${tot}/10`;document.getElementById('rs').textContent=`${p}% de respuestas correctas`;
+  const rr=document.getElementById('rr');
+  rr.textContent=p>=90?'🏆 Sobresaliente':p>=75?'👍 Notable':p>=60?'📚 Bien':p>=50?'📖 Suficiente':'❗ Necesitas repasar';
+  document.getElementById('bkd').innerHTML=Object.entries(bk).map(([k,[c,t]])=>`<div class="bkc"><div class="bkn">${k}</div><div class="bkv">${c}/${t}</div></div>`).join('');
+  const rs=document.getElementById('res');rs.style.display='block';rs.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function restart(){Object.keys(ans).forEach(k=>delete ans[k]);ver.clear();document.querySelectorAll('.opt').forEach(o=>{o.className='opt';});document.querySelectorAll('.fb').forEach(f=>{f.className='fb';f.textContent=''});document.querySelectorAll('.btnv').forEach(b=>{b.disabled=false;b.textContent='▶ Comprobar'});document.getElementById('warn').textContent='';document.getElementById('res').style.display='none';prog();window.scrollTo({top:0,behavior:'smooth'});}
+build();prog();
+</script>
+</body>
+</html>
