@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191230</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191250</p>
   </div>
 </header>
 
@@ -1565,11 +1565,10 @@ function generarPDF() {
     txt('Necesario: Track Acceso y Retorno (.kml o .kmz) y Croquis', ML, y);
     doc.setTextColor(0, 0, 0);
 
-    // ══ FICHAS POR RÁPEL (compactas, seguidas) ══
+    // ══ TABLAS DE RÁPELES (fiel al Anexo I) ══
     const cards = document.querySelectorAll('.rapel-card');
     if (cards.length > 0) {
 
-      // nuevaPag: siempre nueva página, cabecera absoluta en y=0, y resetea a 20
       const nuevaPag = (subtit) => {
         doc.addPage();
         doc.setFillColor(30, 50, 25);
@@ -1581,165 +1580,125 @@ function generarPDF() {
         y = 20;
       };
 
-      // gc busca el campo de cobertura con el nombre exacto generado en addRapel
       const getCob = (id, op) => {
-        // addRapel genera: id-cobmovistar, id-cobvodafone, id-caborange, id-cobobtra
         const el = document.getElementById(id + '-cob' + op);
         return parseInt(el?.value || '0') || 0;
       };
 
-      nuevaPag('FICHA DE RAPELES · ' + v('nombre').trim());
-
-      cards.forEach((card, idx) => {
-        const id      = card.id.replace('card-', '');
-        const g       = fid => (document.getElementById(id + fid)?.value || '').trim();
-        const sit     = g('-sit')     || '';
-        const alt     = g('-alt')     || '';
-        const tipo    = g('-tipo')    || '';
-        const obs     = g('-obs')     || '';
-        const escape  = g('-escape')  || '-';
-        const pista   = g('-pista')   || '-';
-        const sendero = g('-sendero') || '-';
-
-        const obsLines = obs ? doc.splitTextToSize(obs, PW - ML - MR - 12) : [];
-        const nObs     = Math.min(obsLines.length, 3);
-        // altura real de la ficha: barra(9) + fila1(6) + fila2(6) + obs(nObs*4+2) + sep(5)
-        const fichaH   = 9 + 6 + 6 + (obs ? nObs * 4 + 2 : 0) + 5;
-
-        if (y + fichaH > PH - 15) {
-          nuevaPag('FICHA DE RAPELES · ' + v('nombre').trim());
-        }
-
-        // ── Barra título: 9mm de alto, texto centrado verticalmente en y+6.5 ──
-        const barY = y;
-        doc.setFillColor(40, 70, 30);
-        doc.rect(ML, barY, PW - ML - MR, 9, 'F');
-        doc.setTextColor(200, 232, 80);
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
-        doc.text('R' + (idx + 1), ML + 2, barY + 6.5);
-        doc.setFontSize(8);
-        const sitCorta = sit.length > 78 ? sit.substring(0, 75) + '...' : (sit || 'Sin descripcion');
-        doc.text(sitCorta, ML + 15, barY + 6.5);
-        doc.setTextColor(0, 0, 0);
-        y = barY + 10; // avanzar DESPUÉS de la barra
-
-        // ── Fila altura + anclaje ──
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        doc.text('Altura:', ML, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        doc.text(alt ? alt + ' m' : '-', ML + 14, y);
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        doc.text('Anclaje:', ML + 38, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        doc.text(tipo || '-', ML + 52, y);
-        y += 6;
-
-        // ── Fila escape + pista + sendero ──
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        doc.text('Escape:', ML, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        doc.text(escape, ML + 14, y);
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        doc.text('Pista:', ML + 38, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        doc.text(pista, ML + 49, y);
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        doc.text('Sendero:', ML + 70, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        doc.text(sendero, ML + 85, y);
-        y += 6;
-
-        // ── Observaciones ──
-        if (obs && obsLines.length > 0) {
-          doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-          doc.text('Obs:', ML, y);
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
-          obsLines.slice(0, 3).forEach((l, i) => doc.text(l, ML + 10, y + i * 4));
-          y += nObs * 4 + 2;
-        }
-
-        // ── Separador ──
-        doc.setDrawColor(160, 160, 160); doc.setLineWidth(0.15);
-        doc.line(ML, y + 1, PW - MR, y + 1);
-        doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.2);
-        y += 5;
-      });
-
-      // ══ TABLA RESUMEN — siempre página nueva ══
-      nuevaPag('RESUMEN DE RAPELES · ' + v('nombre').trim());
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
-      doc.text('RESUMEN DE RAPELES', ML, y); y += 5;
-
-      const cw     = [10, 13, 50, 28, 14, 12, 13];
-      const cx     = [ML];
-      cw.forEach((w, i) => { if (i < cw.length - 1) cx.push(cx[i] + w); });
-      const rh     = 6;
-      const totalW = cw.reduce((a, b) => a + b, 0);
-      const heads  = ['R', 'Alt.', 'Situacion', 'Anclaje', 'Escape', 'Pista', 'Sendero'];
-
-      doc.setFillColor(220, 235, 210);
-      doc.rect(ML, y, totalW, rh, 'F');
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(7);
-      heads.forEach((h, i) => doc.text(h, cx[i] + 1, y + 4.2));
-      doc.setDrawColor(120, 120, 120);
-      doc.rect(ML, y, totalW, rh);
-      cx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
-      doc.setDrawColor(0, 0, 0);
-      y += rh;
-
-      cards.forEach((card, idx) => {
-        if (y + rh > PH - 15) nuevaPag('RESUMEN DE RAPELES · ' + v('nombre').trim());
-        const id  = card.id.replace('card-', '');
-        const g   = fid => (document.getElementById(id + fid)?.value || '').trim() || '-';
-        const row = ['R'+(idx+1), g('-alt')!=='-'?g('-alt')+'m':'-', g('-sit'), g('-tipo'), g('-escape'), g('-pista'), g('-sendero')];
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
-        row.forEach((d, i) => { const s = doc.splitTextToSize(d||'-', cw[i]-2); doc.text(s[0]||'-', cx[i]+1, y+4.2); });
-        doc.setDrawColor(180, 180, 180);
-        doc.rect(ML, y, totalW, rh);
-        cx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
+      const dibujarCabeclaTabla = (cols, widths, xs, rh) => {
+        doc.setFillColor(220, 235, 210);
+        doc.rect(ML, y, widths.reduce((a,b)=>a+b,0), rh, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(7);
+        cols.forEach((h, i) => doc.text(h, xs[i] + 1, y + rh - 1.5));
+        doc.setDrawColor(100, 100, 100);
+        doc.rect(ML, y, widths.reduce((a,b)=>a+b,0), rh);
+        xs.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
         doc.setDrawColor(0, 0, 0);
         y += rh;
-      });
+      };
 
-      // ══ TABLA COBERTURAS — siempre página nueva ══
-      nuevaPag('COBERTURA MOVIL · ' + v('nombre').trim());
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
-      doc.text('COBERTURA MOVIL POR RAPEL', ML, y); y += 5;
+      const dibujarFilaTabla = (vals, widths, xs, rh) => {
+        if (y + rh > PH - 15) return false; // señal de desbordamiento
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+        vals.forEach((d, i) => {
+          const s = doc.splitTextToSize((d || '-').toString(), widths[i] - 2);
+          doc.text(s[0] || '-', xs[i] + 1, y + rh - 1.5);
+        });
+        doc.setDrawColor(180, 180, 180);
+        doc.rect(ML, y, widths.reduce((a,b)=>a+b,0), rh);
+        xs.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
+        doc.setDrawColor(0, 0, 0);
+        y += rh;
+        return true;
+      };
 
-      const cc     = [10, 38, 38, 38, 36];
-      const ccx    = [ML];
-      cc.forEach((w, i) => { if (i < cc.length - 1) ccx.push(ccx[i] + w); });
-      const totalC = cc.reduce((a, b) => a + b, 0);
-      const hc     = ['R', 'Movistar', 'Vodafone', 'Orange', 'Otra'];
+      // ══ TABLA 1: Rápeles y Seguridad ══
+      nuevaPag('FICHA DE RAPELES Y SEGURIDAD · ' + v('nombre').trim());
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+      doc.text('FICHA DE RAPELES Y SEGURIDAD', ML, y); y += 6;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+      doc.text('Barranco: ' + v('nombre').trim(), ML, y); y += 5;
 
-      doc.setFillColor(220, 235, 210);
-      doc.rect(ML, y, totalC, rh, 'F');
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(7);
-      hc.forEach((h, i) => doc.text(h, ccx[i] + 1, y + 4.2));
-      doc.setDrawColor(120, 120, 120);
-      doc.rect(ML, y, totalC, rh);
-      ccx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
-      doc.setDrawColor(0, 0, 0);
-      y += rh;
+      const rh1 = 7;
+      const cw1 = [12, 55, 15, 35, 63];
+      const cx1 = [ML]; cw1.forEach((w,i) => { if(i<cw1.length-1) cx1.push(cx1[i]+w); });
+      const h1  = ['No Rapel', 'Situacion', 'Altura', 'Anclajes', 'Observaciones'];
+
+      dibujarCabeclaTabla(h1, cw1, cx1, rh1);
 
       cards.forEach((card, idx) => {
-        if (y + rh > PH - 15) nuevaPag('COBERTURA MOVIL · ' + v('nombre').trim());
-        const id  = card.id.replace('card-', '');
-        const bar = n  => '|'.repeat(n) + '.'.repeat(4 - n) + ' (' + n + '/4)';
-        const rowC = [
-          'R'+(idx+1),
+        if (y + rh1 > PH - 15) {
+          nuevaPag('FICHA DE RAPELES Y SEGURIDAD · ' + v('nombre').trim());
+          dibujarCabeclaTabla(h1, cw1, cx1, rh1);
+        }
+        const id = card.id.replace('card-', '');
+        const g  = fid => (document.getElementById(id + fid)?.value || '').trim() || '-';
+        dibujarFilaTabla([
+          'R' + (idx + 1),
+          g('-sit'),
+          g('-alt') !== '-' ? g('-alt') + 'm' : '-',
+          g('-tipo'),
+          g('-obs'),
+        ], cw1, cx1, rh1);
+      });
+
+      // ══ TABLA 2: Escapes y Coberturas ══
+      nuevaPag('FICHA DE RAPELES Y SEGURIDAD · ' + v('nombre').trim());
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+      doc.text('ESCAPES Y COBERTURA MOVIL', ML, y); y += 6;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+      doc.text('Barranco: ' + v('nombre').trim(), ML, y); y += 5;
+
+      const rh2 = 7;
+      const cw2 = [12, 17, 17, 17, 27, 27, 27, 27];
+      const cx2 = [ML]; cw2.forEach((w,i) => { if(i<cw2.length-1) cx2.push(cx2[i]+w); });
+      const h2  = ['No', 'Escape', 'Pista', 'Sendero', 'Movistar', 'Vodafone', 'Orange', 'Otra'];
+
+      // Cabecera doble altura para las etiquetas largas
+      const rhH2 = 9;
+      doc.setFillColor(220, 235, 210);
+      doc.rect(ML, y, cw2.reduce((a,b)=>a+b,0), rhH2, 'F');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
+      h2.forEach((h, i) => {
+        const lines = doc.splitTextToSize(h, cw2[i] - 2);
+        lines.forEach((l, li) => doc.text(l, cx2[i] + 1, y + 4 + li * 3.5));
+      });
+      doc.setDrawColor(100, 100, 100);
+      doc.rect(ML, y, cw2.reduce((a,b)=>a+b,0), rhH2);
+      cx2.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rhH2); });
+      doc.setDrawColor(0, 0, 0);
+      y += rhH2;
+
+      const bar = n => '|'.repeat(n) + '.'.repeat(4-n) + '(' + n + '/4)';
+
+      cards.forEach((card, idx) => {
+        if (y + rh2 > PH - 15) {
+          nuevaPag('FICHA DE RAPELES Y SEGURIDAD · ' + v('nombre').trim());
+          doc.setFillColor(220, 235, 210);
+          doc.rect(ML, y, cw2.reduce((a,b)=>a+b,0), rhH2, 'F');
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
+          h2.forEach((h, i) => {
+            const lines = doc.splitTextToSize(h, cw2[i] - 2);
+            lines.forEach((l, li) => doc.text(l, cx2[i] + 1, y + 4 + li * 3.5));
+          });
+          doc.setDrawColor(100, 100, 100);
+          doc.rect(ML, y, cw2.reduce((a,b)=>a+b,0), rhH2);
+          cx2.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rhH2); });
+          doc.setDrawColor(0, 0, 0);
+          y += rhH2;
+        }
+        const id = card.id.replace('card-', '');
+        const g  = fid => (document.getElementById(id + fid)?.value || '').trim() || '-';
+        dibujarFilaTabla([
+          'R' + (idx + 1),
+          g('-escape'),
+          g('-pista'),
+          g('-sendero'),
           bar(getCob(id, 'movistar')),
           bar(getCob(id, 'vodafone')),
           bar(getCob(id, 'orange')),
           bar(getCob(id, 'otra')),
-        ];
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
-        rowC.forEach((d, i) => doc.text(d||'-', ccx[i]+1, y+4.2));
-        doc.setDrawColor(180, 180, 180);
-        doc.rect(ML, y, totalC, rh);
-        ccx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
-        doc.setDrawColor(0, 0, 0);
-        y += rh;
+        ], cw2, cx2, rh2);
       });
     }
 
