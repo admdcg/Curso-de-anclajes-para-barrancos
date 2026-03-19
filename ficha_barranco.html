@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191045</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191105</p>
   </div>
 </header>
 
@@ -1534,7 +1534,7 @@ function generarPDF() {
       y += 5;
     };
 
-    filaCoord('Coord. Inicio:', v('coord_ini_x'), v('coord_ini_y'), '', 'WGS84 · Zona 28R', ML + 115, 'Datum:');
+    filaCoord('Coord. Inicio:', v('coord_ini_x'), v('coord_ini_y'), '', 'WGS84', ML + 115, 'Datum:');
     filaCoord('Coord. Final:', v('coord_fin_x'), v('coord_fin_y'), '', v('t_acceso'), ML + 115, 'T. Acceso:');
 
     doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
@@ -1565,101 +1565,97 @@ function generarPDF() {
     txt('Necesario: Track Acceso y Retorno (.kml o .kmz) y Croquis', ML, y);
     doc.setTextColor(0, 0, 0);
 
-    // ══ PÁGINA 2: RÁPELES ══
+    // ══ FICHAS POR RÁPEL ══
     const cards = document.querySelectorAll('.rapel-card');
     if (cards.length > 0) {
-      doc.addPage(); y = MT;
-      cabeceraHoja('FICHA DE RAPELES Y SEGURIDAD · ' + v('nombre').trim());
-      y = 20;
-
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
-      txt('Barranco: ', ML, y);
-      doc.setFont('helvetica', 'normal');
-      txt(v('nombre'), ML + 22, y); y += 8;
-
-      // Tabla
-      const cw = [12, 45, 16, 32, 15, 10, 10, 10];
-      const cx = [ML];
-      cw.forEach((w, i) => { if (i < cw.length - 1) cx.push(cx[i] + w); });
-      const rh = 7;
-      const heads = ['No', 'Situacion', 'Altura', 'Anclajes', 'Obs.', 'Esc.', 'Pis.', 'Sen.'];
-      const totalW = cw.reduce((a, b) => a + b, 0);
-
-      // Cabecera tabla
-      doc.setFillColor(220, 235, 210);
-      doc.rect(ML, y, totalW, rh, 'F');
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-      heads.forEach((h, i) => txt(h, cx[i] + 1, y + 4.8));
-      doc.setDrawColor(120, 120, 120);
-      doc.rect(ML, y, totalW, rh);
-      cx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
-      doc.setDrawColor(0, 0, 0);
-      y += rh;
-
-      // Filas
       cards.forEach((card, idx) => {
-        saltoPagina(rh + 2);
         const id = card.id.replace('card-', '');
-        const g = fid => (document.getElementById(id + fid)?.value || '').trim() || ' ';
-        const row = [
-          'R' + (idx + 1),
-          g('-sit'),
-          g('-alt') !== ' ' ? g('-alt') + 'm' : ' ',
-          g('-tipo'),
-          g('-obs'),
-          g('-escape'),
-          g('-pista'),
-          g('-sendero'),
-        ];
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
-        row.forEach((d, i) => {
-          const s = (d || ' ').toString();
-          const lines = doc.splitTextToSize(s, cw[i] - 2);
-          txt(lines[0] || ' ', cx[i] + 1, y + 4.8);
+        const g  = fid => (document.getElementById(id + fid)?.value || '').trim() || ' ';
+        const gc = op  => parseInt(document.getElementById(id + '-cob' + op)?.value || '0') || 0;
+
+        const sit    = g('-sit');
+        const alt    = g('-alt');
+        const tipo   = g('-tipo');
+        const obs    = g('-obs');
+        const escape = g('-escape');
+        const pista  = g('-pista');
+        const sendero= g('-sendero');
+
+        // Cada rápel en su propia página (o salto si no cabe)
+        doc.addPage(); y = MT;
+        cabeceraHoja('FICHA DE RAPEL · ' + v('nombre').trim() + '  |  R' + (idx + 1));
+        y = 20;
+
+        // Título del rápel
+        doc.setFillColor(40, 70, 30);
+        doc.rect(ML, y, PW - ML - MR, 9, 'F');
+        doc.setTextColor(200, 232, 80);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+        txt('R' + (idx + 1), ML + 4, y + 6.5);
+        doc.setFontSize(9);
+        txt(sit !== ' ' ? sit : 'Sin descripcion', ML + 18, y + 6.5);
+        doc.setTextColor(0, 0, 0);
+        y += 13;
+
+        // Fila altura + tipo anclaje
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        txt('Altura:', ML, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        txt(alt !== ' ' ? alt + ' m' : '-', ML + 15, y);
+
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        txt('Tipo anclaje:', ML + 45, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        txt(tipo !== ' ' ? tipo : '-', ML + 75, y);
+        y += 7;
+
+        // Escape / Pista / Sendero
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        txt('Escape:', ML, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        txt(escape !== ' ' ? escape : '-', ML + 16, y);
+
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        txt('Pista:', ML + 45, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        txt(pista !== ' ' ? pista : '-', ML + 57, y);
+
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        txt('Sendero:', ML + 80, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        txt(sendero !== ' ' ? sendero : '-', ML + 96, y);
+        y += 9;
+
+        // Cobertura
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        txt('Cobertura movil:', ML, y); y += 5;
+
+        const ops = ['movistar', 'vodafone', 'orange', 'otra'];
+        const labels = ['Movistar', 'Vodafone', 'Orange', 'Otra'];
+        const colW = (PW - ML - MR) / 4;
+        ops.forEach((op, i) => {
+          const n = gc(op);
+          const cx2 = ML + i * colW;
+          // Etiqueta
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+          txt(labels[i], cx2, y);
+          // Barras
+          doc.setFillColor(80, 140, 40);
+          doc.setDrawColor(150, 150, 150);
+          for (let b = 0; b < 4; b++) {
+            const bx = cx2 + b * 8;
+            doc.setFillColor(b < n ? 80 : 220, b < n ? 140 : 220, b < n ? 40 : 220);
+            doc.rect(bx, y + 2, 6, 4, 'F');
+            doc.rect(bx, y + 2, 6, 4);
+          }
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+          txt('(' + n + '/4)', cx2 + 34, y + 5.5);
         });
-        doc.setDrawColor(180, 180, 180);
-        doc.rect(ML, y, totalW, rh);
-        cx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
         doc.setDrawColor(0, 0, 0);
-        y += rh;
-      });
+        y += 12;
 
-      y += 10;
-
-      // Tabla cobertura
-      saltoPagina(40);
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
-      txt('Cobertura movil por rapel', ML, y); y += 6;
-
-      const cc = [12, 38, 38, 38, 34];
-      const ccx = [ML];
-      cc.forEach((w, i) => { if (i < cc.length - 1) ccx.push(ccx[i] + w); });
-      const totalC = cc.reduce((a, b) => a + b, 0);
-      const hc = ['No', 'Movistar', 'Vodafone', 'Orange', 'Otra'];
-
-      doc.setFillColor(220, 235, 210);
-      doc.rect(ML, y, totalC, rh, 'F');
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-      hc.forEach((h, i) => txt(h, ccx[i] + 1, y + 4.8));
-      doc.setDrawColor(120, 120, 120);
-      doc.rect(ML, y, totalC, rh);
-      ccx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
-      doc.setDrawColor(0, 0, 0);
-      y += rh;
-
-      cards.forEach((card, idx) => {
-        saltoPagina(rh + 1);
-        const id = card.id.replace('card-', '');
-        const gc = op => parseInt(document.getElementById(id + '-cob' + op)?.value || '0') || 0;
-        const bars = n => '|'.repeat(n) + '.'.repeat(4 - n) + ' (' + n + '/4)';
-        const rowC = ['R' + (idx + 1), bars(gc('movistar')), bars(gc('vodafone')), bars(gc('orange')), bars(gc('otra'))];
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
-        rowC.forEach((d, i) => txt((d || ' ').toString(), ccx[i] + 1, y + 4.8));
-        doc.setDrawColor(180, 180, 180);
-        doc.rect(ML, y, totalC, rh);
-        ccx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
-        doc.setDrawColor(0, 0, 0);
-        y += rh;
+        // Observaciones
+        caja('Observaciones', obs !== ' ' ? obs : '', 25);
       });
     }
 
