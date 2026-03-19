@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191250</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191315</p>
   </div>
 </header>
 
@@ -1699,6 +1699,144 @@ function generarPDF() {
           bar(getCob(id, 'orange')),
           bar(getCob(id, 'otra')),
         ], cw2, cx2, rh2);
+      });
+    }
+
+
+    // ══ FICHA DEL BARRANCO - SEGURIDAD (fichas individuales por rápel, 6 por página) ══
+    if (cards.length > 0) {
+
+      const RAPELES_POR_PAG = 6;
+      const FICHA_SEG_H = 38; // alto de cada ficha de seguridad en mm
+
+      const nuevaPagSeg = () => {
+        doc.addPage();
+        doc.setFillColor(30, 50, 25);
+        doc.rect(0, 0, PW, 12, 'F');
+        doc.setTextColor(200, 232, 80);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+        doc.text('FICHA DEL BARRANCO - SEGURIDAD', PW / 2, 8, { align: 'center' });
+        doc.setTextColor(0, 0, 0);
+        // Nombre barranco
+        y = 16;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        doc.text('Nombre Barranco:', ML, y);
+        doc.setFont('helvetica', 'normal');
+        doc.text(v('nombre').trim(), ML + 34, y);
+        doc.setDrawColor(150,150,150);
+        doc.line(ML + 34, y + 0.5, PW - MR, y + 0.5);
+        doc.setDrawColor(0,0,0);
+        y = 22;
+      };
+
+      const dibujarFichaSeg = (idx, card) => {
+        const id      = card.id.replace('card-', '');
+        const g       = fid => (document.getElementById(id + fid)?.value || '').trim();
+        const escape  = g('-escape')  || '';
+        const pista   = g('-pista')   || '';
+        const sendero = g('-sendero') || '';
+        const tipo    = g('-tipo')    || '';
+        const cMov    = getCob(id, 'movistar');
+        const cVod    = getCob(id, 'vodafone');
+        const cOra    = getCob(id, 'orange');
+        const cOtr    = getCob(id, 'otra');
+
+        const W = PW - ML - MR;
+        const fy = y; // y de inicio de esta ficha
+
+        // Borde exterior de la ficha
+        doc.setDrawColor(100, 100, 100); doc.setLineWidth(0.3);
+        doc.rect(ML, fy, W, FICHA_SEG_H);
+        doc.setLineWidth(0.2);
+
+        // ── Fila 1: Rn | Escape S/N | Pista S/N | Sendero S/N ──
+        const f1y = fy + 6;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+        doc.setFillColor(40, 70, 30);
+        doc.rect(ML, fy, 18, 9, 'F');
+        doc.setTextColor(200, 232, 80);
+        doc.text('R' + (idx + 1), ML + 2, fy + 6.5);
+        doc.setTextColor(0, 0, 0);
+
+        // línea separadora horizontal tras Rn
+        doc.setDrawColor(150,150,150);
+        doc.line(ML + 18, fy, ML + 18, fy + 9);
+        doc.setDrawColor(0,0,0);
+
+        // Escape / Pista / Sendero en fila 1
+        const snItems = [
+          { lbl: 'Escape', val: escape },
+          { lbl: 'Pista',  val: pista  },
+          { lbl: 'Sendero',val: sendero},
+        ];
+        const snW = (W - 18) / 3;
+        snItems.forEach((item, i) => {
+          const sx = ML + 18 + i * snW;
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+          doc.text(item.lbl, sx + 2, fy + 4);
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+          const sval = item.val || '-';
+          doc.text('S: ' + (sval === 'S' ? '☒' : '☐') + '  N: ' + (sval === 'N' ? '☒' : '☐'), sx + 2, fy + 8);
+          if (i > 0) { doc.setDrawColor(150,150,150); doc.line(sx, fy, sx, fy + 9); doc.setDrawColor(0,0,0); }
+        });
+        // línea horizontal bajo fila 1
+        doc.setDrawColor(150,150,150);
+        doc.line(ML, fy + 9, ML + W, fy + 9);
+
+        // ── Fila 2: Coberturas 2x2 ──
+        const cobItems = [
+          { lbl: 'Cobertura Movistar', val: cMov },
+          { lbl: 'Cobertura Vodafone', val: cVod },
+          { lbl: 'Cobertura Orange',   val: cOra },
+          { lbl: 'Cobertura (otra)',    val: cOtr },
+        ];
+        const cobW = W / 2;
+        const cobRowH = 10;
+        cobItems.forEach((c, i) => {
+          const col = i % 2;
+          const row = Math.floor(i / 2);
+          const cx3 = ML + col * cobW;
+          const cy3 = fy + 9 + row * cobRowH;
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
+          doc.text(c.lbl + ':', cx3 + 2, cy3 + 4);
+          // Cuadros de cobertura 1-4
+          for (let b = 0; b < 4; b++) {
+            const bx = cx3 + 2 + b * 8;
+            doc.setFillColor(b < c.val ? 80 : 240, b < c.val ? 140 : 240, b < c.val ? 40 : 240);
+            doc.rect(bx, cy3 + 5, 6, 3.5, 'FD');
+          }
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(6);
+          doc.text('(' + c.val + '/4)', cx3 + 36, cy3 + 8);
+          // separadores
+          if (col === 1) { doc.setDrawColor(150,150,150); doc.line(ML + cobW, cy3, ML + cobW, cy3 + cobRowH); }
+          if (row === 0) { doc.setDrawColor(150,150,150); doc.line(cx3, cy3 + cobRowH, cx3 + cobW, cy3 + cobRowH); }
+          doc.setDrawColor(0,0,0);
+        });
+
+        // ── Fila 3: Tipo anclaje con checkboxes ──
+        const f3y = fy + 9 + cobRowH * 2;
+        doc.setDrawColor(150,150,150);
+        doc.line(ML, f3y, ML + W, f3y);
+        doc.setDrawColor(0,0,0);
+
+        const tipoItems = ['Parabolt','Tensor','Spit','Chapa'];
+        const tipoW = W / 4;
+        tipoItems.forEach((t, i) => {
+          const tx = ML + i * tipoW;
+          const checked = tipo.includes(t);
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
+          doc.text((checked ? '☒' : '☐') + ' ' + t, tx + 2, f3y + 5.5);
+          if (i > 0) { doc.setDrawColor(150,150,150); doc.line(tx, f3y, tx, f3y + 9); doc.setDrawColor(0,0,0); }
+        });
+
+        y = fy + FICHA_SEG_H + 2; // avanzar al siguiente rápel
+      };
+
+      // Generar fichas de seguridad, 6 por página
+      nuevaPagSeg();
+      Array.from(cards).forEach((card, idx) => {
+        if (idx > 0 && idx % RAPELES_POR_PAG === 0) nuevaPagSeg();
+        dibujarFichaSeg(idx, card);
       });
     }
 
