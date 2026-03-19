@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Ficha del Barranco</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1410;
+    --surface: #1a2018;
+    --surface2: #222d20;
+    --border: #3a4f35;
+    --accent: #7ec850;
+    --accent2: #4a8c2a;
+    --accent3: #c8e850;
+    --danger: #e85050;
+    --warn: #e8a850;
+    --text: #d4e8cc;
+    --text-dim: #7a9870;
+    --text-muted: #4a6445;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Barlow Condensed', sans-serif;
+    --body: 'Barlow', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(126,200,80,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(126,200,80,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, #1a2a15 0%, #0f1a0c 100%);
+    border-bottom: 2px solid var(--accent2);
+    padding: 1.2rem 1.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header-icon { font-size: 2.2rem; line-height: 1; }
+
+  .header-text h1 {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .header-text p {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* TABS */
+  .tabs {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .tab-btn {
+    flex: 1;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.75rem 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .tab-btn:hover { color: var(--text-dim); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .status-bar {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .progress-bar { width: 120px; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s ease; border-radius: 2px; }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem 1rem 2rem;
+  }
+
+  .section {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .section-header {
+    background: linear-gradient(90deg, var(--surface2), var(--surface));
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-header .sec-icon { font-size: 1rem; }
+
+  .section-header h2 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent3);
+  }
+
+  .section-body { padding: 0.8rem 1rem; }
+
+  .field-row {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .field-row.cols-2 > .field { flex: 1; min-width: 120px; }
+  .field-row.cols-3 > .field { flex: 1; min-width: 90px; }
+
+  .field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .field.full { flex: 0 0 100%; }
+
+  label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .input-wrapper {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg);
+    transition: border-color 0.2s;
+  }
+
+  .input-wrapper:focus-within { border-color: var(--accent2); box-shadow: 0 0 0 2px rgba(126,200,80,0.12); }
+  .input-wrapper.recording { border-color: var(--danger); box-shadow: 0 0 0 2px rgba(232,80,80,0.2); animation: pulse-border 1s infinite; }
+  .input-wrapper.filled { border-color: var(--accent2); }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(232,80,80,0.2); }
+    50% { box-shadow: 0 0 0 4px rgba(232,80,80,0.35); }
+  }
+
+  input[type="text"], textarea, input[type="number"] {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0.55rem 0.7rem;
+    font-family: var(--body);
+    font-size: 0.9rem;
+    color: var(--text);
+    min-width: 0;
+    resize: none;
+  }
+
+  textarea { min-height: 70px; line-height: 1.4; }
+  input::placeholder, textarea::placeholder { color: var(--text-muted); font-size: 0.8rem; }
+
+  .mic-btn {
+    background: none;
+    border: none;
+    border-left: 1px solid var(--border);
+    padding: 0 0.75rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .mic-btn:hover { color: var(--accent); background: rgba(126,200,80,0.06); }
+  .mic-btn.active { color: var(--danger); background: rgba(232,80,80,0.08); }
+  .mic-btn:active { transform: scale(0.92); }
+
+  .datum-badge {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.4rem 0.7rem;
+    color: var(--accent3);
+    letter-spacing: 0.1em;
+    align-self: flex-end;
+    line-height: 1.8;
+  }
+
+  .estado-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .estado-btn {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.9rem;
+    border-radius: 5px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: transparent;
+  }
+
+  .estado-btn.malo { border-color: var(--danger); color: var(--danger); }
+  .estado-btn.malo.sel { background: var(--danger); color: #fff; }
+  .estado-btn.regular { border-color: var(--warn); color: var(--warn); }
+  .estado-btn.regular.sel { background: var(--warn); color: #111; }
+  .estado-btn.bueno { border-color: var(--accent); color: var(--accent); }
+  .estado-btn.bueno.sel { background: var(--accent); color: #111; }
+  .estado-btn.mixto { border-color: var(--text-dim); color: var(--text-dim); }
+  .estado-btn.mixto.sel { background: var(--text-dim); color: #111; }
+
+  .foto-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg);
+  }
+
+  .foto-zone:hover { border-color: var(--accent2); background: rgba(126,200,80,0.04); }
+  .foto-zone p { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; margin-top: 0.4rem; }
+  .foto-zone .icon { font-size: 1.8rem; }
+  #foto-input { display: none; }
+
+  .fotos-preview { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.6rem; }
+  .foto-thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; border: 1px solid var(--border); }
+
+  /* ── TABLA DE RÁPELES ── */
+  .rapel-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .rapel-card.has-data { border-color: var(--accent2); }
+
+  .rapel-card-header {
+    background: var(--surface2);
+    padding: 0.5rem 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    gap: 0.5rem;
+  }
+
+  .rapel-num {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: 1rem;
+    color: var(--accent3);
+    letter-spacing: 0.05em;
+    min-width: 2.8rem;
+  }
+
+  .rapel-summary {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rapel-toggle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    transition: transform 0.2s;
+  }
+
+  .rapel-card-body {
+    padding: 0.8rem 0.9rem;
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .rapel-card-body.open { display: block; }
+
+  .rapel-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .rapel-field { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; min-width: 90px; }
+  .rapel-field.wide { min-width: 180px; flex: 2; }
+
+  .rapel-field label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .small-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.42rem 0.6rem;
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+
+  .small-input:focus { border-color: var(--accent2); }
+  .small-input::placeholder { color: var(--text-muted); font-size: 0.75rem; }
+
+  /* Cobertura */
+  .cob-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .cob-field { display: flex; flex-direction: column; gap: 0.2rem; }
+
+  .cob-field label {
+    font-family: var(--mono);
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cob-stars {
+    display: flex;
+    gap: 3px;
+  }
+
+  .cob-star {
+    width: 26px; height: 26px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.1s;
+    font-family: var(--mono);
+    font-weight: bold;
+  }
+
+  .cob-star:hover { border-color: var(--accent2); }
+  .cob-star.active { background: var(--accent2); border-color: var(--accent); color: var(--accent3); }
+
+  /* Toggle S/N */
+  .sn-toggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .sn-btn {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 0.35rem 0.7rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .sn-btn.s.active { background: var(--accent2); color: var(--accent3); }
+  .sn-btn.n.active { background: #2a1a1a; color: var(--danger); }
+
+  /* Tipo anclaje */
+  .tipo-btns { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+
+  .tipo-btn {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.06em;
+  }
+
+  .tipo-btn.active { background: var(--surface2); border-color: var(--accent2); color: var(--accent3); }
+
+  /* Añadir rápel */
+  .add-rapel-btn {
+    width: 100%;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.7rem;
+    background: transparent;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+  }
+
+  .add-rapel-btn:hover { border-color: var(--accent2); color: var(--accent); }
+
+  /* Botones acción */
+  .actions { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    flex: 1;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.2rem;
+    background: var(--accent);
+    color: #0f1410;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-primary:hover { background: var(--accent3); }
+  .btn-primary:active { transform: scale(0.97); }
+
+  .btn-secondary {
+    flex: 1;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.2rem;
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface2);
+    border: 1px solid var(--accent2);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    z-index: 100;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .rec-indicator {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(232,80,80,0.92);
+    color: white;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0.5rem;
+    z-index: 200;
+  }
+
+  .rec-indicator.show { display: block; }
+
+  .rec-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: white;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: blink 0.8s infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  /* ── BOTÓN GPS ── */
+  .geo-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.38rem 0.85rem;
+    background: transparent;
+    border: 1px solid var(--accent2);
+    border-radius: 20px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .geo-btn:hover { background: rgba(126,200,80,0.1); }
+  .geo-btn:active { transform: scale(0.95); }
+  .geo-btn.loading { border-color: var(--warn); color: var(--warn); animation: pulse-border 1s infinite; }
+  .geo-btn.done { border-color: var(--accent); background: rgba(126,200,80,0.12); }
+  .geo-icon { font-size: 1rem; }
+
+  .geo-status {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.07em;
+    color: var(--warn);
+    min-height: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .geo-wgs {
+    font-family: var(--mono);
+    font-size: 0.57rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── BOTÓN GPS ── */
+  .geo-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    background: transparent;
+    border: 1px solid var(--accent2);
+    border-radius: 20px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .geo-btn:hover { background: rgba(126,200,80,0.1); }
+  .geo-btn:active { transform: scale(0.95); }
+  .geo-btn.loading { border-color: var(--warn); color: var(--warn); animation: pulse-border 1s infinite; }
+  .geo-btn.done { border-color: var(--accent); background: rgba(126,200,80,0.12); }
+
+  .geo-icon { font-size: 1rem; }
+
+  .geo-status {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--warn);
+    min-height: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .geo-wgs {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    margin-bottom: 0.4rem;
+  }
+
+  @media print {
+    body { background: white; color: black; }
+    body::before { display: none; }
+    header { background: #f0f0f0; border-bottom: 2px solid #333; }
+    .header-text h1 { color: #333; }
+    .tabs { display: none; }
+    .tab-panel { display: block !important; }
+    .section { border: 1px solid #ccc; page-break-inside: avoid; }
+    .section-header { background: #f5f5f5; }
+    .section-header h2 { color: #333; }
+    .rapel-card { border: 1px solid #ccc; }
+    .rapel-card-header { background: #f0f0f0; }
+    .rapel-num { color: #333; }
+    .rapel-card-body { display: block !important; }
+    .mic-btn, .actions, .status-bar, .rec-indicator, .add-rapel-btn, .tab-btn { display: none !important; }
+    input, textarea, .small-input { color: black; background: white; }
+    label { color: #555; }
+  }
+
+  @media (max-width: 480px) {
+    header { padding: 1rem; }
+    main { padding: 0.8rem 0.8rem 2rem; }
+    .cob-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="rec-indicator" id="recIndicator">
+  <span class="rec-dot"></span> Grabando... toca 🎙️ para detener
+</div>
+
+<header>
+  <div class="header-icon">🏔️</div>
+  <div class="header-text">
+    <h1>Ficha del Barranco</h1>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6</p>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('general')" id="tab-general">📋 General</button>
+  <button class="tab-btn" onclick="switchTab('rapeles')" id="tab-rapeles">🧗 Rápeles</button>
+</div>
+
+<div class="status-bar">
+  <span id="statusText">CAMPOS COMPLETADOS</span>
+  <div style="display:flex;align-items:center;gap:0.7rem;">
+    <span id="progressLabel">0 / 16</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════ PESTAÑA GENERAL ══════════════════ -->
+<div class="tab-panel active" id="panel-general">
+
+  <div class="section">
+    <div class="section-header"><span class="sec-icon">📋</span><h2>Identificación</h2></div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field full">
+          <label>Nombre del Barranco</label>
+          <div class="input-wrapper" id="wrap-nombre">
+            <input type="text" id="nombre" placeholder="Ej: Barranco del Infierno" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('nombre')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Localidad</label>
+          <div class="input-wrapper" id="wrap-localidad">
+            <input type="text" id="localidad" placeholder="Localidad" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('localidad')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Municipio</label>
+          <div class="input-wrapper" id="wrap-municipio">
+            <input type="text" id="municipio" placeholder="Municipio" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('municipio')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>Graduación</label>
+          <div class="input-wrapper" id="wrap-graduacion">
+            <input type="text" id="graduacion" placeholder="Ej: V4 A3 II (800m)" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('graduacion')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="sec-icon">📝</span><h2>Descripciones</h2></div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field full">
+          <label>Descripción del Barranco</label>
+          <div class="input-wrapper" id="wrap-desc_barranco">
+            <textarea id="desc_barranco" placeholder="Tipo de roca, morfología, ambiente, dificultades generales..." oninput="updateProgress()"></textarea>
+            <button class="mic-btn" onclick="toggleMic('desc_barranco')" title="Dictar" style="align-self:flex-start;margin-top:4px;">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>Descripción del Acceso</label>
+          <div class="input-wrapper" id="wrap-desc_acceso">
+            <textarea id="desc_acceso" placeholder="Cómo llegar al inicio del barranco..." oninput="updateProgress()"></textarea>
+            <button class="mic-btn" onclick="toggleMic('desc_acceso')" title="Dictar" style="align-self:flex-start;margin-top:4px;">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>Descripción del Descenso</label>
+          <div class="input-wrapper" id="wrap-desc_descenso">
+            <textarea id="desc_descenso" placeholder="Rápeles, pozas, pasos destacados..." oninput="updateProgress()"></textarea>
+            <button class="mic-btn" onclick="toggleMic('desc_descenso')" title="Dictar" style="align-self:flex-start;margin-top:4px;">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>Descripción del Retorno</label>
+          <div class="input-wrapper" id="wrap-desc_retorno">
+            <textarea id="desc_retorno" placeholder="Salida al vehículo, camino de vuelta..." oninput="updateProgress()"></textarea>
+            <button class="mic-btn" onclick="toggleMic('desc_retorno')" title="Dictar" style="align-self:flex-start;margin-top:4px;">🎙️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="sec-icon">📍</span><h2>Coordenadas y Tiempos</h2></div>
+    <div class="section-body">
+
+      <!-- COORD INICIO -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">
+        <span style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Coord. Inicio</span>
+        <button class="geo-btn" onclick="getGPS('inicio')" id="geo-btn-inicio" title="Capturar ubicación actual">
+          <span class="geo-icon">📍</span> Capturar posición
+        </button>
+      </div>
+      <div id="geo-status-inicio" class="geo-status"></div>
+      <div class="field-row" style="align-items:flex-end;">
+        <div class="field" style="flex:2;min-width:130px;">
+          <label>X · Este (UTM)</label>
+          <div class="input-wrapper" id="wrap-coord_ini_x">
+            <input type="text" id="coord_ini_x" placeholder="315432" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('coord_ini_x')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field" style="flex:2;min-width:130px;">
+          <label>Y · Norte (UTM)</label>
+          <div class="input-wrapper" id="wrap-coord_ini_y">
+            <input type="text" id="coord_ini_y" placeholder="3095210" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('coord_ini_y')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="datum-badge">28R</div>
+      </div>
+      <div id="geo-wgs-inicio" class="geo-wgs"></div>
+
+      <!-- COORD FINAL -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.8rem;margin-bottom:0.4rem;">
+        <span style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Coord. Final</span>
+        <button class="geo-btn" onclick="getGPS('fin')" id="geo-btn-fin" title="Capturar ubicación actual">
+          <span class="geo-icon">📍</span> Capturar posición
+        </button>
+      </div>
+      <div id="geo-status-fin" class="geo-status"></div>
+      <div class="field-row" style="align-items:flex-end;margin-top:0.2rem;">
+        <div class="field" style="flex:2;min-width:130px;">
+          <label>X · Este (UTM)</label>
+          <div class="input-wrapper" id="wrap-coord_fin_x">
+            <input type="text" id="coord_fin_x" placeholder="315100" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('coord_fin_x')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field" style="flex:2;min-width:130px;">
+          <label>Y · Norte (UTM)</label>
+          <div class="input-wrapper" id="wrap-coord_fin_y">
+            <input type="text" id="coord_fin_y" placeholder="3094800" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('coord_fin_y')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div style="width:60px;"></div>
+      </div>
+      <div id="geo-wgs-fin" class="geo-wgs"></div>
+      <div class="field-row cols-3" style="margin-top:0.6rem;">
+        <div class="field">
+          <label>T. Acceso</label>
+          <div class="input-wrapper" id="wrap-t_acceso">
+            <input type="text" id="t_acceso" placeholder="1h30'" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('t_acceso')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>T. Descenso</label>
+          <div class="input-wrapper" id="wrap-t_descenso">
+            <input type="text" id="t_descenso" placeholder="3h00'" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('t_descenso')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>T. Retorno</label>
+          <div class="input-wrapper" id="wrap-t_retorno">
+            <input type="text" id="t_retorno" placeholder="0h45'" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('t_retorno')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="sec-icon">⚙️</span><h2>Datos Técnicos</h2></div>
+    <div class="section-body">
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Escapes</label>
+          <div class="input-wrapper" id="wrap-escapes">
+            <input type="text" id="escapes" placeholder="Ej: R3, R7" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('escapes')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Rápel más alto</label>
+          <div class="input-wrapper" id="wrap-rapel">
+            <input type="text" id="rapel" placeholder="Ej: 45m (R5)" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('rapel')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Cuerdas necesarias</label>
+          <div class="input-wrapper" id="wrap-cuerdas">
+            <input type="text" id="cuerdas" placeholder="Ej: 2×50m" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('cuerdas')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Combinación vehículos</label>
+          <div class="input-wrapper" id="wrap-vehiculos">
+            <input type="text" id="vehiculos" placeholder="Ej: Shuttle 2 coches" oninput="updateProgress()">
+            <button class="mic-btn" onclick="toggleMic('vehiculos')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:0.8rem;">
+        <label>Estado de los Anclajes</label>
+        <div class="estado-btns" id="estadoBtns">
+          <button class="estado-btn malo" onclick="setEstado('Malo')">😰 Malo</button>
+          <button class="estado-btn regular" onclick="setEstado('Regular')">😐 Regular</button>
+          <button class="estado-btn bueno" onclick="setEstado('Bueno')">✅ Bueno</button>
+          <button class="estado-btn mixto" onclick="setEstado('Mixto')">🔀 Mixto</button>
+        </div>
+        <input type="hidden" id="estado_anclajes">
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>Observaciones</label>
+          <div class="input-wrapper" id="wrap-observaciones">
+            <textarea id="observaciones" placeholder="Estado de la roca, puntos de peligro, condiciones del agua, notas para el reequipamiento..." oninput="updateProgress()"></textarea>
+            <button class="mic-btn" onclick="toggleMic('observaciones')" title="Dictar" style="align-self:flex-start;margin-top:4px;">🎙️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="sec-icon">📸</span><h2>Croquis y Fotos</h2></div>
+    <div class="section-body">
+      <div class="foto-zone" onclick="document.getElementById('foto-input').click()">
+        <div class="icon">🗺️</div>
+        <p>Toca para adjuntar croquis o fotos</p>
+        <p style="margin-top:4px;font-size:0.55rem;">.jpg · .png · .pdf · .kml</p>
+      </div>
+      <input type="file" id="foto-input" multiple accept="image/*,.pdf,.kml,.kmz" onchange="handleFotos(event)">
+      <div class="fotos-preview" id="fotosPreview"></div>
+      <div id="archivosNombres" style="margin-top:0.4rem;font-family:var(--mono);font-size:0.6rem;color:var(--text-muted);"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="imprimirFicha()">🖨️ Imprimir / PDF</button>
+    <button class="btn-secondary" onclick="limpiarFicha()">🗑️ Limpiar</button>
+  </div>
+
+</div><!-- /panel-general -->
+
+
+<!-- ══════════════════ PESTAÑA RÁPELES ══════════════════ -->
+<div class="tab-panel" id="panel-rapeles">
+
+  <div class="section" style="margin-top:1rem;">
+    <div class="section-header"><span class="sec-icon">🧗</span><h2>Ficha de Rápeles y Seguridad</h2></div>
+    <div class="section-body" style="padding-bottom:0.4rem;">
+      <p style="font-family:var(--mono);font-size:0.62rem;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:0.8rem;">
+        Toca cada rápel para expandirlo y rellenar sus datos. Usa 🎙️ para dictar.
+      </p>
+      <div id="rapeles-container"></div>
+      <button class="add-rapel-btn" onclick="addRapel()">+ Añadir rápel</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="imprimirFicha()">🖨️ Imprimir / PDF</button>
+    <button class="btn-secondary" onclick="limpiarRapeles()">🗑️ Limpiar rápeles</button>
+  </div>
+
+</div><!-- /panel-rapeles -->
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ─── ESTADO DE GRABACIÓN ──────────────────────────────────────────────────────
+let activeRecognition = null;
+let activeFieldId = null;
+let activeWrapper = null;
+let activeMicBtn = null;
+
+function toggleMic(fieldId) {
+  if (activeFieldId) {
+    stopRecording();
+    if (activeFieldId === fieldId) return;
+  }
+  startRecording(fieldId);
+}
+
+function startRecording(fieldId) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('⚠️ Navegador sin reconocimiento de voz'); return; }
+
+  const field = document.getElementById(fieldId);
+  if (!field) return;
+  const wrapper = document.getElementById('wrap-' + fieldId);
+  const btn = wrapper ? wrapper.querySelector('.mic-btn') : null;
+
+  const recognition = new SR();
+  recognition.lang = 'es-ES';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  let finalTranscript = field.value || '';
+  if (finalTranscript && !finalTranscript.endsWith(' ')) finalTranscript += ' ';
+
+  recognition.onstart = () => {
+    activeFieldId = fieldId;
+    activeRecognition = recognition;
+    activeWrapper = wrapper;
+    activeMicBtn = btn;
+    if (wrapper) wrapper.classList.add('recording');
+    if (btn) { btn.classList.add('active'); btn.textContent = '⏹️'; }
+    document.getElementById('recIndicator').classList.add('show');
+    showToast('🎙️ Grabando...');
+  };
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) finalTranscript += t + ' ';
+      else interim += t;
+    }
+    field.value = finalTranscript + interim;
+    updateRapelSummary();
+    updateProgress();
+  };
+
+  recognition.onerror = (e) => {
+    if (e.error !== 'aborted') showToast('Error: ' + e.error);
+    stopRecording();
+  };
+
+  recognition.onend = () => { stopRecording(); updateProgress(); };
+  recognition.start();
+}
+
+function stopRecording() {
+  if (activeRecognition) { try { activeRecognition.stop(); } catch(e) {} activeRecognition = null; }
+  if (activeWrapper) activeWrapper.classList.remove('recording');
+  if (activeMicBtn) { activeMicBtn.classList.remove('active'); activeMicBtn.textContent = '🎙️'; }
+  document.getElementById('recIndicator').classList.remove('show');
+  activeFieldId = null; activeWrapper = null; activeMicBtn = null;
+}
+
+// ─── RÁPELES ──────────────────────────────────────────────────────────────────
+let rapelCount = 0;
+
+function addRapel(data) {
+  rapelCount++;
+  const n = rapelCount;
+  const id = 'r' + n;
+  const container = document.getElementById('rapeles-container');
+
+  const card = document.createElement('div');
+  card.className = 'rapel-card';
+  card.id = 'card-' + id;
+
+  card.innerHTML = `
+    <div class="rapel-card-header" onclick="toggleRapel('${id}')">
+      <span class="rapel-num">R${n}</span>
+      <span class="rapel-summary" id="sum-${id}">Sin datos</span>
+      <button class="rapel-toggle" id="tog-${id}">▼</button>
+    </div>
+    <div class="rapel-card-body open" id="body-${id}">
+
+      <div class="rapel-row">
+        <div class="rapel-field wide">
+          <label>Situación / Descripción</label>
+          <input class="small-input" id="${id}-sit" type="text" placeholder="Ej: Cascada principal, pared derecha..." 
+            oninput="updateRapelSummary()" value="${data?.sit||''}">
+        </div>
+        <div class="rapel-field" style="min-width:80px;max-width:90px;">
+          <label>Altura (m)</label>
+          <input class="small-input" id="${id}-alt" type="text" placeholder="30m"
+            oninput="updateRapelSummary()" value="${data?.alt||''}">
+        </div>
+      </div>
+
+      <div class="rapel-row">
+        <div class="rapel-field" style="flex:0 0 auto;">
+          <label>Tipo anclajes</label>
+          <div class="tipo-btns" id="${id}-tipo-btns">
+            <button class="tipo-btn" onclick="toggleTipo('${id}','Parabolt')">Parabolt</button>
+            <button class="tipo-btn" onclick="toggleTipo('${id}','Tensor')">Tensor</button>
+            <button class="tipo-btn" onclick="toggleTipo('${id}','Spit')">Spit</button>
+            <button class="tipo-btn" onclick="toggleTipo('${id}','Chapa')">Chapa</button>
+          </div>
+          <input type="hidden" id="${id}-tipo" value="${data?.tipo||''}">
+        </div>
+      </div>
+
+      <div class="rapel-row">
+        <div class="rapel-field wide">
+          <label>Observaciones del rápel</label>
+          <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg);" id="wrap-${id}-obs">
+            <input class="small-input" id="${id}-obs" type="text" 
+              style="border:none;background:transparent;flex:1;"
+              placeholder="Roces, agua, dificultad, estado roca..."
+              value="${data?.obs||''}">
+            <button class="mic-btn" onclick="toggleMic('${id}-obs')" title="Dictar">🎙️</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:0.5rem;">
+        <label style="display:block;margin-bottom:0.4rem;font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Escape / Pista / Sendero</label>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+          ${['Escape','Pista','Sendero'].map(t => `
+          <div style="display:flex;flex-direction:column;gap:0.2rem;align-items:center;">
+            <span style="font-family:var(--mono);font-size:0.52rem;color:var(--text-muted);">${t}</span>
+            <div class="sn-toggle">
+              <button class="sn-btn s" onclick="setSN('${id}-${t.toLowerCase()}','S',this)">S</button>
+              <button class="sn-btn n" onclick="setSN('${id}-${t.toLowerCase()}','N',this)">N</button>
+            </div>
+            <input type="hidden" id="${id}-${t.toLowerCase()}" value="${data?.[t.toLowerCase()]||''}">
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        <label style="display:block;margin-bottom:0.4rem;font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Cobertura (1–4 barras)</label>
+        <div class="cob-grid">
+          ${['Movistar','Vodafone','Orange','Otra'].map(op => `
+          <div class="cob-field">
+            <label>${op}</label>
+            <div class="cob-stars" id="${id}-cob-${op.toLowerCase()}">
+              ${[1,2,3,4].map(v => `<button class="cob-star" onclick="setCob('${id}-cob-${op.toLowerCase()}',${v})">${v}</button>`).join('')}
+            </div>
+            <input type="hidden" id="${id}-cob${op.toLowerCase()}" value="${data?.['cob'+op.toLowerCase()]||'0'}">
+          </div>`).join('')}
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  container.appendChild(card);
+
+  // Restaurar tipos activos
+  if (data?.tipo) {
+    data.tipo.split(',').forEach(t => {
+      const btns = card.querySelectorAll('.tipo-btn');
+      btns.forEach(b => { if(b.textContent === t.trim()) b.classList.add('active'); });
+    });
+  }
+
+  // Restaurar S/N
+  if (data) {
+    ['escape','pista','sendero'].forEach(k => {
+      if (data[k]) {
+        const hidden = document.getElementById(id+'-'+k);
+        if (hidden) {
+          // Activar botón correcto
+          const sn = card.querySelector(`[onclick="setSN('${id}-${k}','${data[k]}',this)"]`);
+          if (sn) { sn.classList.add('active'); }
+        }
+      }
+    });
+  }
+
+  // Restaurar coberturas
+  if (data) {
+    ['movistar','vodafone','orange','otra'].forEach(op => {
+      const val = parseInt(data['cob'+op]||'0');
+      if (val > 0) setCobValue(id+'-cob-'+op, val);
+    });
+  }
+
+  updateRapelSummary();
+}
+
+function toggleRapel(id) {
+  const body = document.getElementById('body-' + id);
+  const tog = document.getElementById('tog-' + id);
+  body.classList.toggle('open');
+  tog.textContent = body.classList.contains('open') ? '▲' : '▼';
+}
+
+function updateRapelSummary() {
+  document.querySelectorAll('.rapel-card').forEach(card => {
+    const id = card.id.replace('card-','');
+    const sit = document.getElementById(id+'-sit')?.value || '';
+    const alt = document.getElementById(id+'-alt')?.value || '';
+    const tipo = document.getElementById(id+'-tipo')?.value || '';
+    let parts = [];
+    if (alt) parts.push(alt + 'm');
+    if (tipo) parts.push(tipo);
+    if (sit) parts.push(sit.substring(0,30));
+    const summary = parts.join(' · ') || 'Sin datos';
+    const sumEl = document.getElementById('sum-' + id);
+    if (sumEl) sumEl.textContent = summary;
+    if (alt || sit || tipo) card.classList.add('has-data');
+    else card.classList.remove('has-data');
+  });
+}
+
+function toggleTipo(rapelId, tipo) {
+  const btn = [...document.querySelectorAll(`#card-${rapelId} .tipo-btn`)].find(b => b.textContent === tipo);
+  const hidden = document.getElementById(rapelId + '-tipo');
+  if (!btn || !hidden) return;
+
+  btn.classList.toggle('active');
+  const activos = [...document.querySelectorAll(`#card-${rapelId} .tipo-btn.active`)].map(b => b.textContent);
+  hidden.value = activos.join(', ');
+  updateRapelSummary();
+}
+
+function setSN(fieldId, val, btn) {
+  document.getElementById(fieldId).value = val;
+  const parent = btn.closest('.sn-toggle');
+  parent.querySelectorAll('.sn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setCob(starsId, val) {
+  setCobValue(starsId, val);
+  const op = starsId.split('-cob-')[1];
+  const rapelId = starsId.split('-cob-')[0];
+  const hidden = document.getElementById(rapelId + '-cob' + op);
+  if (hidden) hidden.value = val;
+}
+
+function setCobValue(starsId, val) {
+  const container = document.getElementById(starsId);
+  if (!container) return;
+  container.querySelectorAll('.cob-star').forEach((s, i) => {
+    s.classList.toggle('active', i < val);
+  });
+}
+
+function limpiarRapeles() {
+  if (!confirm('¿Borrar todos los rápeles?')) return;
+  document.getElementById('rapeles-container').innerHTML = '';
+  rapelCount = 0;
+  initRapeles();
+  showToast('🗑️ Rápeles borrados');
+}
+
+function initRapeles() {
+  for (let i = 0; i < 6; i++) addRapel();
+}
+
+// ─── GEOLOCALIZACIÓN GPS ──────────────────────────────────────────────────────
+function getGPS(punto) {
+  const btn    = document.getElementById('geo-btn-' + punto);
+  const status = document.getElementById('geo-status-' + punto);
+  const wgsEl  = document.getElementById('geo-wgs-' + punto);
+
+  if (!navigator.geolocation) {
+    status.textContent = '⚠️ Geolocalización no disponible en este navegador';
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.querySelector('.geo-icon').textContent = '⏳';
+  status.textContent = 'Obteniendo señal GPS… puede tardar unos segundos al aire libre.';
+  wgsEl.textContent = '';
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      const acc = pos.coords.accuracy;
+      const alt = pos.coords.altitude;
+      const utm = wgs84ToUTM(lat, lon);
+
+      const xField = punto === 'inicio' ? 'coord_ini_x' : 'coord_fin_x';
+      const yField = punto === 'inicio' ? 'coord_ini_y' : 'coord_fin_y';
+      document.getElementById(xField).value = Math.round(utm.x);
+      document.getElementById(yField).value = Math.round(utm.y);
+
+      wgsEl.innerHTML = `WGS84: ${toDMS(lat,'lat')} / ${toDMS(lon,'lon')}${alt ? ' · Alt: '+Math.round(alt)+'m' : ''} · Precisión: ±${Math.round(acc)}m`;
+
+      btn.classList.remove('loading');
+      btn.classList.add('done');
+      btn.querySelector('.geo-icon').textContent = '✅';
+      status.textContent = '';
+      updateProgress();
+      showToast(`📍 ${punto === 'inicio' ? 'Inicio' : 'Final'} capturado · ±${Math.round(acc)}m`);
+    },
+    (err) => {
+      btn.classList.remove('loading');
+      btn.querySelector('.geo-icon').textContent = '📍';
+      const msgs = {
+        1: 'Permiso denegado. Actívalo en Ajustes → Privacidad → Ubicación.',
+        2: 'Sin señal GPS. Sal al exterior e inténtalo de nuevo.',
+        3: 'Tiempo agotado. Inténtalo de nuevo al aire libre.'
+      };
+      status.style.color = 'var(--danger)';
+      status.textContent = '⚠️ ' + (msgs[err.code] || err.message);
+    },
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+  );
+}
+
+function wgs84ToUTM(latDeg, lonDeg) {
+  const a = 6378137.0, f = 1/298.257223563;
+  const b = a*(1-f), e2 = 1-(b/a)**2, k0 = 0.9996;
+  const zone = 28; // Canarias
+  const lon0 = ((zone-1)*6 - 180 + 3) * Math.PI/180;
+  const lat = latDeg * Math.PI/180, lon = lonDeg * Math.PI/180;
+  const N = a / Math.sqrt(1 - e2*Math.sin(lat)**2);
+  const T = Math.tan(lat)**2, C = e2/(1-e2)*Math.cos(lat)**2;
+  const A = Math.cos(lat)*(lon - lon0);
+  const e4 = e2**2, e6 = e2**3;
+  const M = a*((1-e2/4-3*e4/64-5*e6/256)*lat
+    - (3*e2/8+3*e4/32+45*e6/1024)*Math.sin(2*lat)
+    + (15*e4/256+45*e6/1024)*Math.sin(4*lat)
+    - (35*e6/3072)*Math.sin(6*lat));
+  const x = k0*N*(A+(1-T+C)*A**3/6+(5-18*T+T**2+72*C-58)*A**5/120)+500000;
+  let y = k0*(M+N*Math.tan(lat)*(A**2/2+(5-T+9*C+4*C**2)*A**4/24+(61-58*T+T**2+600*C-330)*A**6/720));
+  if (latDeg < 0) y += 10000000;
+  return { x, y, zone };
+}
+
+function toDMS(decimal, type) {
+  const abs = Math.abs(decimal);
+  const d = Math.floor(abs);
+  const m = Math.floor((abs-d)*60);
+  const s = ((abs-d-m/60)*3600).toFixed(1);
+  const ref = type === 'lat' ? (decimal >= 0 ? 'N' : 'S') : (decimal >= 0 ? 'E' : 'W');
+  return `${d}°${m}'${s}"${ref}`;
+}
+
+// ─── ESTADO GENERAL ───────────────────────────────────────────────────────────
+function setEstado(valor) {
+  document.getElementById('estado_anclajes').value = valor;
+  document.querySelectorAll('.estado-btn').forEach(b => b.classList.remove('sel'));
+  const clases = { 'Malo':'malo','Regular':'regular','Bueno':'bueno','Mixto':'mixto' };
+  document.querySelectorAll('.estado-btn.' + clases[valor]).forEach(b => b.classList.add('sel'));
+  updateProgress();
+}
+
+function updateProgress() {
+  const ids = ['nombre','localidad','municipio','graduacion',
+               'desc_barranco','desc_acceso','desc_descenso','desc_retorno',
+               'coord_ini_x','coord_ini_y','t_descenso',
+               'escapes','rapel','cuerdas','observaciones'];
+  let filled = 0;
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value.trim()) {
+      filled++;
+      const wrap = document.getElementById('wrap-'+id);
+      if (wrap) wrap.classList.add('filled');
+    } else {
+      const wrap = document.getElementById('wrap-'+id);
+      if (wrap) wrap.classList.remove('filled');
+    }
+  });
+  if (document.getElementById('estado_anclajes').value) filled++;
+  const total = ids.length + 1;
+  const pct = Math.round((filled / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = filled + ' / ' + total;
+}
+
+function handleFotos(event) {
+  const files = Array.from(event.target.files);
+  const preview = document.getElementById('fotosPreview');
+  const nombres = document.getElementById('archivosNombres');
+  files.forEach(file => {
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'foto-thumb';
+        img.title = file.name;
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+    const span = document.createElement('div');
+    span.textContent = '📎 ' + file.name;
+    nombres.appendChild(span);
+  });
+  showToast('📎 ' + files.length + ' archivo(s) adjunto(s)');
+}
+
+function imprimirFicha() { stopRecording(); window.print(); }
+
+function limpiarFicha() {
+  if (!confirm('¿Borrar todos los datos de la ficha?')) return;
+  const ids = ['nombre','localidad','municipio','graduacion',
+               'desc_barranco','desc_acceso','desc_descenso','desc_retorno',
+               'coord_ini_x','coord_ini_y','coord_fin_x','coord_fin_y',
+               't_acceso','t_descenso','t_retorno',
+               'escapes','rapel','cuerdas','vehiculos','observaciones','estado_anclajes'];
+  ids.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  document.querySelectorAll('.estado-btn').forEach(b => b.classList.remove('sel'));
+  document.getElementById('fotosPreview').innerHTML = '';
+  document.getElementById('archivosNombres').innerHTML = '';
+  updateProgress();
+  showToast('🗑️ Ficha limpiada');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── DATOS PRECARGADOS ────────────────────────────────────────────────────────
+function precargarDatos() {
+  const datos = {
+    nombre:        'Barranco del Infierno',
+    localidad:     'Santa Cruz de Tenerife',
+    municipio:     'Adeje',
+    graduacion:    'V4 A3 II (800m)',
+    desc_barranco: 'Tipo de roca: basalto. Ambiente bastante duro, estrecho, con paredes altas.',
+    desc_acceso:   'Para llegar al barranco hay que ir hasta el eje y subir hasta el final. Necesita doble coche (shuttle).',
+    desc_descenso: 'Rápeles altos, algunas veces con pasos complicados de trepe y agua.',
+    desc_retorno:  'Ir al segundo coche que está al final del pueblo de Adeje.',
+    vehiculos:     'Shuttle — 2 coches',
+  };
+  Object.entries(datos).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  setEstado('Mixto');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+precargarDatos();
+initRapeles();
+updateProgress();
+</script>
+</body>
+</html>
