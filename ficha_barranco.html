@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191315</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191330</p>
   </div>
 </header>
 
@@ -1567,6 +1567,13 @@ function generarPDF() {
 
     // ══ TABLAS DE RÁPELES (fiel al Anexo I) ══
     const cards = document.querySelectorAll('.rapel-card');
+
+    // getCob accesible en todos los bloques de rápeles
+    const getCob = (id, op) => {
+      const el = document.getElementById(id + '-cob' + op);
+      return parseInt(el?.value || '0') || 0;
+    };
+
     if (cards.length > 0) {
 
       const nuevaPag = (subtit) => {
@@ -1578,11 +1585,6 @@ function generarPDF() {
         doc.text(subtit, PW / 2, 8, { align: 'center' });
         doc.setTextColor(0, 0, 0);
         y = 20;
-      };
-
-      const getCob = (id, op) => {
-        const el = document.getElementById(id + '-cob' + op);
-        return parseInt(el?.value || '0') || 0;
       };
 
       const dibujarCabeclaTabla = (cols, widths, xs, rh) => {
