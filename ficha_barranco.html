@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191105</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191120</p>
   </div>
 </header>
 
@@ -1710,9 +1710,9 @@ function precargarDatos() {
     localidad:     'Santa Cruz de Tenerife',
     municipio:     'Adeje',
     graduacion:    'V4 A3 II (800m)',
-    desc_barranco: 'Tipo de roca: basalto. Ambiente bastante duro, estrecho, con paredes altas.',
-    desc_acceso:   'Para llegar al barranco hay que ir hasta el eje y subir hasta el final. Necesita doble coche (shuttle).',
-    desc_descenso: 'Rápeles altos, algunas veces con pasos complicados de trepe y agua.',
+    desc_barranco: 'Tipo de roca: basalto. Ambiente bastante duro, estrecho, con paredes altas. Dos sectores. Paso bajo autopista TF-1 entre sectores.',
+    desc_acceso:   'Kilómetro 20 de la carretera TF-28, junto a la torre de alta tensión.',
+    desc_descenso: '10 rápeles distribuidos en dos sectores. R1-R7 en primer sector. Enlace por túnel bajo autopista TF-1. R8-R10 en segundo sector. Destacan arco de piedra, cueva, pozas y tramos de vegetación. Salida por la playa.',
     desc_retorno:  'Ir al segundo coche que está al final del pueblo de Adeje.',
     vehiculos:     'Shuttle — 2 coches',
   };
@@ -1725,7 +1725,49 @@ function precargarDatos() {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 precargarDatos();
-initRapeles();
+
+// Rápeles del ejemplo
+const rapelesDemoData = [
+  { sit: 'Instalación por la izquierda', alt: '10', tipo: 'Tensor', obs: '', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por la derecha. Transición previa: arco de piedra.', alt: '10', tipo: 'Tensor', obs: '', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por el centro. Junto a una cueva.', alt: '20', tipo: 'Tensor', obs: 'Junto a cueva. Transición previa: tramo con vegetación y dos pozas.', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por la derecha', alt: '6', tipo: 'Tensor', obs: '', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por la derecha', alt: '10', tipo: 'Tensor', obs: 'Transición previa: destrepes.', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por la izquierda', alt: '8', tipo: 'Tensor', obs: 'Transición previa: tramo con vegetación.', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por la derecha. Cae directamente a una poza.', alt: '15', tipo: 'Tensor', obs: 'Enlace posterior: túnel bajo autopista TF-1 hacia segundo sector.', escape: 'S', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por el centro. 2º Sector. Transición inicial: charcas, cueva y arco de piedra.', alt: '15', tipo: 'Tensor', obs: '', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por el centro', alt: '8', tipo: 'Tensor', obs: 'Transición previa: tramo largo entre huertas. Escape junto a casita rural.', escape: 'S', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+  { sit: 'Instalación por la izquierda', alt: '15', tipo: 'Tensor', obs: 'Salida posterior: progresión larga hasta la playa.', escape: 'N', pista: '', sendero: '', cobmovistar: String(Math.floor(Math.random()*4)+1), cobvodafone: '0', caborange: '0', cobobtra: '0' },
+];
+
+rapelesDemoData.forEach(d => addRapel(d));
+
+// Rellenar coberturas Movistar al azar y campos S/N
+setTimeout(() => {
+  document.querySelectorAll('.rapel-card').forEach((card, idx) => {
+    const id = card.id.replace('card-', '');
+    const d = rapelesDemoData[idx];
+    if (!d) return;
+
+    // Cobertura Movistar
+    const cobVal = parseInt(d.cobmovistar) || 0;
+    if (cobVal > 0) {
+      setCobValue(id + '-cob-movistar', cobVal);
+      const hidden = document.getElementById(id + '-cobmovistar');
+      if (hidden) hidden.value = cobVal;
+    }
+
+    // Escape S/N
+    if (d.escape) {
+      const hidden = document.getElementById(id + '-escape');
+      if (hidden) hidden.value = d.escape;
+      const btn = card.querySelector(`.sn-btn.${d.escape === 'S' ? 's' : 'n'}[onclick*="${id}-escape"]`);
+      if (btn) btn.classList.add('active');
+    }
+  });
+  updateProgress();
+}, 100);
+
 updateProgress();
 </script>
 </body>
