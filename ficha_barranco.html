@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191135</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191150</p>
   </div>
 </header>
 
@@ -1572,91 +1572,108 @@ function generarPDF() {
       cabeceraHoja('FICHA DE RAPELES · ' + v('nombre').trim());
       y = 20;
 
+      const FICHA_H_BASE = 22; // altura mínima de cada ficha
+      const FICHA_H_OBS  = 10; // espacio extra si hay observaciones
+      const SEP = 3;           // separación entre fichas
+
       cards.forEach((card, idx) => {
         const id  = card.id.replace('card-', '');
-        const g   = fid => (document.getElementById(id + fid)?.value || '').trim() || '';
+        const g   = fid => (document.getElementById(id + fid)?.value || '').trim();
         const gc  = op  => parseInt(document.getElementById(id + '-cob' + op)?.value || '0') || 0;
 
-        const sit    = g('-sit');
-        const alt    = g('-alt');
-        const tipo   = g('-tipo');
-        const obs    = g('-obs');
-        const escape = g('-escape');
-        const pista  = g('-pista');
-        const sendero= g('-sendero');
+        const sit     = g('-sit')     || '';
+        const alt     = g('-alt')     || '';
+        const tipo    = g('-tipo')    || '';
+        const obs     = g('-obs')     || '';
+        const escape  = g('-escape')  || '-';
+        const pista   = g('-pista')   || '-';
+        const sendero = g('-sendero') || '-';
 
-        const alturaTexto = alt ? alt + ' m' : '-';
-        const ficha_h = obs ? 28 : 22; // más alta si hay observaciones
+        const fichaH = FICHA_H_BASE + (obs ? FICHA_H_OBS : 0);
 
-        saltoPagina(ficha_h + 4);
+        // Salto de página si no cabe la ficha completa
+        if (y + fichaH > PH - 20) {
+          doc.addPage();
+          cabeceraHoja('FICHA DE RAPELES · ' + v('nombre').trim());
+          y = 20;
+        }
 
-        // Barra título del rápel
+        // ── Barra título ──
         doc.setFillColor(40, 70, 30);
         doc.rect(ML, y, PW - ML - MR, 7, 'F');
         doc.setTextColor(200, 232, 80);
         doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
-        txt('R' + (idx + 1), ML + 3, y + 5);
+        txt('R' + (idx + 1), ML + 2, y + 5);
         doc.setFontSize(8);
-        txt(sit || 'Sin descripcion', ML + 16, y + 5);
+        const sitCorta = sit.length > 80 ? sit.substring(0, 77) + '...' : sit;
+        txt(sitCorta || 'Sin descripcion', ML + 15, y + 5);
         doc.setTextColor(0, 0, 0);
         y += 8;
 
-        // Fila datos
+        // ── Fila 1: altura, anclaje ──
         doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
         txt('Altura:', ML, y);
         doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        txt(alturaTexto, ML + 14, y);
+        txt(alt ? alt + ' m' : '-', ML + 14, y);
 
         doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        txt('Anclaje:', ML + 35, y);
+        txt('Anclaje:', ML + 38, y);
         doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        txt(tipo || '-', ML + 50, y);
+        txt(tipo || '-', ML + 52, y);
+        y += 5;
+
+        // ── Fila 2: escape, pista, sendero ──
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+        txt('Escape:', ML, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+        txt(escape, ML + 14, y);
 
         doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        txt('Escape:', ML + 95, y);
+        txt('Pista:', ML + 38, y);
         doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        txt(escape || '-', ML + 110, y);
+        txt(pista, ML + 49, y);
 
         doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        txt('Pista:', ML + 125, y);
+        txt('Sendero:', ML + 70, y);
         doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        txt(pista || '-', ML + 136, y);
+        txt(sendero, ML + 85, y);
+        y += 5;
 
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-        txt('Sendero:', ML + 152, y);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-        txt(sendero || '-', ML + 167, y);
-        y += 6;
-
-        // Observaciones (solo si hay)
+        // ── Observaciones (solo si hay) ──
         if (obs) {
           doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
           txt('Obs:', ML, y);
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-          const lines = doc.splitTextToSize(obs, PW - ML - MR - 14);
-          lines.slice(0, 2).forEach((l, i) => txt(l, ML + 10, y + i * 4));
-          y += Math.min(lines.length, 2) * 4 + 2;
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
+          const obsLines = doc.splitTextToSize(obs, PW - ML - MR - 12);
+          obsLines.slice(0, 2).forEach((l, i) => txt(l, ML + 10, y + i * 4));
+          y += Math.min(obsLines.length, 2) * 4 + 1;
         }
 
-        // Línea separadora
-        doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.2);
-        doc.line(ML, y, PW - MR, y);
+        // ── Separador ──
+        doc.setDrawColor(160, 160, 160); doc.setLineWidth(0.15);
+        doc.line(ML, y + 1, PW - MR, y + 1);
         doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.2);
-        y += 4;
+        y += SEP + 2;
       });
 
-      // ── TABLA RESUMEN RÁPELES ──
-      saltoPagina(50);
-      y += 4;
+      // ══ TABLA RESUMEN RÁPELES ══
+      if (y + 20 + cards.length * 6 > PH - 20) {
+        doc.addPage();
+        cabeceraHoja('RESUMEN DE RAPELES · ' + v('nombre').trim());
+        y = 20;
+      } else {
+        y += 6;
+      }
+
       doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
       txt('RESUMEN DE RAPELES', ML, y); y += 5;
 
-      const cw  = [10, 14, 44, 30, 16, 16, 16];
+      const cw  = [10, 13, 50, 28, 14, 12, 13];
       const cx  = [ML];
       cw.forEach((w, i) => { if (i < cw.length - 1) cx.push(cx[i] + w); });
-      const rh  = 6;
-      const totalW = cw.reduce((a, b) => a + b, 0);
-      const heads  = ['R', 'Alt.', 'Situacion', 'Anclaje', 'Escape', 'Pista', 'Sendero'];
+      const rh      = 6;
+      const totalW  = cw.reduce((a, b) => a + b, 0);
+      const heads   = ['R', 'Alt.', 'Situacion', 'Anclaje', 'Escape', 'Pista', 'Sendero'];
 
       doc.setFillColor(220, 235, 210);
       doc.rect(ML, y, totalW, rh, 'F');
@@ -1669,9 +1686,13 @@ function generarPDF() {
       y += rh;
 
       cards.forEach((card, idx) => {
-        saltoPagina(rh + 1);
-        const id = card.id.replace('card-', '');
-        const g  = fid => (document.getElementById(id + fid)?.value || '').trim() || '-';
+        if (y + rh > PH - 15) {
+          doc.addPage();
+          cabeceraHoja('RESUMEN DE RAPELES · ' + v('nombre').trim());
+          y = 20;
+        }
+        const id  = card.id.replace('card-', '');
+        const g   = fid => (document.getElementById(id + fid)?.value || '').trim() || '-';
         const row = [
           'R' + (idx + 1),
           g('-alt') !== '-' ? g('-alt') + 'm' : '-',
@@ -1683,8 +1704,8 @@ function generarPDF() {
         ];
         doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
         row.forEach((d, i) => {
-          const lines = doc.splitTextToSize((d || '-'), cw[i] - 2);
-          txt(lines[0] || '-', cx[i] + 1, y + 4.2);
+          const s = doc.splitTextToSize(d || '-', cw[i] - 2);
+          txt(s[0] || '-', cx[i] + 1, y + 4.2);
         });
         doc.setDrawColor(180, 180, 180);
         doc.rect(ML, y, totalW, rh);
@@ -1693,9 +1714,14 @@ function generarPDF() {
         y += rh;
       });
 
-      // ── TABLA COBERTURAS ──
-      saltoPagina(20 + cards.length * 6 + 10);
+      // ══ TABLA COBERTURAS ══
       y += 8;
+      if (y + 10 + cards.length * rh > PH - 15) {
+        doc.addPage();
+        cabeceraHoja('COBERTURA MOVIL · ' + v('nombre').trim());
+        y = 20;
+      }
+
       doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
       txt('COBERTURA MOVIL POR RAPEL', ML, y); y += 5;
 
@@ -1716,13 +1742,17 @@ function generarPDF() {
       y += rh;
 
       cards.forEach((card, idx) => {
-        saltoPagina(rh + 1);
+        if (y + rh > PH - 15) {
+          doc.addPage();
+          cabeceraHoja('COBERTURA MOVIL · ' + v('nombre').trim());
+          y = 20;
+        }
         const id  = card.id.replace('card-', '');
         const gc  = op => parseInt(document.getElementById(id + '-cob' + op)?.value || '0') || 0;
         const bar = n  => '|'.repeat(n) + '.'.repeat(4 - n) + ' (' + n + '/4)';
         const rowC = ['R' + (idx + 1), bar(gc('movistar')), bar(gc('vodafone')), bar(gc('orange')), bar(gc('otra'))];
         doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
-        rowC.forEach((d, i) => txt((d || '-'), ccx[i] + 1, y + 4.2));
+        rowC.forEach((d, i) => txt(d || '-', ccx[i] + 1, y + 4.2));
         doc.setDrawColor(180, 180, 180);
         doc.rect(ML, y, totalC, rh);
         ccx.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rh); });
