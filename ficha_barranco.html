@@ -439,7 +439,6 @@
 
   .cob-star:hover { border-color: var(--accent2); }
   .cob-star.active { background: var(--accent2); border-color: var(--accent); color: var(--accent3); }
-  .cob-star.cob-zero { border-color: var(--danger); color: var(--danger); }
   .cob-star.cob-zero.active { background: var(--danger); border-color: var(--danger); color: #fff; }
 
   /* Toggle S/N */
@@ -718,7 +717,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191415</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191430</p>
   </div>
 </header>
 
@@ -1262,24 +1261,29 @@ function setSN(fieldId, val, btn) {
 }
 
 function setCob(starsId, val) {
-  setCobValue(starsId, val);
   const op = starsId.split('-cob-')[1];
   const rapelId = starsId.split('-cob-')[0];
   const hidden = document.getElementById(rapelId + '-cob' + op);
-  if (hidden) hidden.value = val; // guarda 0, 1, 2, 3 o 4
+
+  // Toggle: si ya está activo el mismo valor, desmarcar → volver a '-'
+  const current = hidden?.value ?? '-';
+  const newVal = (String(current) === String(val)) ? '-' : val;
+
+  setCobValue(starsId, newVal);
+  if (hidden) hidden.value = newVal;
 }
 
 function setCobValue(starsId, val) {
   const container = document.getElementById(starsId);
   if (!container) return;
-  const n = parseInt(val);
+  const n = (val === '-' || val === '') ? -1 : parseInt(val);
   container.querySelectorAll('.cob-star').forEach((s) => {
     s.classList.remove('active');
-    const sv = parseInt(s.textContent);
     if (s.classList.contains('cob-zero')) {
       if (n === 0) s.classList.add('active');
     } else {
-      if (!isNaN(n) && n > 0 && sv <= n) s.classList.add('active');
+      const sv = parseInt(s.textContent);
+      if (n > 0 && sv <= n) s.classList.add('active');
     }
   });
 }
