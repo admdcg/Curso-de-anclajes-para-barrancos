@@ -439,6 +439,8 @@
 
   .cob-star:hover { border-color: var(--accent2); }
   .cob-star.active { background: var(--accent2); border-color: var(--accent); color: var(--accent3); }
+  .cob-star.cob-zero { border-color: var(--danger); color: var(--danger); }
+  .cob-star.cob-zero.active { background: var(--danger); border-color: var(--danger); color: #fff; }
 
   /* Toggle S/N */
   .sn-toggle {
@@ -716,7 +718,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191330</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191400</p>
   </div>
 </header>
 
@@ -1164,15 +1166,16 @@ function addRapel(data) {
       </div>
 
       <div>
-        <label style="display:block;margin-bottom:0.4rem;font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Cobertura (1–4 barras)</label>
+        <label style="display:block;margin-bottom:0.4rem;font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Cobertura · 0=sin señal · -=no medido</label>
         <div class="cob-grid">
           ${['Movistar','Vodafone','Orange','Otra'].map(op => `
           <div class="cob-field">
             <label>${op}</label>
             <div class="cob-stars" id="${id}-cob-${op.toLowerCase()}">
+              <button class="cob-star cob-zero" onclick="setCob('${id}-cob-${op.toLowerCase()}',0)" title="Sin señal">0</button>
               ${[1,2,3,4].map(v => `<button class="cob-star" onclick="setCob('${id}-cob-${op.toLowerCase()}',${v})">${v}</button>`).join('')}
             </div>
-            <input type="hidden" id="${id}-cob${op.toLowerCase()}" value="${data?.['cob'+op.toLowerCase()]||'0'}">
+            <input type="hidden" id="${id}-cob${op.toLowerCase()}" value="${data?.['cob'+op.toLowerCase()]||'-'}">
           </div>`).join('')}
         </div>
       </div>
@@ -1263,14 +1266,21 @@ function setCob(starsId, val) {
   const op = starsId.split('-cob-')[1];
   const rapelId = starsId.split('-cob-')[0];
   const hidden = document.getElementById(rapelId + '-cob' + op);
-  if (hidden) hidden.value = val;
+  if (hidden) hidden.value = val; // guarda 0, 1, 2, 3 o 4
 }
 
 function setCobValue(starsId, val) {
   const container = document.getElementById(starsId);
   if (!container) return;
-  container.querySelectorAll('.cob-star').forEach((s, i) => {
-    s.classList.toggle('active', i < val);
+  const n = parseInt(val);
+  container.querySelectorAll('.cob-star').forEach((s) => {
+    s.classList.remove('active');
+    const sv = parseInt(s.textContent);
+    if (s.classList.contains('cob-zero')) {
+      if (n === 0) s.classList.add('active');
+    } else {
+      if (!isNaN(n) && n > 0 && sv <= n) s.classList.add('active');
+    }
   });
 }
 
@@ -1571,7 +1581,15 @@ function generarPDF() {
     // getCob accesible en todos los bloques de rápeles
     const getCob = (id, op) => {
       const el = document.getElementById(id + '-cob' + op);
-      return parseInt(el?.value || '0') || 0;
+      const val = el?.value ?? '-';
+      if (val === '-' || val === '') return -1; // no medido
+      return parseInt(val) || 0;
+    };
+
+    const barCob = n => {
+      if (n < 0) return 'N/M'; // no medido
+      if (n === 0) return 'SIN SENAL';
+      return '|'.repeat(n) + '.'.repeat(4-n) + '(' + n + '/4)';
     };
 
     if (cards.length > 0) {
@@ -1671,7 +1689,7 @@ function generarPDF() {
       doc.setDrawColor(0, 0, 0);
       y += rhH2;
 
-      const bar = n => '|'.repeat(n) + '.'.repeat(4-n) + '(' + n + '/4)';
+      const bar = barCob;
 
       cards.forEach((card, idx) => {
         if (y + rh2 > PH - 15) {
@@ -1801,35 +1819,42 @@ function generarPDF() {
           const cy3 = fy + 9 + row * cobRowH;
           doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
           doc.text(c.lbl + ':', cx3 + 2, cy3 + 4);
-          // Cuadros de cobertura 1-4
-          for (let b = 0; b < 4; b++) {
-            const bx = cx3 + 2 + b * 8;
-            doc.setFillColor(b < c.val ? 80 : 240, b < c.val ? 140 : 240, b < c.val ? 40 : 240);
-            doc.rect(bx, cy3 + 5, 6, 3.5, 'FD');
+          if (c.val < 0) {
+            // No medido
+            doc.setFont('helvetica', 'italic'); doc.setFontSize(7); doc.setTextColor(150,150,150);
+            doc.text('N/M', cx3 + 2, cy3 + 8);
+            doc.setTextColor(0,0,0);
+          } else if (c.val === 0) {
+            // Sin señal — texto en rojo
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(200,50,50);
+            doc.text('SIN SENAL', cx3 + 2, cy3 + 8);
+            doc.setTextColor(0,0,0);
+          } else {
+            // Cuadros de cobertura 1-4
+            for (let b = 0; b < 4; b++) {
+              const bx = cx3 + 2 + b * 8;
+              doc.setFillColor(b < c.val ? 80 : 240, b < c.val ? 140 : 240, b < c.val ? 40 : 240);
+              doc.rect(bx, cy3 + 5, 6, 3.5, 'FD');
+            }
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(6);
+            doc.text('(' + c.val + '/4)', cx3 + 36, cy3 + 8);
           }
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(6);
-          doc.text('(' + c.val + '/4)', cx3 + 36, cy3 + 8);
           // separadores
           if (col === 1) { doc.setDrawColor(150,150,150); doc.line(ML + cobW, cy3, ML + cobW, cy3 + cobRowH); }
           if (row === 0) { doc.setDrawColor(150,150,150); doc.line(cx3, cy3 + cobRowH, cx3 + cobW, cy3 + cobRowH); }
           doc.setDrawColor(0,0,0);
         });
 
-        // ── Fila 3: Tipo anclaje con checkboxes ──
+        // ── Fila 3: Tipo anclaje — solo el elegido ──
         const f3y = fy + 9 + cobRowH * 2;
         doc.setDrawColor(150,150,150);
         doc.line(ML, f3y, ML + W, f3y);
         doc.setDrawColor(0,0,0);
 
-        const tipoItems = ['Parabolt','Tensor','Spit','Chapa'];
-        const tipoW = W / 4;
-        tipoItems.forEach((t, i) => {
-          const tx = ML + i * tipoW;
-          const checked = tipo.includes(t);
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
-          doc.text((checked ? '☒' : '☐') + ' ' + t, tx + 2, f3y + 5.5);
-          if (i > 0) { doc.setDrawColor(150,150,150); doc.line(tx, f3y, tx, f3y + 9); doc.setDrawColor(0,0,0); }
-        });
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+        doc.text('Anclaje:', ML + 2, f3y + 5.5);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        doc.text(tipo || '-', ML + 22, f3y + 5.5);
 
         y = fy + FICHA_SEG_H + 2; // avanzar al siguiente rápel
       };
