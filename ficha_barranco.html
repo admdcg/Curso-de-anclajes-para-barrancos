@@ -718,7 +718,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191400</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191415</p>
   </div>
 </header>
 
@@ -1769,7 +1769,7 @@ function generarPDF() {
         doc.rect(ML, fy, W, FICHA_SEG_H);
         doc.setLineWidth(0.2);
 
-        // ── Fila 1: Rn | Escape S/N | Pista S/N | Sendero S/N ──
+        // ── Fila 1: Rn | Escape S/N | Pista/Sendero si S ──
         const f1y = fy + 6;
         doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
         doc.setFillColor(40, 70, 30);
@@ -1778,27 +1778,32 @@ function generarPDF() {
         doc.text('R' + (idx + 1), ML + 2, fy + 6.5);
         doc.setTextColor(0, 0, 0);
 
-        // línea separadora horizontal tras Rn
         doc.setDrawColor(150,150,150);
         doc.line(ML + 18, fy, ML + 18, fy + 9);
         doc.setDrawColor(0,0,0);
 
-        // Escape / Pista / Sendero en fila 1
-        const snItems = [
-          { lbl: 'Escape', val: escape },
-          { lbl: 'Pista',  val: pista  },
-          { lbl: 'Sendero',val: sendero},
-        ];
-        const snW = (W - 18) / 3;
-        snItems.forEach((item, i) => {
-          const sx = ML + 18 + i * snW;
+        // Escape: S en verde, N en rojo, nada si vacío
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+        doc.text('Escape:', ML + 20, fy + 6);
+        if (escape === 'S') {
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+          doc.setTextColor(80, 140, 40); doc.text('S', ML + 40, fy + 6); doc.setTextColor(0,0,0);
+        } else if (escape === 'N') {
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+          doc.setTextColor(200, 50, 50); doc.text('N', ML + 40, fy + 6); doc.setTextColor(0,0,0);
+        }
+
+        // Pista y Sendero — solo el texto si están marcados S
+        const extras = [];
+        if (pista   === 'S') extras.push('Pista');
+        if (sendero === 'S') extras.push('Sendero');
+        if (extras.length > 0) {
           doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-          doc.text(item.lbl, sx + 2, fy + 4);
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-          const sval = item.val || '-';
-          doc.text('S: ' + (sval === 'S' ? '☒' : '☐') + '  N: ' + (sval === 'N' ? '☒' : '☐'), sx + 2, fy + 8);
-          if (i > 0) { doc.setDrawColor(150,150,150); doc.line(sx, fy, sx, fy + 9); doc.setDrawColor(0,0,0); }
-        });
+          doc.setTextColor(80, 140, 40);
+          doc.text(extras.join(' + '), ML + 48, fy + 6);
+          doc.setTextColor(0,0,0);
+        }
+
         // línea horizontal bajo fila 1
         doc.setDrawColor(150,150,150);
         doc.line(ML, fy + 9, ML + W, fy + 9);
