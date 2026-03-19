@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Ficha del Barranco</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap');
 
@@ -975,7 +976,7 @@
   </div>
 
   <div class="actions">
-    <button class="btn-primary" onclick="imprimirFicha()">🖨️ Imprimir / PDF</button>
+    <button class="btn-primary" onclick="generarPDF()">📄 Generar PDF</button>
     <button class="btn-secondary" onclick="limpiarFicha()">🗑️ Limpiar</button>
   </div>
 
@@ -997,7 +998,7 @@
   </div>
 
   <div class="actions">
-    <button class="btn-primary" onclick="imprimirFicha()">🖨️ Imprimir / PDF</button>
+    <button class="btn-primary" onclick="generarPDF()">📄 Generar PDF</button>
     <button class="btn-secondary" onclick="limpiarRapeles()">🗑️ Limpiar rápeles</button>
   </div>
 
@@ -1423,7 +1424,317 @@ function handleFotos(event) {
   showToast('📎 ' + files.length + ' archivo(s) adjunto(s)');
 }
 
-function imprimirFicha() { stopRecording(); window.print(); }
+// ─── GENERAR PDF (fiel al Anexo I) ───────────────────────────────────────────
+function generarPDF() {
+  stopRecording();
+  const { jsPDF } = window.jspdf;
+  if (!jsPDF) { showToast('⚠️ jsPDF no cargado, comprueba conexión'); return; }
+
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const PW = 210, PH = 297;
+  const ML = 15, MR = 15, MT = 15;
+  let y = MT;
+
+  // ── helpers ──
+  const val = id => (document.getElementById(id)?.value || '').trim();
+
+  function titulo(txt) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text(txt, PW/2, y, { align: 'center' });
+    y += 8;
+  }
+
+  function subtitulo(txt) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    doc.text(txt, ML, y);
+    y += 5;
+    doc.setTextColor(0, 0, 0);
+  }
+
+  function campoLinea(etiqueta, valor, ancho, xOffset) {
+    const x = xOffset !== undefined ? xOffset : ML;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text(etiqueta + ':', x, y);
+    const etqAncho = doc.getTextWidth(etiqueta + ': ');
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text(valor, x + etqAncho + 1, y);
+    // línea base
+    const lineX = x + etqAncho + 1;
+    const lineW = ancho || (PW - MR - lineX);
+    doc.setDrawColor(180, 180, 180);
+    doc.line(lineX, y + 0.5, lineX + lineW, y + 0.5);
+    doc.setDrawColor(0, 0, 0);
+  }
+
+  function cajaCampo(etiqueta, contenido, altoCaja) {
+    const h = altoCaja || 22;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text(etiqueta + ':', ML, y);
+    y += 4;
+    doc.setDrawColor(180, 180, 180);
+    doc.rect(ML, y, PW - ML - MR, h);
+    if (contenido) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      const lines = doc.splitTextToSize(contenido, PW - ML - MR - 4);
+      doc.text(lines, ML + 2, y + 4);
+    }
+    doc.setDrawColor(0, 0, 0);
+    y += h + 3;
+  }
+
+  function saltoPaginaSiNecesario(espacio) {
+    if (y + espacio > PH - 15) {
+      doc.addPage();
+      y = MT;
+    }
+  }
+
+  // ══════════════════ PÁGINA 1: FICHA GENERAL ══════════════════
+
+  // Cabecera
+  doc.setFillColor(30, 50, 25);
+  doc.rect(0, 0, PW, 12, 'F');
+  doc.setTextColor(200, 232, 80);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('CURSO DE REEQUIPAMIENTO DE BARRANCOS', PW/2, 8, { align: 'center' });
+  doc.setTextColor(0, 0, 0);
+  y = 20;
+
+  titulo('FICHA DEL BARRANCO');
+  doc.setDrawColor(80, 140, 40);
+  doc.setLineWidth(0.5);
+  doc.line(ML, y - 2, PW - MR, y - 2);
+  doc.setLineWidth(0.2);
+  doc.setDrawColor(0, 0, 0);
+  y += 2;
+
+  // Identificación
+  campoLinea('Nombre Barranco', val('nombre'), PW - ML - MR - 30);
+  y += 6;
+  campoLinea('Localidad', val('localidad'), 55);
+  campoLinea('Municipio', val('municipio'), 50, ML + 80);
+  y += 6;
+  campoLinea('Graduación', val('graduacion'), PW - ML - MR - 25);
+  y += 8;
+
+  // Descripciones
+  cajaCampo('Descripción Barranco', val('desc_barranco'), 24);
+  cajaCampo('Descripción Acceso', val('desc_acceso'), 20);
+  cajaCampo('Descripción Descenso', val('desc_descenso'), 20);
+  cajaCampo('Descripción Retorno', val('desc_retorno'), 18);
+
+  // Coordenadas
+  saltoPaginaSiNecesario(30);
+  const xIni = val('coord_ini_x'), yIni = val('coord_ini_y');
+  const xFin = val('coord_fin_x'), yFin = val('coord_fin_y');
+
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Coord. Inicio:', ML, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(`x: ${xIni}`, ML + 28, y);
+  doc.text(`y: ${yIni}`, ML + 70, y);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Datum:', ML + 115, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text('WGS84', ML + 128, y);
+  y += 5;
+
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Coord. Final:', ML, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(`x: ${xFin}`, ML + 28, y);
+  doc.text(`y: ${yFin}`, ML + 70, y);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Tiempo Acceso:', ML + 115, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(val('t_acceso'), ML + 143, y);
+  y += 5;
+
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Escapes:', ML, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(val('escapes'), ML + 18, y);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Tiempo Descenso:', ML + 115, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(val('t_descenso'), ML + 148, y);
+  y += 5;
+
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Rapel más alto:', ML, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(val('rapel'), ML + 30, y);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+  doc.text('Tiempo Retorno:', ML + 115, y);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(val('t_retorno'), ML + 146, y);
+  y += 5;
+
+  campoLinea('Cuerdas', val('cuerdas'), 80);
+  y += 6;
+  campoLinea('Combinación vehículos', val('vehiculos'), 80);
+  y += 6;
+  campoLinea('Estado Anclajes', val('estado_anclajes'), 80);
+  y += 6;
+
+  cajaCampo('Observaciones', val('observaciones'), 18);
+
+  // Nota final
+  saltoPaginaSiNecesario(10);
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(7.5);
+  doc.setTextColor(100, 100, 100);
+  doc.text('Necesario: Track Acceso y Retorno (.kml ó .kmz) y Croquis', ML, y);
+  doc.setTextColor(0, 0, 0);
+  y += 10;
+
+  // ══════════════════ PÁGINAS RÁPELES ══════════════════
+  const rapelCards = document.querySelectorAll('.rapel-card');
+  const rapelesDatos = [];
+  rapelCards.forEach((card, idx) => {
+    const id = card.id.replace('card-', '');
+    const sit  = document.getElementById(id+'-sit')?.value || '';
+    const alt  = document.getElementById(id+'-alt')?.value || '';
+    const tipo = document.getElementById(id+'-tipo')?.value || '';
+    const obs  = document.getElementById(id+'-obs')?.value || '';
+    const esc  = document.getElementById(id+'-escape')?.value || '';
+    const pis  = document.getElementById(id+'-pista')?.value || '';
+    const sen  = document.getElementById(id+'-sendero')?.value || '';
+    const cobMov = document.getElementById(id+'-cobmovistar')?.value || '0';
+    const cobVod = document.getElementById(id+'-cobvodafone')?.value || '0';
+    const cobOra = document.getElementById(id+'-caborange')?.value || '0';
+    const cobOtr = document.getElementById(id+'-cobobtra')?.value || '0';
+    rapelesDatos.push({ n: idx+1, sit, alt, tipo, obs, esc, pis, sen, cobMov, cobVod, cobOra, cobOtr });
+  });
+
+  if (rapelesDatos.length > 0) {
+    doc.addPage();
+    y = MT;
+
+    // Cabecera página 2
+    doc.setFillColor(30, 50, 25);
+    doc.rect(0, 0, PW, 12, 'F');
+    doc.setTextColor(200, 232, 80);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('FICHA DE RÁPELES Y SEGURIDAD', PW/2, 8, { align: 'center' });
+    doc.setTextColor(0, 0, 0);
+    y = 20;
+
+    // Nombre barranco en página 2
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+    doc.text('Barranco: ', ML, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(val('nombre'), ML + 22, y);
+    y += 8;
+
+    // Tabla rápeles
+    const colWidths = [12, 48, 18, 30, 12, 10, 10, 10]; // Nº, Situación, Altura, Anclajes, Obs, Esc, Pis, Sen
+    const colX = [ML];
+    for (let i = 0; i < colWidths.length - 1; i++) colX.push(colX[i] + colWidths[i]);
+    const rowH = 7;
+    const headers = ['Nº', 'Situación', 'Altura', 'Anclajes', 'Obs.', 'Esc.', 'Pis.', 'Sen.'];
+
+    // Cabecera tabla
+    doc.setFillColor(220, 235, 210);
+    doc.rect(ML, y, colWidths.reduce((a,b)=>a+b,0), rowH, 'F');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+    headers.forEach((h, i) => {
+      doc.text(h, colX[i] + 1, y + 4.5);
+    });
+    doc.setDrawColor(150, 150, 150);
+    doc.rect(ML, y, colWidths.reduce((a,b)=>a+b,0), rowH);
+    colX.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rowH); });
+    y += rowH;
+
+    // Filas rápeles
+    rapelesDatos.forEach(r => {
+      saltoPaginaSiNecesario(rowH + 2);
+      doc.setFillColor(i => i % 2 === 0 ? 250 : 255, 255, 250);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+
+      const rowData = [
+        `R${r.n}`,
+        r.sit,
+        r.alt ? r.alt+'m' : '',
+        r.tipo,
+        r.obs,
+        r.esc,
+        r.pis,
+        r.sen,
+      ];
+
+      rowData.forEach((d, i) => {
+        const txt = doc.splitTextToSize(d, colWidths[i] - 2);
+        doc.text(txt, colX[i] + 1, y + 4.5);
+      });
+
+      doc.setDrawColor(180, 180, 180);
+      doc.rect(ML, y, colWidths.reduce((a,b)=>a+b,0), rowH);
+      colX.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rowH); });
+      y += rowH;
+    });
+
+    y += 10;
+
+    // Segunda tabla: coberturas
+    saltoPaginaSiNecesario(40);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+    doc.text('Cobertura móvil por rápel', ML, y); y += 6;
+
+    const colC = [12, 35, 35, 35, 35];
+    const colCX = [ML];
+    for (let i = 0; i < colC.length - 1; i++) colCX.push(colCX[i] + colC[i]);
+    const headersC = ['Nº', 'Movistar', 'Vodafone', 'Orange', 'Otra'];
+
+    doc.setFillColor(220, 235, 210);
+    doc.rect(ML, y, colC.reduce((a,b)=>a+b,0), rowH, 'F');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+    headersC.forEach((h, i) => doc.text(h, colCX[i] + 1, y + 4.5));
+    doc.setDrawColor(150, 150, 150);
+    doc.rect(ML, y, colC.reduce((a,b)=>a+b,0), rowH);
+    colCX.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rowH); });
+    y += rowH;
+
+    rapelesDatos.forEach(r => {
+      saltoPaginaSiNecesario(rowH + 1);
+      const bars = v => '▓'.repeat(parseInt(v)||0) + '░'.repeat(4-(parseInt(v)||0));
+      const rowC = [`R${r.n}`, bars(r.cobMov), bars(r.cobVod), bars(r.cobOra), bars(r.cobOtr)];
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+      rowC.forEach((d, i) => doc.text(d, colCX[i] + 1, y + 4.5));
+      doc.setDrawColor(180, 180, 180);
+      doc.rect(ML, y, colC.reduce((a,b)=>a+b,0), rowH);
+      colCX.forEach((x, i) => { if (i > 0) doc.line(x, y, x, y + rowH); });
+      y += rowH;
+    });
+  }
+
+  // Pie de página en todas las páginas
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(7);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Página ${p} de ${totalPages}  ·  Anexo I · Tema 6 · Curso de Reequipamiento de Barrancos`, PW/2, PH - 7, { align: 'center' });
+    doc.setTextColor(0, 0, 0);
+  }
+
+  // Guardar
+  const nombre = val('nombre') || 'barranco';
+  const fecha = new Date().toISOString().slice(0,10);
+  doc.save(`ficha_${nombre.replace(/\s+/g,'_')}_${fecha}.pdf`);
+  showToast('📄 PDF generado correctamente');
+}
+
 
 function limpiarFicha() {
   if (!confirm('¿Borrar todos los datos de la ficha?')) return;
