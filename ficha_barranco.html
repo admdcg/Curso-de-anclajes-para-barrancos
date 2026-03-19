@@ -716,7 +716,7 @@
   <div class="header-icon">🏔️</div>
   <div class="header-text">
     <h1>Ficha del Barranco</h1>
-    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191032</p>
+    <p>Curso de Reequipamiento · Anexo I · Tema 6 · v202603191045</p>
   </div>
 </header>
 
@@ -1682,18 +1682,6 @@ function generarPDF() {
     showToast('Error al generar PDF: ' + e.message);
   }
 }
-
-  stopRecording();
-  const { jsPDF } = window.jspdf;
-  if (!jsPDF) { showToast('⚠️ jsPDF no cargado, comprueba conexión'); return; }
-
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const PW = 210, PH = 297;
-  const ML = 15, MR = 15, MT = 15;
-  let y = MT;
-
-  // ── helpers ──
-  const val = id => (document.getElementById(id)?.value || '').trim();
 
 function limpiarFicha() {
   if (!confirm('¿Borrar todos los datos de la ficha?')) return;
